@@ -1,8 +1,18 @@
 <?php
 namespace App\Modules\Admin\Controllers;
 
+use App\Models\Permission;
 use App\Modules\Common\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * 登录
+ * Class LoginController
+ * @package App\Modules\Admin\Controllers
+ *
+ * @author davin.bao
+ * @since 2016/7/15 9:34
+ */
 class LoginController extends BaseController {
     /**
      * 定义 permission list
@@ -15,6 +25,13 @@ class LoginController extends BaseController {
         ];
     }
     public function getIndex(){
+
+        $p = Permission::find(1);
+        Permission::create(['name'=> $p->name]);
+
+        DB::transaction(function () {
+            throw  new \App\Exceptions\ErrorMessageException('sdfsd', null, 600);
+        });
         echo 'login';
     }
 }

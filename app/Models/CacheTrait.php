@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Cache trait
+ * Cache trait 支持使用缓存依赖
  *
  * @author davin.bao <davin.bao@gmail.com>
  * @package App\Models

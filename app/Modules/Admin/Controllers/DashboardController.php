@@ -3,6 +3,14 @@ namespace App\Modules\Admin\Controllers;
 
 use App\Modules\Admin\Controllers\Controller as BaseController;
 
+/**
+ * 控制面板
+ * Class DashboardController
+ * @package App\Modules\Admin\Controllers
+ *
+ * @author davin.bao
+ * @since 2016/7/15 9:34
+ */
 class DashboardController extends BaseController {
     /**
      * 定义 permission list

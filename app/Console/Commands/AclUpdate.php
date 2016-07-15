@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Command will rebuild the permissions table. This will cause all routes
- * and actions to become public. Be aware when running this command on
- * production. It will destroy all your permissions data.
+ * 重建ACL列表，并保留以前的设置
  *
- * @author Todor Todorov <todstoychev@gmail.com>
  * @package App\Console\Commands
+ *
+ * @author davin.bao
+ * @since 2016/7/15 9:34
  */
 class AclUpdate extends Command
 {

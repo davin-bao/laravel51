@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
 
 /**
- * Base controller class. Holds some basic methods used by the child classes
+ * 控制器基类
+ * Class Controller
+ * @package App\Modules\Common
  *
- * @author Todor Todorov <todstoychev@gmail.com>
- * @package App\Http\Controllers
+ * @author davin.bao
+ * @since 2016/7/15 9:34
  */
 abstract class Controller extends BaseController {
 
@@ -25,6 +27,7 @@ abstract class Controller extends BaseController {
      */
     public function __construct() {
         $this->middleware('last_activity');
+        $this->middleware('catch_exceptions');
     }
 
     protected function all(Request $request,

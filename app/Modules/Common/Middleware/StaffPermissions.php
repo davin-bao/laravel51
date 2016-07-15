@@ -5,7 +5,17 @@ namespace App\Modules\Common\Middleware;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/**
+ * 实现ACL权限控制
+ *
+ * Class StaffPermissions
+ * @package App\Modules\Common\Middleware
+ *
+ * @author davin.bao
+ * @since 2016/7/15 18:34
+ */
 class StaffPermissions
 {
     /**
@@ -24,7 +34,7 @@ class StaffPermissions
         if ($permission) {
             return $next($request);
         } else {
-            return view('errors.403', ['admin' => null]);
+            throw new AccessDeniedHttpException('Forbidden');
         }
     }
 }

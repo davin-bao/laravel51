@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     /*
     |--------------------------------------------------------------------------
@@ -140,17 +140,19 @@ return [
         /*
          * Application Service Providers...
          */
+        Collective\Html\HtmlServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Modules\ServiceProvider::class,
+        App\Providers\Translation\TranslationServiceProvider::class,
 
         /**
          * other Service Providers
          */
-        //Barryvdh\Debugbar\ServiceProvider::class,
-        Recca0120\LaravelTracy\ServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+//        Recca0120\LaravelTracy\ServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         Yuansir\Toastr\ToastrServiceProvider::class,
         Kbwebs\MultiAuth\AuthServiceProvider::class,
@@ -204,7 +206,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
-        //'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Entrust'   => Zizaco\Entrust\EntrustServiceProvider::class,
         'Toastr' => Yuansir\Toastr\Facades\Toastr::class,
 

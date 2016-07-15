@@ -54,7 +54,9 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => env('MAIL_FROM_ADDRESS', 'system@laravel51.com'), 'name' => env('MAIL_FROM_NAME', 'system@laravel51.com')],
+
+    'tech_support'=> ['address' => env('MAIL_TECH_SUPPORT_ADDRESS', 'tech-support@laravel51.com'), 'name' => env('MAIL_TECH_SUPPORT_NAME', 'tech-support@laravel51.com'), 'title' => env('MAIL_TECH_SUPPORT_TITLE', 'Error notice')],
 
     /*
     |--------------------------------------------------------------------------
