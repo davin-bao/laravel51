@@ -37,7 +37,7 @@ class CatchExceptions
             if($code > 599 && $code <=699) {   //返回 HTML 响应
                 self::redirectBack($e);
             }elseif($code > 699 && $code<=799){    //返回 JSON 响应
-                self::outputJsonContent($e);
+                self::renderJsonResult($e);
             }
         }
     }
@@ -57,7 +57,7 @@ class CatchExceptions
      * 输出 JSON 字符串
      * @param BusinessException $exception
      */
-    public static function outputJsonContent(BusinessException $exception){
+    public static function renderJsonResult(BusinessException $exception){
         header("Content-type:text/json;charset=UTF-8");
         $result['status'] = $exception->getCode();
         $result['msg']    = $exception->getMessage();

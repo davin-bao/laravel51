@@ -51,52 +51,6 @@ abstract class Controller extends BaseController {
     }
 
     /**
-     * Function to send emails to the user and to the admin.
-     * The input array must be in the following format
-     * [
-     *  'user_email' => '',
-     *  'username' => '',
-     *  'user_subject' => '',
-     *  'admin_subject' => '',
-     *  'user_email_text' => '',
-     *  'admin_mail_text' =>
-     * ]
-     *
-     * @param Array $data Data to use for the emails
-     * @param string $user_template User email template
-     * @param string $admin_template Admin email template
-     * @return boolean
-     */
-    protected function sendMail($data, $user_template, $admin_template) {
-
-        // Send user email
-        Mail::send($user_template, $data, function($msg) use ($data) {
-            $msg->to($data['user_email'], $data['username']);
-            $msg->from(Config::get('mail.from.address'), Config::get('mail.from.name'));
-            $msg->subject($data['user_subject']);
-        });
-
-        // Check for email failures
-        if (count(Mail::failures()) > 0) {
-            return false;
-        }
-
-        // Send admin email
-        Mail::send($admin_template, $data, function($msg) use ($data) {
-            $msg->to(Config::get('mail.from.address'), Config::get('mail.from.name'));
-            $msg->from(Config::get('mail.from.address'), $data['username']);
-            $msg->subject($data['admin_subject']);
-        });
-
-        // Check for email failures
-        if (count(Mail::failures()) > 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * return json result
      * @author: davin.bao
      * @since: 2016/3/8

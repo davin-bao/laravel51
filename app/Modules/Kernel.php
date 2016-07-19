@@ -29,7 +29,7 @@ class Kernel extends HttpKernel
 //        'auth' => \App\Modules\Common\Middleware\Authenticate::class,
         'guest' => \App\Modules\Common\Middleware\RedirectIfAuthenticated::class,
         'last_activity' => \App\Modules\Common\Middleware\LastActivity::class,
-        'staff_permissions' => App\Modules\Common\Middleware\StaffPermissions::class,
+        'staff_permissions' => \App\Modules\Common\Middleware\StaffPermissions::class,
         'catch_exceptions'=> \App\Modules\Common\Middleware\CatchExceptions::class,
 
         'role' => Zizaco\Entrust\Middleware\EntrustRole::class,

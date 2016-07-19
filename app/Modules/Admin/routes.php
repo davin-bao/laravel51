@@ -7,5 +7,5 @@ Route::group(array('prefix' => 'admin','module'=>'admin', 'namespace' => 'App\Mo
 });
 
 Route::group(array('prefix' => '','module'=>'admin', 'namespace' => 'App\Modules\Admin\Controllers'), function() {
-    Route::controller('/', 'LoginController', App\Modules\Admin\Controllers\LoginController::getActionName());
+    Route::controller('login', 'LoginController', App\Modules\Admin\Controllers\LoginController::getActionName());
 });
