@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Mockery\CountValidator\Exception;
 
 /**
  * 重建ACL列表，并保留以前的设置
@@ -56,24 +57,28 @@ class AclUpdate extends Command
     {
         $this->info("Clearing permissions... \n");
 
-        // Delete old data
-        //$response = Action::deleteAllData();
-
-        //(null !== $response) ? $this->error("\n" . $response . "\n") : null;
-
-
         try {
             $routeData = $this->getRouteData();
 
             DB::beginTransaction();
             foreach ($routeData as $action => $item) {
+                $attributes = null;
                 $attributes = json_decode($item['name'], true);
                 $attributes['action'] = $action;
                 $attributes['uri'] = $item['uri'];
+                $parent = array_get($attributes, 'parent', null);
 
-                $permission = Permission::where('action', $action)->first();
-                if(!$permission){
-                    $permission = new Permission($attributes);
+                if(($parent === 0)  || !isset($attributes['display_name'])){
+                    $attributes['fid'] = 0;
+                }else{
+                    $parentPermission = Permission::where('action', "like", '%'.$parent)->first();
+                    if($parentPermission){
+                        $attributes['fid'] = $parentPermission->id;
+                    }
+                }
+
+                if(!isset($attributes['fid'])){
+                   throw new \Exception('Action '.$action.' 未定义 parent 或定义的 parent 不合法');
                 }
 
                 $oldPermission = Permission::where('action', $action)->first();
@@ -84,10 +89,14 @@ class AclUpdate extends Command
                     $roles = Role::where('name', Role::NAME_ADMINISTRATOR)->get();
                 }
 
+                $permission = Permission::where('action', $action)->first();
+                if(!$permission){
+                    $permission = new Permission($attributes);
+                }
                 $permission->save();
 
                 $roles->each(function($role) use ($permission) {
-                    $permission->role()->associate($role);
+                    $permission->roles()->sync([$role->id]);
                 });
 
                 $this->comment("Added perimission " . $action . "\n");
@@ -99,7 +108,7 @@ class AclUpdate extends Command
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error("\n" . $e->getTraceAsString() . "\n");
+            $this->error($e->getMessage(). "\n" . $e->getTraceAsString() . "\n");
         }
 
     }

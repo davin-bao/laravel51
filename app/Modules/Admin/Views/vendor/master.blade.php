@@ -1,13 +1,12 @@
 @extends('vendor.master')
 @section('head')
-    {!! Form::headerLink() !!}
+    {!! Html::headerLink() !!}
     @yield('stylesheets')
     @yield('head-scripts')
 @endsection
 
 @section('body')
     @yield('container')
-
-    {!! Form::footScript() !!}
+    {!! Html::footerScript() !!}
     @yield('foot-scripts')
 @endsection

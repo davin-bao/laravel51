@@ -31,7 +31,7 @@ class StaffPermissions
         $roleIds = (Auth::staff()->check()) ? Auth::staff()->get()->getRoleIds() : null;
         $permission = Permission::getPermission($action, $roleIds);
 
-        if ($permission) {
+        if (!$permission) {
             return $next($request);
         } else {
             throw new AccessDeniedHttpException('Forbidden');

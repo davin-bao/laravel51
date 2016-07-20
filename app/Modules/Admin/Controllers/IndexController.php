@@ -21,10 +21,10 @@ class IndexController extends BaseController {
      * 定义 permission list
      * @return array
      */
-    public static function getActionName()
+    public static function actionName()
     {
         return [
-            'getLogin'=> json_encode(['fid'=>0, 'icon'=>'home', 'display_name'=>'登录', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>''])
+            'getLogin'=> json_encode(['parent'=>0, 'icon'=>'home', 'display_name'=>'登录', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>''])
         ];
     }
 

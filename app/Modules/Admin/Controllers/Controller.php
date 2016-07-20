@@ -28,6 +28,6 @@ abstract class Controller extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     protected function render($view = null, $data = [], $mergeData = []){
-        return view('Admin::'.Config::get('view.admin_template') . $view, $data, $mergeData);
+        return view('Admin::'  . $view, $data, $mergeData);
     }
 }

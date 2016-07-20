@@ -36,7 +36,6 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
     protected static $searchColumns = ['username', 'name'];
 
 
-
     public static function create(array $attributes = array()) {
 
         isset($attributes['password']) && empty($attributes['password']) ? $attributes = array_except($attributes, 'password') :'';
@@ -92,7 +91,7 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function roles() {
-        return $this->belongsToMany('App\Models\Role', 'staff_roles');
+        return $this->belongsToMany('App\Models\Role', 'staff_role');
     }
 
     /**

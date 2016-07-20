@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * 控制器基类
@@ -99,52 +100,13 @@ abstract class Controller extends BaseController {
         return redirect()->to($nextUrl);
     }
 
-
     /**
-     * get all items pages
-     *
+     * 为列表生成结果
      * @param Request $request
-     * @param mixed $query
-     * @param string $uri
-     * @param string $title
-     * @param string $delete_message
-     * @param string $view
+     * @param $query
+     * @param string $countColumns
      * @return array
      */
-    protected function getQueryData(
-        Request $request,
-        $query,
-        $uri,
-        $title,
-        $delete_message
-    ) {
-        $params = $this->formParams($request);
-
-        $results = $query;
-
-        // Order
-        if ($params['param'] && $params['order']) {
-            $results = $results->orderBy($params['param'], $params['order']);
-        }
-
-        $paginator = $results->paginate($params['limit']);
-        $paginator->appends(['limit' => $params['limit'], 'param' => $params['param'], 'order' => $params['order']]);
-        $paginator->setPath('all');
-
-        $data = [
-            'results' => $paginator,
-            'uri' => $uri,
-            'title' => $title,
-            'delete_message' => $delete_message,
-            'limit' => $params['limit'],
-            'param' => $params['param'],
-            'order' => $params['order'],
-            'search' => $params['search']
-        ];
-
-        return $data;
-    }
-
     protected function queryData(Request $request, $query, $countColumns = '*'){
         $page = intval($request->input('page',0));
         $limit = intval($request->input('rows',100));
@@ -167,7 +129,6 @@ abstract class Controller extends BaseController {
         ];
 
         return $data;
-
     }
 
     /**

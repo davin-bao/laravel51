@@ -8,7 +8,7 @@ use App\Exceptions\NoticeMessageException;
 /**
  *  Index Service
  * Class IndexService
- * @package App\Modules\Admin\Controllers
+ * @package App\Modules\Admin\Services
  *
  * @author davin.bao
  * @since 2016/7/15 9:34

@@ -27,19 +27,5 @@ class StaffSeeder extends Seeder
         $admin->save();
 
         $admin->roles()->save(Role::find(1));
-
-        for ($i = 0; $i < 10; $i++) {
-            $admin = new Staff();
-            $admin->username = $faker->userName;
-            $admin->password = Hash::make('123456');
-            $admin->name = $faker->userName;
-            $admin->email = $faker->safeEmail;
-            $admin->mobile = '18800000000';
-            $admin->deleted_at = null;
-            $admin->confirmed_at = \Carbon\Carbon::now();
-            $admin->save();
-
-            $admin->roles()->save(Role::find(2));
-        }
     }
 }

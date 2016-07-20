@@ -17,6 +17,13 @@ use Illuminate\Database\Eloquent\Model as ModelBase;
  */
 abstract class Model extends ModelBase
 {
+
+    /**
+     * 可以进行模糊查询的列
+     * @var array
+     */
+    protected static $searchColumns = [];
+
     /**
      * 创建Model 需要的验证规则
      *
@@ -99,5 +106,33 @@ abstract class Model extends ModelBase
         parent::update($attributes);
 
         return self::get($self->id, true);
+    }
+
+    /**
+     * 获取检索query
+     * @param $query
+     * @param $match 检索信息
+     * @return mixed query
+     */
+    public static function getSearchQuery($query, $match, $otherFields = array(), $hasAccess = false){
+        //添加数据访问权限
+        if($hasAccess) {
+            $query = self::access($query);
+        }
+
+        if(empty($match)) {
+            return $query;
+        }
+        $query = $query->where(function($query) use ($match, $otherFields) {
+            foreach(static::$searchColumns as $searchColumn) {
+                $query->orWhere($query->getModel()->table.'.'.$searchColumn, "like", '%'.$match.'%');
+            }
+
+            foreach($otherFields as $searchColumn) {
+                $query->orWhere($searchColumn, "like", '%'.$match.'%');
+            }
+        });
+
+        return $query;
     }
 }
