@@ -6,6 +6,6 @@ Route::group(array('prefix' => 'admin','module'=>'admin', 'namespace' => 'App\Mo
     Route::controller('/', 'DashboardController', App\Modules\Admin\Controllers\DashboardController::getActionName());
 });
 
-Route::group(array('prefix' => '','module'=>'admin', 'namespace' => 'App\Modules\Admin\Controllers'), function() {
-    Route::controller('login', 'LoginController', App\Modules\Admin\Controllers\LoginController::getActionName());
+Route::group(array('prefix' => 'index','module'=>'admin', 'namespace' => 'App\Modules\Admin\Controllers'), function() {
+    Route::controller('/', 'IndexController', App\Modules\Admin\Controllers\IndexController::getActionName());
 });

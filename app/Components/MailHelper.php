@@ -43,8 +43,13 @@ class MailHelper
             'content'=> $exception->getMessage(),
             'trace'=> str_ireplace("\n", "<br/>", $exception->getTraceAsString())
         ];
-//die;
-        return self::send('Admin::emails.exception_notice', $data);
+        //如果开启DEBUG模式，则关闭发邮件
+        if(\Config::get('app.debug')){
+            echo 'send tech-support mail';
+            return;
+        }else{
+            return self::send('Admin::emails.exception_notice', $data);
+        }
     }
 
     /**

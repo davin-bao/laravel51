@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\Components;
 
 use Illuminate\Database\Query\Builder as Builder;
 

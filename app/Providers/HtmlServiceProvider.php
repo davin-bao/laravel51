@@ -1,4 +1,5 @@
 <?php namespace App\Providers;
+use App\Components\Html\HtmlBuilder;
 use App\Components\Html\FormBuilder;
 
 /**
@@ -11,6 +12,12 @@ use App\Components\Html\FormBuilder;
 class HtmlServiceProvider extends \Collective\Html\HtmlServiceProvider
 {
 
+    protected function registerHtmlBuilder()
+    {
+        $this->app->singleton('html', function ($app) {
+            return new HtmlBuilder($app['url'], $app['session'], $app['config']);
+        });
+    }
     /**
      * Register the form builder instance.
      */

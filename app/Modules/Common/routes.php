@@ -25,3 +25,4 @@ Event::listen('illuminate.query', function($query, $bindings) {
         fclose($logFile);
     }
 });
+

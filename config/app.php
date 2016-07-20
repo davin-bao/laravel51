@@ -140,7 +140,7 @@ return [
         /*
          * Application Service Providers...
          */
-        Collective\Html\HtmlServiceProvider::class,
+        App\Providers\HtmlServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
@@ -154,7 +154,6 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
 //        Recca0120\LaravelTracy\ServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Yuansir\Toastr\ToastrServiceProvider::class,
         Kbwebs\MultiAuth\AuthServiceProvider::class,
         Kbwebs\MultiAuth\PasswordResets\PasswordResetServiceProvider::class,
 
@@ -210,7 +209,6 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Entrust'   => Zizaco\Entrust\EntrustServiceProvider::class,
-        'Toastr' => Yuansir\Toastr\Facades\Toastr::class,
 
     ],
 

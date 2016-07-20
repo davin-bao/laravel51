@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Components\QueryBuilder;
 use App\Exceptions\NoticeMessageException;
 use \DB;
 use Illuminate\Database\Eloquent\Model as ModelBase;

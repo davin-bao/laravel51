@@ -16,14 +16,15 @@ abstract class BusinessException extends HttpException
      * @var array 携带一定的业务数据
      */
     public $data = array();
+
     /**
-     * Constructor.
-     *
-     * @param string     $message  The internal exception message
-     * @param \Exception $previous The previous exception
-     * @param int        $code     The internal exception code
+     * BusinessException constructor.
+     * @param null $message
+     * @param int $code
+     * @param \Exception|null $previous
+     * @param array $data
      */
-    public function __construct($message = null, \Exception $previous = null, $code = 500, $data = [])
+    public function __construct( $message = null,$code = 500, \Exception $previous = null, $data = [])
     {
         $this->data = $data;
         parent::__construct($code, $message, $previous, array(), $code);

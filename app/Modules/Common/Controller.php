@@ -2,12 +2,11 @@
 
 namespace App\Modules\Common;
 
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Config;
 
 /**
  * 控制器基类
@@ -30,13 +29,38 @@ abstract class Controller extends BaseController {
         $this->middleware('catch_exceptions');
     }
 
-    protected function all(Request $request,
-                           $query,
-                           $uri,
-                           $title,
-                           $delete_message,
-                           $view){
-        return $this->render($view, $this->getQueryData($request, $query, $uri, $title, $delete_message));
+    /**
+     * Service 实例
+     * 必须每个Controller 都要指定Service
+     * @var null
+     */
+    private $service = null;
+
+    /**
+     * 获取 Service 实例
+     * @return null
+     */
+    protected function getService(){
+        if(!$this->service){
+            $serviceName = str_replace('Controller', 'Service', get_called_class()).'';
+            $this->service = new $serviceName();
+        }
+        return $this->service;
+    }
+
+    /**
+     * 验证表单合法性
+     * @param array $rules
+     * @param Request $request
+     */
+    protected function validateRequest(array $rules, Request $request){
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
     }
 
     /**
@@ -51,19 +75,30 @@ abstract class Controller extends BaseController {
     }
 
     /**
-     * return json result
+     *
+     * return result
      * @author: davin.bao
      * @since: 2016/3/8
-     * @param string $queryData  查询条件
-     * @param int $statusCode   返回code
-     * @param string $message   返回提示信息
+     *
+     * @param Request $request 请求参数
+     * @param array $data  数据
+     * @param string $nextUrl   跳转地址
+     *
+     * @return $this|JsonResponse
      */
-    protected function renderJsonResult($queryData = null, $statusCode = 200, $message = 'success'){
-        $result['status'] = $statusCode;
-        $result['msg']    = $message;
-        $result['data'] = $queryData;
-        die(json_encode($result));
+    protected function response(Request $request, array $data,  $nextUrl = null){
+
+        $message = isset($data['msg']) ? $data['msg'] : '操作成功';
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return new JsonResponse(array_merge($data, ['msg'=>$message, 'next_url'=>$nextUrl]), 200, $headers = [], 0);
+        }
+
+        \Html::success($message, 200);
+
+        return redirect()->to($nextUrl);
     }
+
 
     /**
      * get all items pages

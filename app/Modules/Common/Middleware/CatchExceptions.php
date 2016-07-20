@@ -5,8 +5,7 @@ namespace App\Modules\Common\Middleware;
 use App\Exceptions\BusinessException;
 use App\Models\Permission;
 use Closure;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Illuminate\Http\Exception\HttpResponseException;
 
 /**
  * Class CatchExceptions
@@ -32,36 +31,27 @@ class CatchExceptions
     {
         try {
             return $next($request);
-        } catch(BusinessException $e){
-            $code = intval($e->getCode());
-            if($code > 599 && $code <=699) {   //返回 HTML 响应
-                self::redirectBack($e);
-            }elseif($code > 699 && $code<=799){    //返回 JSON 响应
-                self::renderJsonResult($e);
+        } catch(BusinessException $exception){
+            //业务逻辑错误
+            $errors = ['msg'=>$exception->getMessage()];
+
+            if ($request->ajax() || $request->wantsJson()) { //输出 JSON 字符串
+                return new JsonResponse($errors, $exception->getCode());
             }
+
+            //输出异常信息， 跳转回 GET 页
+            \Html::error($exception->getMessage(), $exception->getCode());
+
+            return redirect()->back()
+                ->withInput($request->input())
+                ->withErrors($errors, $exception->getMessage());
+        } catch(HttpResponseException $exception){
+            //输出异常信息， 跳转回 GET 页
+            \Html::error('输入参数有误', 422);
+
+            //表单验证错误
+            throw $exception;
         }
     }
 
-    /**
-     * 输出异常信息， 跳转回 GET 页
-     *
-     * @param BusinessException $exception
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public static function redirectBack(BusinessException $exception){
-        \Toastr::error($exception->getMessage(), 'ERROR '.$exception->getCode());
-        return redirect()->back();
-    }
-
-    /**
-     * 输出 JSON 字符串
-     * @param BusinessException $exception
-     */
-    public static function renderJsonResult(BusinessException $exception){
-        header("Content-type:text/json;charset=UTF-8");
-        $result['status'] = $exception->getCode();
-        $result['msg']    = $exception->getMessage();
-        $result['data'] = $exception->getData();
-        die(json_encode($result));
-    }
 }
