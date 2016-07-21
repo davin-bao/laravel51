@@ -1,6 +1,6 @@
 @extends('vendor.master')
 @section('title')
-    404 Page not found
+    500 Internal server error
 @endsection
 
 @section('head')
@@ -16,11 +16,11 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="error-box-inner">
-                            <img src="{{ asset('centaurus/img/error-404-v3.png') }}" alt="Have you seen this page?"/>
+                            <img src="{{ asset('centaurus/img/error-500-v1.png') }}" alt="Error 500"/>
                         </div>
-                        <h1>HTTP ERROR 404</h1>
+                        <h1>HTTP ERROR 500</h1>
                         <p>
-                            你所访问页面不存在<br/>
+                            服务器内部错误
                         </p>
                         <p>
                             Go back to <a href="/">homepage</a>.
@@ -31,4 +31,5 @@
         </div>
     </div>
 </div>
+
 @endsection
