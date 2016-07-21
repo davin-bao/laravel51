@@ -1,57 +1,36 @@
-<html>
-	<head>
+@extends('vendor.master')
+@section('title')
+	503 Service Unavailable
+@endsection
 
-		<style>
-            /* latin-ext */
-            @font-face {
-                font-family: 'Lato';
-                font-style: normal;
-                font-weight: 100;
-                src: local('Lato Hairline'), local('Lato-Hairline'), url({{ asset('css/fonts/eFRpvGLEW31oiexbYNx7Y_esZW2xOQ-xsNqO47m55DA.woff2') }}) format('woff2');
-            unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-            }
-            /* latin */
-            @font-face {
-                font-family: 'Lato';
-                font-style: normal;
-                font-weight: 100;
-                src: local('Lato Hairline'), local('Lato-Hairline'), url({{ asset('css/fonts/GtRkRNTnri0g82CjKnEB0Q.woff2') }}) format('woff2');
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-            }
+@section('head')
+	<link rel="stylesheet" type="text/css" href="{{ asset('centaurus/css/libs/font-awesome.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('centaurus/css/libs/theme_styles.css') }}"/>
+@endsection
 
-			body {
-				margin: 0;
-				padding: 0;
-				width: 100%;
-				height: 100%;
-				color: #B0BEC5;
-				display: table;
-				font-weight: 100;
-				font-family: 'Lato';
-			}
-
-			.container {
-				text-align: center;
-				display: table-cell;
-				vertical-align: middle;
-			}
-
-			.content {
-				text-align: center;
-				display: inline-block;
-			}
-
-			.title {
-				font-size: 72px;
-				margin-bottom: 40px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="content">
-				<div class="title">Be right back.</div>
+@section('body')
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div id="error-box">
+				<div class="row">
+					<div class="col-xs-12">
+						<div id="error-box-inner">
+							<img src="{{ asset('centaurus/img/error-500-v1.png') }}" alt="Error 503"/>
+						</div>
+						<h1>HTTP ERROR 503</h1>
+						<p>
+							由于临时的服务器维护或者过载<br>
+							服务器当前无法处理请求
+						</p>
+						<p>
+							Go back to <a href="/">homepage</a>.
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
-	</body>
-</html>
+	</div>
+</div>
+
+@endsection
