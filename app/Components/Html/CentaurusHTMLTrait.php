@@ -150,5 +150,87 @@ trait CentaurusHtmlTrait {
         $this->session->flash('centaurus:notifications', $this->notifications);
     }
 
+    /**
+     * 得到当前登录用户的信息
+     * @return mixed
+     */
+    public function getStaff(){
+        return Auth::staff()->get()->toArray();
+    }
 
+    /**
+     * 得到当前登录用户权限内的菜单栏
+     * @return string
+     */
+    public function getMenus() {
+        $permission = new Permission();
+        $permissions = $permission->where('fid', 0)->where('is_menu', 1)->orderBy('sort', 'asc')->orderBy('id', 'asc')->get()->toArray();
+
+        $permissionArray = Staff::getPermissionIds();
+        $menus = [];
+        if($permissions) {
+            foreach ($permissions as $permission) {
+                if (!in_array($permission['id'], $permissionArray)) {
+                    continue;
+                }
+                if($permission['sub_permission']) {
+                    foreach ($permission['sub_permission'] as $sub) {
+                        if($sub['is_menu']) {
+                            $permission['sub'][] = $sub;
+                        }
+                    }
+                    unset($permission['sub_permission']);
+                }
+                $menus[] = $permission;
+            }
+        }
+
+        $html = '<div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+                    <ul class="nav nav-pills nav-stacked">';
+        if ($menus) {
+            $currentRouteName = json_decode(Route::currentRouteName());
+            $routeDisplayName = $currentRouteName->display_name;
+            foreach ($menus as $menu) {
+                if ($menu['display_name'] === $routeDisplayName) {
+                    $active = ' class="active"';
+                } else {
+                    $active = '';
+                }
+                $icon = $menu['icon'];
+                $display_name = $menu['display_name'];
+                if (!isset($menu['sub'])) {
+                    $aTagHref = $menu['uri'];
+                    $aTagClass = '';
+                    $menuRightIcon = "<span class=\"label label-info label-circle pull-right\">Jump</span>";
+                    $subMenu = '';
+                } else {
+                    $aTagHref = '#';
+                    $aTagClass = " class=\"dropdown-toggle\"";
+                    $menuRightIcon = "<i class=\"fa fa-chevron-circle-right drop-icon\"></i>";
+                    $subMenu = "<ul class=\"submenu\">";
+                    foreach ($menu['sub'] as $sub) {
+                        $subHref = $sub['uri'];
+                        $subDisplayName = $sub['display_name'];
+                        $subMenu .= "<li>
+                                        <a href=\"$subHref\">
+                                            $subDisplayName
+                                        </a>
+                                    </li>";
+                    }
+                    $subMenu .= '</ul>';
+                }
+                $html .= "<li$active>
+                            <a href=\"$aTagHref\"$aTagClass>
+                                <i class=\"fa fa-$icon\"></i>
+                                <span>$display_name</span>
+                                $menuRightIcon
+                            </a>
+                            $subMenu
+                          </li>";
+            }
+        }
+        $html .= '</ul>
+               </div>';
+        return $html;
+    }
 }

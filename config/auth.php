@@ -45,17 +45,17 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'=> App\Staff::class,
+            'model'=> App\Models\Staff::class,
         ]
     ],
     'multi-auth' => [
         'staff' => [
             'driver' => 'eloquent',
-            'model'  => App\Staff::class
+            'model'  => App\Models\Staff::class
         ],
         'member' => [
             'driver' => 'eloquent',
-            'model'  => App\Member::class
+            'model'  => App\Models\Member::class
         ]
     ],
 

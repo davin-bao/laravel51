@@ -124,4 +124,35 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
         return ($this->username == 'admin') ? true : false;
     }
 
+    /**
+     * 得到当前登录的用户的所有角色ID数字数组
+     * @return mixed
+     */
+    public function getRoleIds() {
+        $staffId = Auth::staff()->get()->toArray()['id'];
+        $roleIds = self::select('staff_role.role_id')
+            ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
+            ->where('staff.id', $staffId)
+            ->get()
+            ->toArray();
+        return $roleIds;
+    }
+
+    /**
+     * 得到当前登录的用户的权限ID数组
+     * @return array
+     */
+    public static function getPermissionIds() {
+        $staffId = Auth::staff()->get()->toArray()['id'];
+        $permissions = self::select('permission_role.permission_id')
+            ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
+            ->join('permission_role', 'permission_role.role_id', '=', 'staff_role.role_id')
+            ->where('staff.id', $staffId)
+            ->get()->toArray();
+        $permissionArray = [];
+        foreach ($permissions as $permission) {
+            $permissionArray[] = $permission['permission_id'];
+        }
+        return $permissionArray;
+    }
 }
