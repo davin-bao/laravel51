@@ -158,15 +158,42 @@ trait CentaurusHtmlTrait {
      * @return mixed
      */
     public function getStaff(){
-        return Auth::staff()->get()->toArray();
+        return Auth::staff()->get();
+    }
+
+    /**
+     * 过滤掉子菜单中的非menu的菜单
+     * @param $permissions
+     * @return array|null
+     */
+    protected static function filterSubMenu($permissions) {
+        if($permissions) {
+            foreach ($permissions as $permission) {
+                $subMenus = [];
+                if($permission->sub_permission) {
+                    foreach ($permission->sub_permission as $sub) {
+                        if($sub->is_menu) {
+                            $subMenus[] = $sub;
+                        }
+                    }
+                    $permission->sub = $subMenus;
+                    unset($permission->sub_permission);
+                }
+
+                $menus[] = $permission;
+            }
+            return $menus;
+        }
+        return null;
     }
 
     /**
      * 得到当前登录用户权限内的菜单栏
      * @return string
      */
-    public function getMenus() {
-        $menus = Staff::getPermissions();
+    public function getMenu() {
+        $permissions = Auth::staff()->get()->getPermissions();
+        $menus = self::filterSubMenu($permissions);
 
         $html = '<div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
                     <ul class="nav nav-pills nav-stacked">';
@@ -174,15 +201,15 @@ trait CentaurusHtmlTrait {
             $currentRouteName = json_decode(Route::currentRouteName());
             $routeDisplayName = $currentRouteName->display_name;
             foreach ($menus as $menu) {
-                if ($menu['display_name'] === $routeDisplayName) {
+                if ($menu->display_name === $routeDisplayName) {
                     $active = ' class="active"';
                 } else {
                     $active = '';
                 }
-                $icon = $menu['icon'];
-                $display_name = $menu['display_name'];
-                if (!isset($menu['sub'])) {
-                    $aTagHref = $menu['uri'];
+                $icon = $menu->icon;
+                $display_name = $menu->display_name;
+                if (!$menu->sub) {
+                    $aTagHref = $menu->uri;
                     $aTagClass = '';
                     $menuRightIcon = "<span class=\"label label-info label-circle pull-right\">Jump</span>";
                     $subMenu = '';
@@ -191,9 +218,9 @@ trait CentaurusHtmlTrait {
                     $aTagClass = " class=\"dropdown-toggle\"";
                     $menuRightIcon = "<i class=\"fa fa-chevron-circle-right drop-icon\"></i>";
                     $subMenu = "<ul class=\"submenu\">";
-                    foreach ($menu['sub'] as $sub) {
-                        $subHref = $sub['uri'];
-                        $subDisplayName = $sub['display_name'];
+                    foreach ($menu->sub as $sub) {
+                        $subHref = $sub->uri;
+                        $subDisplayName = $sub->display_name;
                         $subMenu .= "<li>
                                         <a href=\"$subHref\">
                                             $subDisplayName

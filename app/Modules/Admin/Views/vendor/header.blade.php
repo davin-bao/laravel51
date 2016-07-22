@@ -158,8 +158,8 @@
                     </li>
                     <li class="dropdown profile-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{!! Html::getStaff()['avatar'] !!}" alt="">
-                            <span class="hidden-xs">{!! Html::getStaff()['name'] !!}</span> <b class="caret"></b>
+                            <img src="{!! Html::getStaff()->avatar !!}" alt="">
+                            <span class="hidden-xs">{!! Html::getStaff()->name !!}</span> <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="user-profile.html"><i class="fa fa-user"></i>Profile</a></li>

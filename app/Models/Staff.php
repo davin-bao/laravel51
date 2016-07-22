@@ -140,32 +140,19 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
     }
 
     /**
-     * 得到当前登录的用户的权限数组
-     * @return array
+     * 得到当前登录的用户的权限
+     * @return mixed
      */
-    public static function getPermissions() {
-        $staffId = Auth::staff()->get()->toArray()['id'];
-        $permissions = self::select('permissions.*')
-            ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
-            ->join('permission_role', 'permission_role.role_id', '=', 'staff_role.role_id')
-            ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
-            ->where('staff.id', $staffId)
+    public function getPermissions() {
+        $permissions = Permission::select('permissions.*')
+            ->join('staff_role', 'staff_role.staff_id', 'and', 'staff_role.role_id')
+            ->join('permission_role', function ($join) {
+                $join->on('permission_role.role_id', '=', 'staff_role.role_id')->on('permissions.id', '=', 'permission_role.permission_id');
+            })
+            ->where('permissions.is_menu', 1)
+            ->where('permissions.fid', 0)
+            ->where('staff_role.staff_id', $this->id)
             ->get();
-        $reformedPermissions = [];
-        foreach ($permissions as $permission) {
-            if ($permission->is_menu) {
-                if ($permission->fid === 0) {
-                    $reformedPermissions[$permission->id] = $permission->toArray();
-                } else {
-                    if (!isset($reformedPermissions[$permission->fid])) {
-                        $reformedPermissions[$permission->fid] = [];
-                        $reformedPermissions[$permission->fid]['sub'][] = $permission->toArray();
-                    } else {
-                        $reformedPermissions[$permission->fid]['sub'][] = $permission->toArray();
-                    }
-                }
-            }
-        }
-        return $reformedPermissions;
+        return $permissions;
     }
 }
