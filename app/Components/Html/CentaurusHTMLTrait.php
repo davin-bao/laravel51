@@ -164,7 +164,7 @@ trait CentaurusHtmlTrait {
     /**
      * 得到当前登录用户权限内的菜单栏
      * @author chuanhgnyu
-     * @version 3.0
+     * @version 4.0
      * @since version 1.0
      * @return string
      */
