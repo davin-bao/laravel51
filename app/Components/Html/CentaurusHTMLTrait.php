@@ -163,9 +163,9 @@ trait CentaurusHtmlTrait {
 
     /**
      * 得到当前登录用户权限内的菜单栏
-     * @author chuanhgnyu
+     * @author chuanhangyu
      * @version 4.0
-     * @since version 1.0
+     * @since 2016/7/21 15:30
      * @return string
      */
     public function getMenu() {
