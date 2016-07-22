@@ -1,6 +1,9 @@
 <?php namespace App\Components\Html;
 
 use App\Models\Permission;
+use App\Models\Staff;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Form 自定义组件
@@ -163,27 +166,7 @@ trait CentaurusHtmlTrait {
      * @return string
      */
     public function getMenus() {
-        $permission = new Permission();
-        $permissions = $permission->where('fid', 0)->where('is_menu', 1)->orderBy('sort', 'asc')->orderBy('id', 'asc')->get()->toArray();
-
-        $permissionArray = Staff::getPermissionIds();
-        $menus = [];
-        if($permissions) {
-            foreach ($permissions as $permission) {
-                if (!in_array($permission['id'], $permissionArray)) {
-                    continue;
-                }
-                if($permission['sub_permission']) {
-                    foreach ($permission['sub_permission'] as $sub) {
-                        if($sub['is_menu']) {
-                            $permission['sub'][] = $sub;
-                        }
-                    }
-                    unset($permission['sub_permission']);
-                }
-                $menus[] = $permission;
-            }
-        }
+        $menus = Staff::getPermissions();
 
         $html = '<div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
                     <ul class="nav nav-pills nav-stacked">';

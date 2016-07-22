@@ -1,9 +1,9 @@
 <header class="navbar" id="header-navbar">
     <div class="container">
         <a href="/index" id="logo" class="navbar-brand">
-            <img src="/centaurus/img/logo.png" alt="" class="normal-logo logo-white">
-            <img src="/centaurus/img/logo-black.png" alt="" class="normal-logo logo-black">
-            <img src="/centaurus/img/logo-small.png" alt="" class="small-logo hidden-xs hidden-sm hidden">
+            <img src="{!! URL::asset('centaurus/img/logo.png') !!}" alt="" class="normal-logo logo-white">
+            <img src="{!! URL::asset('centaurus/img/logo-black.png') !!}" alt="" class="normal-logo logo-black">
+            <img src="{!! URL::asset('centaurus/img/logo-small.png') !!}" alt="" class="small-logo hidden-xs hidden-sm hidden">
         </a>
         <div class="clearfix">
             <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Index\Requests\Admins\PasswordResetRequest;
 use Carbon\Carbon;
@@ -139,20 +140,32 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
     }
 
     /**
-     * 得到当前登录的用户的权限ID数组
+     * 得到当前登录的用户的权限数组
      * @return array
      */
-    public static function getPermissionIds() {
+    public static function getPermissions() {
         $staffId = Auth::staff()->get()->toArray()['id'];
-        $permissions = self::select('permission_role.permission_id')
+        $permissions = self::select('permissions.*')
             ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
             ->join('permission_role', 'permission_role.role_id', '=', 'staff_role.role_id')
+            ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
             ->where('staff.id', $staffId)
-            ->get()->toArray();
-        $permissionArray = [];
+            ->get();
+        $reformedPermissions = [];
         foreach ($permissions as $permission) {
-            $permissionArray[] = $permission['permission_id'];
+            if ($permission->is_menu) {
+                if ($permission->fid === 0) {
+                    $reformedPermissions[$permission->id] = $permission->toArray();
+                } else {
+                    if (!isset($reformedPermissions[$permission->fid])) {
+                        $reformedPermissions[$permission->fid] = [];
+                        $reformedPermissions[$permission->fid]['sub'][] = $permission->toArray();
+                    } else {
+                        $reformedPermissions[$permission->fid]['sub'][] = $permission->toArray();
+                    }
+                }
+            }
         }
-        return $permissionArray;
+        return $reformedPermissions;
     }
 }
