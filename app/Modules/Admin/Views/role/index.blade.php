@@ -1,106 +1,99 @@
 @extends('Admin::vendor.index')
 
 @section('container')
-    <div class="pageheader">
-        <h2><i class="fa fa-home"></i> Dashboard <span>系统设置</span></h2>
-    </div>
+    <div class="main-box clearfix">
+        <header class="main-box-header clearfix">
+            <h2 class="pull-left"><i class="fa fa-home"></i> 角色列表</h2>
+            <div class="filter-block pull-right">
+                <div class="form-group pull-left">
+                    <input type="text" class="form-control" id="matchCon" name="matchCon" placeholder="Search...">
+                </div>
+                <a class="btn btn-info pull-left" id="search-btn">
+                    <i class="fa fa-search fa-lg"></i> 搜索
+                </a>
 
-    <div class="contentpanel panel-email">
-
-        <div class="row">
-
-
-            <div class="col-sm-9 col-lg-10">
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
-
-                        <div class="pull-right">
-                            <div class="btn-group mr10">
-                                <a class="btn btn-white tooltips"
-                                   data-toggle="tooltip" data-original-title="新增"><i
-                                            class="glyphicon glyphicon-plus"></i></a>
-                                <a class="btn btn-white tooltips deleteall" data-toggle="tooltip"
-                                   data-original-title="删除"><i
-                                            class="glyphicon glyphicon-trash"></i></a>
-                            </div>
-                        </div><!-- pull-right -->
-
-                        <h5 class="subtitle mb5">角色列表</h5>
-                        <div class="table-responsive col-md-12">
-                            <table class="table mb30" id="list">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <span class="ckbox ckbox-primary">
-                                            <input type="checkbox" id="selectall"/>
-                                            <label for="selectall"></label>
-                                        </span>
-                                    </th>
-                                    <th>角色名</th>
-                                    <th>说明</th>
-                                    <th>创建时间</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div><!-- panel-body -->
-                </div><!-- panel -->
-
-            </div><!-- col-sm-9 -->
-
-        </div><!-- row -->
-
+                <a href="#" class="btn btn-primary pull-right">
+                    <i class="fa fa-plus-circle fa-lg"></i> 添加角色
+                </a>
+            </div>
+        </header>
+        <div class="main-box-body clearfix">
+            <div class="row panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive col-md-12">
+                        <table class="table mb30" id="list">
+                        </table>
+                    </div>
+                </div><!-- panel-body -->
+            </div><!-- row panel -->
+        </div>
     </div>
 @endsection
 
 @section('foot-scripts')
     @parent
     <script type="text/javascript">
+        var page = {
+            urlParam: Public.urlParam(),
+            matchConDom: $('#matchCon'),
+            searchDom: $('#search-btn'),
+            listDom: $('#list'),
+
+            listDataTable: null,
+
+            init: function(){
+                this.initDom(), this.addEvent();
+            },
+            initDom: function(){
+                var self = this;
+
+                var options = {
+                    "index": "/admin/role",
+                    "list": "/list",
+                    "columns": [
+                        {
+                            "data": "id" ,
+                            "title": "id",
+                            "orderable": true,
+                        },
+                        {
+                            "data": "display_name",
+                            "title": "display_name",
+                            "orderable": true,
+                        },
+                        {
+                            "data": "description" ,
+                            "title": "description",
+                            "orderable": false,
+                        },
+                        {
+                            "data": "created_at" ,
+                            "title": "created_at",
+                            "orderable": false,
+                        },
+                        {
+                            "data": "operate",
+                            "title": "operate",
+                            "orderable": false,
+                        },
+                    ],
+                };
+                self.listDataTable = self.listDom.table(options);
+            },
+            addEvent: function(){
+                var self = this;
+                self.searchDom.on('click', function(){
+                    var data = {
+                        'matchCon': self.matchConDom.val()
+                    };
+                    self.listDataTable.fnSearch(data);
+                });
+            }
+        };
+
         (function(){
-
-            var table = $('#list').dataTable({
-                "serverSide": true,
-                "ajax": {
-                    "url": "/admin/role/list",
-                    "dataSrc": "rows"
-                },
-                "columns": [
-                    { "data": "id" },
-                    {
-                        "data": "display_name"
-                    },
-                    { "data": "description" },
-                    { "data": "created_at" },
-                    { "data": "operate" }
-                ],
-                "columnDefs": [ {
-                    "targets": -1,
-                    "data": 'operate',
-                    "defaultContent": '<a class="btn btn-white btn-xs"><i class="fa fa-pencil"></i> 编辑</a>\
-                        <a class="btn btn-info btn-xs role-permissions"><i class="fa fa-wrench"></i> 权限</a>\
-                        <a class="btn btn-danger btn-xs" data-href=""><i class="fa fa-trash-o"></i> 删除</a>'
-                } ]
-            });
-
+            page.init();
         })();
-
-        $(".role-delete").click(function () {
-            Rbac.ajax.delete({
-                confirmTitle: '确定删除角色?',
-                href: $(this).data('href'),
-                successTitle: '角色删除成功'
-            });
-        });
-
-        $(".deleteall").click(function () {
-            Rbac.ajax.deleteAll({
-                confirmTitle: '确定删除选中的角色?',
-                href: $(this).data('href'),
-                successTitle: '角色删除成功'
-            });
-        });
     </script>
 
 @endsection

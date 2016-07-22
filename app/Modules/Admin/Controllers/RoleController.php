@@ -1,6 +1,7 @@
 <?php
 namespace App\Modules\Admin\Controllers;
 
+use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
 use App\Modules\Admin\Controllers\Controller as BaseController;
 
@@ -72,6 +73,7 @@ class RoleController extends BaseController {
     }
 
     public function postDelete(Request $request){
+
         $this->validateRequest([
             'id' => 'required|min:0',
         ], $request);

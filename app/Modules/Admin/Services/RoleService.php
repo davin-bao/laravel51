@@ -52,9 +52,12 @@ class RoleService {
 
     public function deleteRole($id){
         $role = Role::find($id);
-        if ($role->id < 6) {
+
+        if(!$role){
+            throw new NoticeMessageException('选择的角色不存在!');
+        }else if ($role->id < 2) {
             throw new NoticeMessageException('系统角色不允许删除!');
-        }else if($role->admins()->count() > 0){
+        }else if($role->staff()->get()->count() > 0){
             throw new NoticeMessageException('角色下关联了用户，不允许删除!');
         } else {
             $role->delete();

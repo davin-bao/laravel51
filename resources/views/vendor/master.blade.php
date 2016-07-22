@@ -13,6 +13,11 @@
         <meta name="keywords"content="@yield('keywords')" />
         <title>@yield('title')</title>
         @yield('head')
+        <style type="text/css">
+            .dataTables_filter {
+                /*display: none;*/
+            }
+        </style>
     </head>
     <body>
     @yield('body')

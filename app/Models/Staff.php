@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
-use App\Modules\Index\Requests\Admins\PasswordResetRequest;
-use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 

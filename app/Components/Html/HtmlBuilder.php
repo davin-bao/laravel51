@@ -1,4 +1,5 @@
-<?php namespace App\Components\Html;
+<?php
+namespace App\Components\Html;
 
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Session\SessionManager ;
