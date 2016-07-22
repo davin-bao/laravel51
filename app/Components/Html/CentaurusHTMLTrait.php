@@ -1,4 +1,5 @@
-<?php namespace App\Components\Html;
+<?php
+namespace App\Components\Html;
 
 use App\Models\Permission;
 use App\Models\Staff;
@@ -20,6 +21,13 @@ trait CentaurusHtmlTrait {
         "font-awesome" => "centaurus/css/libs/font-awesome.css",
         "nanoscroller" => "centaurus/css/libs/nanoscroller.css",
         "theme_styles" => "centaurus/css/libs/theme_styles.css",
+        "ns-default" => "centaurus/css/libs/ns-default.css",
+        "ns-style-attached" => "centaurus/css/libs/ns-style-attached.css",
+        "ns-style-bar" => "centaurus/css/libs/ns-style-bar.css",
+        "ns-style-growl" => "centaurus/css/libs/ns-style-growl.css",
+        "ns-style-other" => "centaurus/css/libs/ns-style-other.css",
+        "ns-style-theme" => "centaurus/css/libs/ns-style-theme.css",
+        "bootstrap-dialog" => "centaurus/css/bootstrap/bootstrap-dialog.min.css",
         "Open_Sans400-600-700-00Titillium-Web200-300-400" => "centaurus/fonts/Open_Sans400-600-700-00Titillium-Web200-300-400.css"
     ];
 
@@ -28,7 +36,12 @@ trait CentaurusHtmlTrait {
         "bootstrap-script" => "centaurus/js/bootstrap.js",
         "jquery.nanoscroller" => "centaurus/js/jquery.nanoscroller.min.js",
         "demo" => "centaurus/js/demo.js",
-        "jquery-script" => "centaurus/js/scripts.js"
+        "jquery-script" => "centaurus/js/scripts.js",
+        "classie" => "centaurus/js/classie.js",
+        "modernizr-custom" => "centaurus/js/modernizr.custom.js",
+        "notificationFx" => "centaurus/js/notificationFx.js",
+        "bootstrap-dialog" => "centaurus/js/bootstrap-dialog.min.js",
+        "common-script" => "js/common.js",
     ];
 
     public function headerLink(){
@@ -214,7 +227,7 @@ trait CentaurusHtmlTrait {
 
                 // 如果此菜单无子菜单，设置其对应的右图标
                 if (!$menu->sub) {
-                    $aTagHref = $menu->uri;
+                    $aTagHref = \URL::action('\\'.$menu->action);
                     $aTagClass = '';
                     $menuRightIcon = "<span class=\"label label-info label-circle pull-right\">Jump</span>";
                     $subMenu = '';
@@ -228,10 +241,10 @@ trait CentaurusHtmlTrait {
 
                     // 循环配置子菜单
                     foreach ($menu->sub as $sub) {
-                        $subHref = $sub->uri;
+                        $subHref = \URL::action('\\'.$menu->action);;
                         $subDisplayName = $sub->display_name;
                         $subMenu .= "<li>
-                                        <a href=\"$subHref\">
+                                        <a href=\"".URL::action('App\Modules\Admin\Controllers\RoleController@getIndex')."\">
                                             $subDisplayName
                                         </a>
                                     </li>";
