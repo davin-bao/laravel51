@@ -142,8 +142,8 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
     /**
      * 得到当前登录的用户的所有权限
      * @author chuanhangyu
-     * @version 3.0
-     * @since version 1.0
+     * @version 4.0
+     * @since 2016/7/21 14:00
      * @return array
      */
     public function getPermissions() {
