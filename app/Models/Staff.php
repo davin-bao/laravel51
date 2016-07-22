@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -121,4 +122,34 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
         return ($this->username == 'admin') ? true : false;
     }
 
+    /**
+     * 得到当前登录的用户的所有角色ID数字数组
+     * @return mixed
+     */
+    public function getRoleIds() {
+        $staffId = Auth::staff()->get()->toArray()['id'];
+        $roleIds = self::select('staff_role.role_id')
+            ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
+            ->where('staff.id', $staffId)
+            ->get()
+            ->toArray();
+        return $roleIds;
+    }
+
+    /**
+     * 得到当前登录的用户的所有权限
+     * @author chuanhangyu
+     * @version 4.0
+     * @since 2016/7/21 14:00
+     * @return array
+     */
+    public function getPermissions() {
+        $permissions = self::select('permissions.*')
+                ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
+                ->join('permission_role', 'permission_role.role_id', '=', 'staff_role.role_id')
+                ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
+                ->where('staff.id', $this->id)
+                ->get();
+        return $permissions;
+    }
 }

@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 use App\Models\Staff;
 use App\Models\Role;
-use App\Models\Department;
 
 class StaffSeeder extends Seeder
 {
@@ -14,7 +13,6 @@ class StaffSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
 
         $admin = new Staff();
         $admin->username = 'admin';
