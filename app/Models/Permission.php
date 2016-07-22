@@ -10,6 +10,9 @@ class Permission extends EntrustPermission
 {
     use CacheTrait;
 
+    const IS_MENU_YES = 1;  //菜单
+    const IS_MENU_NO = 0;   //非菜单
+
     protected $table = 'permissions';
 
     protected $fillable = ['id', 'fid', 'icon', 'uri', 'action', 'display_name', 'description', 'is_menu', 'sort'];
