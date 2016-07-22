@@ -140,19 +140,19 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
     }
 
     /**
-     * 得到当前登录的用户的权限
-     * @return mixed
+     * 得到当前登录的用户的所有权限
+     * @author chuanhangyu
+     * @version 3.0
+     * @since version 1.0
+     * @return array
      */
     public function getPermissions() {
-        $permissions = Permission::select('permissions.*')
-            ->join('staff_role', 'staff_role.staff_id', 'and', 'staff_role.role_id')
-            ->join('permission_role', function ($join) {
-                $join->on('permission_role.role_id', '=', 'staff_role.role_id')->on('permissions.id', '=', 'permission_role.permission_id');
-            })
-            ->where('permissions.is_menu', 1)
-            ->where('permissions.fid', 0)
-            ->where('staff_role.staff_id', $this->id)
-            ->get();
+        $permissions = self::select('permissions.*')
+                ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
+                ->join('permission_role', 'permission_role.role_id', '=', 'staff_role.role_id')
+                ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
+                ->where('staff.id', $this->id)
+                ->get();
         return $permissions;
     }
 }
