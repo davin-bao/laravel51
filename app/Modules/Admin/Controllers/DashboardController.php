@@ -19,7 +19,7 @@ class DashboardController extends BaseController {
     public static function actionName()
     {
         return [
-            'getIndex'=> json_encode(['parent'=>0, 'icon'=>'home', 'display_name'=>'控制面板', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>''])
+            'getIndex'=> json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'控制面板', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>''])
         ];
     }
 

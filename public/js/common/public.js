@@ -1,8 +1,8 @@
-
-//<editor-fold desc="Public Functions">
 //公共方法
+
+//<editor-fold desc="AJAX">
 var Public = Public || {};
-Public.ROOT_URL = Public.ROOT_URL || {};
+Public.ROOT_URL = Public.ROOT_URL || (function(){ return location.href.substr(0, location.href.indexOf(location.pathname)) + '/'; })();
 
 $.ajaxSetup({
     headers: {
@@ -35,17 +35,25 @@ $.ajaxSetup( {
         } );
     }
 } );
-/*
- 通用get请求，返回json
- url:请求地址， params：传递的参数{...}， callback：请求成功回调
+
+/**
+ * 通用get请求，返回json
+ * @param url 请求地址
+ * @param params 传递的参数{...}
+ * @param callback 请求成功回调
+ * @param errCallback
  */
 Public.ajaxGet = function(url, params, callback, errCallback){
+    $('.loading').show();
     $.ajax({
         type: "GET",
-        url: Public.ROOT_URL() + url,
+        url: Public.ROOT_URL + url,
         dataType: "json",
         data: params,
-        //mode: "limit",
+        mode: "limit",
+        complete: function(xMLHttpRequest, textStatus){
+            $('.loading').hide();
+        },
         success: function(data, status){
             callback(data);
         },
@@ -54,17 +62,25 @@ Public.ajaxGet = function(url, params, callback, errCallback){
         }
     });
 };
-/*
- 通用post请求，返回json
- url:请求地址， params：传递的参数{...}， callback：请求成功回调
+
+/**
+ * 通用post请求，返回json
+ * @param url 请求地址
+ * @param params 传递的参数{...}
+ * @param callback 请求成功回调
+ * @param errCallback
  */
 Public.ajaxPost = function(url, params, callback, errCallback){
+    $('.loading').show();
     $.ajax({
         type: "POST",
-        url: Public.ROOT_URL() + url,
+        url: Public.ROOT_URL + url,
         data: params,
         dataType: "json",
         mode: "limit",
+        complete: function(xMLHttpRequest, textStatus){
+            $('.loading').hide();
+        },
         success: function(data, status){
             callback(data);
         },
@@ -79,7 +95,13 @@ Public.ajaxPost = function(url, params, callback, errCallback){
         }
     });
 };
-/*获取URL参数值*/
+//</editor-fold>
+
+//<editor-fold desc="URL参数值操作">
+/**
+ * 获取 URL 参数
+ * @type {Public.urlParam}
+ */
 Public.getRequest = Public.urlParam = function() {
     var param, url = location.search, theRequest = {};
     if (url.indexOf("?") != -1) {
@@ -92,7 +114,11 @@ Public.getRequest = Public.urlParam = function() {
     }
     return theRequest;
 };
-/*对象转URL参数字符串*/
+/**
+ * 对象转URL参数字符串
+ * @param obj { key: value }
+ * @returns {string}
+ */
 Public.buildQuery = function(obj) {
     var param = '';
     for ( var p in obj ){ // 方法
@@ -102,21 +128,9 @@ Public.buildQuery = function(obj) {
         } } // 最后显示所有的属性
     return param.slice(0, param.length - 1);
 }
-/*提示*/
-Public.tips = function(options){
-    var notification = new NotificationFx($.extend(true, {
-        message : '<p>$message</p>',
-        layout : 'growl',
-        effect : 'genie',
-        type : '$type', // notice, warning or error
-        onClose : function() {
-            //关闭
-        }
-    }, options));
-    notification.show();
+//</editor-fold>
 
-};
-
+//<editor-fold desc="原型方法扩展">
 $.fn.table = function( options ) {
     var self = this;
 
@@ -124,7 +138,7 @@ $.fn.table = function( options ) {
         "autoWidth":false,
         "bProcessing": true,
         "bPaginate": true,
-        "index": "/admin/",
+        "index": "admin",
         "list": "/list",
         "edit": "/add",
         "delete": "/delete",
@@ -175,7 +189,7 @@ $.fn.table = function( options ) {
         "serverSide": true,
         "ajax": {
             "dataSrc": "rows",
-            "url": Public.ROOT_URL() + options.index + options.list
+            "url": Public.ROOT_URL + options.index + options.list
         },
         "columns": [
         ]
@@ -184,7 +198,7 @@ $.fn.table = function( options ) {
     if(options.edit_able){
         self.on('click', '.edit-row-btn', function(){
             var index = $(this).data('id');
-            window.location = Public.ROOT_URL() + options.index + options.edit + '?id=' + index;
+            window.location = Public.ROOT_URL + options.index + options.edit + '?id=' + index;
         });
     }
 
@@ -251,6 +265,4 @@ $.fn.dataTable.Api.register( 'fnSearch()', function ( obj) {
     url = url + '?' + Public.buildQuery(obj);
     this.ajax.url( url ).load();
 } );
-
-
 //</editor-fold>

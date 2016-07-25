@@ -41,5 +41,5 @@
 
 @section('foot-scripts')
     @parent
-    <script type="text/javascript" src="role_index.js"></script>
+    <script type="text/javascript" src="{{ asset('js/admin/role_index.js') }}"></script>
 @endsection

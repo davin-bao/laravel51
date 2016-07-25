@@ -22,11 +22,15 @@ class RoleController extends BaseController {
     public static function actionName()
     {
         return [
-            'getIndex'=> json_encode(['parent'=>0, 'icon'=>'home', 'display_name'=>'角色管理', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'getList'=> json_encode(['parent'=>'RoleController@getIndex', 'icon'=>'', 'display_name'=>'角色列表', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postAdd'=> json_encode(['parent'=>'RoleController@getIndex', 'icon'=>'', 'display_name'=>'添加角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postEdit'=> json_encode(['parent'=>'RoleController@getIndex', 'icon'=>'', 'display_name'=>'修改角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postDelete'=> json_encode(['parent'=>'RoleController@getIndex', 'icon'=>'', 'display_name'=>'删除角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'getModule'=> json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'角色管理', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+
+            'getIndex'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'user', 'display_name'=>'角色列表', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'getAdd'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'plus', 'display_name'=>'添加角色', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+
+            'getList'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postAdd'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'添加角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postEdit'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'修改角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postDelete'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'删除角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
 
@@ -79,26 +83,25 @@ class RoleController extends BaseController {
         return $this->response($request, $role->toArray(), 'admin/role/index');
     }
 
-    public function postAdd(Request $request){
-
-        $this->validateRequest([
-            'name' => 'required|alpha_num|min:6|max:30|unique:roles',
-            'display_name' => 'required|min:6',
-        ], $request);
-
-        $this->getService()->createRole($request);
-
-        return $this->response($request, [], 'admin/role/index');
-    }
-
     public function postEdit(Request $request){
 
-        $this->validateRequest([
-            'name' => 'required|alpha_num|min:6|max:30|unique:roles,name,' . $request->input('id', 0),
-            'display_name' => 'required|min:6',
-        ], $request);
+        $id = $request->input('id', 0);
 
-        $this->getService()->saveRole($request->all());
+        if(empty($id)){  //创建
+            $this->validateRequest([
+                'name' => 'required|alpha_num|min:6|max:30|unique:roles',
+                'display_name' => 'required|min:6',
+            ], $request);
+
+            $this->getService()->createRole($request);
+        }else{ //修改
+            $this->validateRequest([
+                'name' => 'required|alpha_num|min:6|max:30|unique:roles,name,' . $request->input('id', 0),
+                'display_name' => 'required|min:6',
+            ], $request);
+
+            $this->getService()->updateRole($request->all());
+        }
 
         return $this->response($request, [], 'admin/role/index');
     }

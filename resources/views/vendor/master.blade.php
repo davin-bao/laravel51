@@ -22,5 +22,6 @@
     <body>
     @yield('body')
     {!! Html::notification() !!}
+    <div class="loading"></div>
     </body>
 </html>

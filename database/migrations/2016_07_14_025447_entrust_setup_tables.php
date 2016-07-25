@@ -31,7 +31,7 @@ class EntrustSetupTables extends Migration
         // Create table for storing permissions
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('fid')->unsigned()->default(0)->comment('菜单父ID');
+            $table->string('parent')->nullable()->comment('父菜单 action');
             $table->string('icon')->nullable()->comment('图标class');
             $table->string('uri')->nullable()->comment('uri 现无意义');
             $table->string('action')->nullable()->comment('action URL地址对应的接口地址');

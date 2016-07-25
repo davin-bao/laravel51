@@ -66,20 +66,20 @@ class AclUpdate extends Command
                 $attributes = json_decode($item['name'], true);
                 $attributes['action'] = $action;
                 $attributes['uri'] = $item['uri'];
-                $parent = array_get($attributes, 'parent', null);
+//                $parent = array_get($attributes, 'parent', null);
 
-                if(($parent === 0)  || !isset($attributes['display_name'])){
-                    $attributes['fid'] = 0;
-                }else{
-                    $parentPermission = Permission::where('action', "like", '%'.$parent)->first();
-                    if($parentPermission){
-                        $attributes['fid'] = $parentPermission->id;
-                    }
-                }
-
-                if(!isset($attributes['fid'])){
-                   throw new \Exception('Action '.$action.' 未定义 parent 或定义的 parent 不合法');
-                }
+//                if(($parent === 0)  || !isset($attributes['display_name'])){
+//                    $attributes['fid'] = 0;
+//                }else{
+//                    $parentPermission = Permission::where('action', "like", '%'.$parent)->first();
+//                    if($parentPermission){
+//                        $attributes['fid'] = $parentPermission->id;
+//                    }
+//                }dd($attributes);
+//
+//                if(!isset($attributes['fid'])){
+//                   throw new \Exception('Action '.$action.' 未定义 parent 或定义的 parent 不合法');
+//                }
 
                 $oldPermission = Permission::where('action', $action)->first();
                 if($oldPermission){

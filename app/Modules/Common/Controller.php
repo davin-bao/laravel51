@@ -76,6 +76,11 @@ abstract class Controller extends BaseController {
     }
 
     /**
+     * 设置可配置模块权限的路由
+     */
+    public function getModule(){}
+
+    /**
      *
      * return result
      * @author: davin.bao

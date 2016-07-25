@@ -12,7 +12,7 @@
         <div class="main-box clearfix">
             <header class="main-box-header clearfix">
                 <h2 class="pull-left">&nbsp;</h2>
-                <div class="filter-block pull-right">
+                <div class="filter-block pull-right tool-bar">
                     <a href="#" class="btn btn-primary pull-right">
                         <i class="fa fa-plus-circle fa-lg"></i> 保存
                     </a>
@@ -20,7 +20,8 @@
                 </div>
             </header>
             <div class="main-box-body clearfix">
-                <form role="form" method="post">
+                <form role="form">
+                    <input type="hidden" id="id" name="id">
                     <div class="form-group col-md-6 col-lg-3">
                         <label for="name">角色英文标示</label>
                         <input type="text" class="form-control" id="name" placeholder="">
@@ -34,9 +35,9 @@
                         <textarea class="form-control" id="description" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <div class="col-lg-offset-2 col-lg-10">
-                            <button type="submit" class="btn btn-success"><i class="fa fa-plus-circle fa-lg"></i>保存</button>
-                            <a class="btn btn-default">返回</a>
+                        <div class="col-lg-offset-2 col-lg-10 tool-bar">
+                            {{--<button type="submit" class="btn btn-success"><i class="fa fa-plus-circle fa-lg"></i>保存</button>--}}
+                            {{--<a class="btn btn-default">返回</a>--}}
                         </div>
                     </div>
                 </form>
@@ -47,5 +48,5 @@
 
 @section('foot-scripts')
     @parent
-    <script type="text/javascript" src="../role_add.js"></script>
+    <script type="text/javascript" src="{{ asset('js/admin/role_add.js') }}"></script>
 @endsection

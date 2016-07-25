@@ -42,7 +42,9 @@ trait CentaurusHtmlTrait {
         "modernizr-custom" => "centaurus/js/modernizr.custom.js",
         "notificationFx" => "centaurus/js/notificationFx.js",
         "bootstrap-dialog" => "centaurus/js/bootstrap-dialog.min.js",
-        "common-script" => "js/common.js",
+        "jquery-validate" => "js/common/jquery.validate.min.js",
+        "public-script" => "js/common/public.js",
+        "widgets-script" => "js/common/widgets.js",
     ];
 
     public function headerLink(){
