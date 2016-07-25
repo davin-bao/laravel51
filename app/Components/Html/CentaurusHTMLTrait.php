@@ -176,6 +176,18 @@ trait CentaurusHtmlTrait {
     public function getStaff(){
         return Auth::staff()->get();
     }
+    /**
+     * 得到当前登录用户的头像
+     * @return string
+     */
+    public function avatar($email, $s = 80, $d = 'mm', $r = 'g'){
+        if($this->getStaff()->avatar){
+            return $this->getStaff()->avatar;
+        }else{
+            $avatar ="http://www.gravatar.com/avatar/".md5($email)."?s=$s&d=$d&r=$r";
+            return $avatar;
+        }
+    }
 
     /**
      * 得到当前登录用户权限内的菜单栏
