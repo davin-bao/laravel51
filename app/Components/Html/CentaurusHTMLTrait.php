@@ -191,7 +191,6 @@ trait CentaurusHtmlTrait {
             if(empty($permission->parent) && $permission->is_menu === Permission::IS_MENU_YES){
                 $subPermissions = [];
                 foreach($permissions as $subPermission) {
-//                    if ($subPermission->fid === $permission->id && $subPermission->is_menu === 1) {
                     if ($subPermission->parent && $subPermission->is_menu === Permission::IS_MENU_YES && preg_match('~'. $subPermission->parent. '~', $permission->action)) {
                         array_push($subPermissions, $subPermission);
                     }
