@@ -188,11 +188,11 @@ trait CentaurusHtmlTrait {
 
         // 循环得到所有顶级菜单下的子菜单
         foreach($permissions as $permission){
-            if($permission->parent === null && $permission->is_menu === Permission::IS_MENU_YES){
+            if(empty($permission->parent) && $permission->is_menu === Permission::IS_MENU_YES){
                 $subPermissions = [];
                 foreach($permissions as $subPermission) {
 //                    if ($subPermission->fid === $permission->id && $subPermission->is_menu === 1) {
-                    if ($subPermission->parent && $subPermission->is_menu === 1 && preg_match('~'. $subPermission->parent. '~', $permission->action)) {
+                    if ($subPermission->parent && $subPermission->is_menu === Permission::IS_MENU_YES && preg_match('~'. $subPermission->parent. '~', $permission->action)) {
                         array_push($subPermissions, $subPermission);
                     }
                 }
