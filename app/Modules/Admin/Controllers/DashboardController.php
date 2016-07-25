@@ -24,6 +24,6 @@ class DashboardController extends BaseController {
     }
 
     public function getIndex(){
-        echo 'dashboard';
+        return $this->render('dashboard');
     }
 }

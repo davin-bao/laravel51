@@ -2,6 +2,7 @@
 
 namespace App\Modules\Admin\Controllers;
 
+use Breadcrumbs;
 use App\Modules\Common\Controller as BaseController;
 
 /**
@@ -17,6 +18,11 @@ abstract class Controller extends BaseController
     public function __construct() {
         parent::__construct();
         $this->middleware('staff_permissions');
+
+        Breadcrumbs::setView('Admin::vendor.breadcrumbs');
+        Breadcrumbs::register('dashboard', function ($breadcrumbs) {
+            $breadcrumbs->push('控制面板', adminAction('DashboardController@getIndex'));
+        });
     }
 
     /**

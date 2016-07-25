@@ -46,3 +46,7 @@ function formatEndDate($endDate){
     }
     return date('Y-m-d h:i:s',strtotime('+12 month'));
 }
+
+function adminAction($action){
+    return action('\App\Modules\Admin\Controllers\\'.$action);
+}
