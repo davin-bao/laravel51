@@ -188,10 +188,10 @@ trait CentaurusHtmlTrait {
 
         // 循环得到所有顶级菜单下的子菜单
         foreach($permissions as $permission){
-            if($permission->fid === 0 && $permission->is_menu === Permission::IS_MENU_YES){
+            if(empty($permission->parent) && $permission->is_menu === Permission::IS_MENU_YES){
                 $subPermissions = [];
                 foreach($permissions as $subPermission) {
-                    if ($subPermission->fid === $permission->id && $subPermission->is_menu === 1) {
+                    if ($subPermission->parent && $subPermission->is_menu === Permission::IS_MENU_YES && preg_match('~'. $subPermission->parent. '~', $permission->action)) {
                         array_push($subPermissions, $subPermission);
                     }
                 }
@@ -207,19 +207,17 @@ trait CentaurusHtmlTrait {
                     <ul class="nav nav-pills nav-stacked">';
 
         // 得到当前路由信息
-        $currentRouteName = json_decode(Route::currentRouteName());
+        $routeActionName = Route::current()->getActionName();
 
         // 当该用户有对应权限的菜单时
-        if ($menus && $currentRouteName) {
-
-            $routeDisplayName = $currentRouteName->display_name;
+        if ($menus && $routeActionName) {
 
             // 循环包裹菜单
             // 循环包裹顶级菜单
             foreach ($menus as $menu) {
 
                 // 为当前路由对应的菜单配置激活class
-                if ($menu->display_name === $routeDisplayName) {
+                if ($menu->action === $routeActionName) {
                     $active = ' class="active"';
                 } else {
                     $active = '';
@@ -229,7 +227,7 @@ trait CentaurusHtmlTrait {
 
                 // 如果此菜单无子菜单，设置其对应的右图标
                 if (!$menu->sub) {
-                    $aTagHref = \URL::action('\\'.$menu->action);
+                    $aTagHref = action('\\'.$menu->action);
                     $aTagClass = '';
                     $menuRightIcon = "<span class=\"label label-info label-circle pull-right\">Jump</span>";
                     $subMenu = '';
@@ -243,17 +241,29 @@ trait CentaurusHtmlTrait {
 
                     // 循环配置子菜单
                     foreach ($menu->sub as $sub) {
-                        $subHref = \URL::action('\\'.$menu->action);;
+                        if ($sub->action === $routeActionName) {
+                            $subActive = ' class="active"';
+                            $active = ' class="active open"';
+                        } else {
+                            $subActive = '';
+                        }
+                        $subHref = action('\\'.$sub->action);
+                        $subIcon = $sub->icon;
+                        if ($subIcon) {
+                            $subIconTag = "<i class=\"fa fa-$subIcon\" style=\"margin-right: 0.5em\"></i>";
+                        } else {
+                            $subIconTag = "<i style=\"margin-right: 1.5em\"></i>";
+                        }
                         $subDisplayName = $sub->display_name;
                         $subMenu .= "<li>
-                                        <a href=\"".URL::action('App\Modules\Admin\Controllers\RoleController@getIndex')."\">
+                                        <a href=\"$subHref\"$subActive>
+                                            $subIconTag
                                             $subDisplayName
                                         </a>
                                     </li>";
                     }
                     $subMenu .= '</ul>';
                 }
-
                 // 拼接所有html
                 $html .= "<li$active>
                             <a href=\"$aTagHref\"$aTagClass>
