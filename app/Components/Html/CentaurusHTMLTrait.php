@@ -179,6 +179,8 @@ trait CentaurusHtmlTrait {
     /**
      * 得到当前登录用户的头像
      * @return string
+     * @author  cunqinghuang
+     * @since  2016-07-25 15:00
      */
     public function avatar( $s = 80, $d = 'mm', $r = 'g'){
         if($this->getStaff()->avatar){
