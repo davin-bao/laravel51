@@ -90,14 +90,14 @@ class RoleController extends BaseController {
         if(empty($id)){  //创建
             $this->validateRequest([
                 'name' => 'required|alpha_num|min:6|max:30|unique:roles',
-                'display_name' => 'required|min:6',
+                'display_name' => 'required|min:6|max:30',
             ], $request);
 
-            $this->getService()->createRole($request);
+            $this->getService()->createRole($request->all());
         }else{ //修改
             $this->validateRequest([
                 'name' => 'required|alpha_num|min:6|max:30|unique:roles,name,' . $request->input('id', 0),
-                'display_name' => 'required|min:6',
+                'display_name' => 'required|min:6|max:30',
             ], $request);
 
             $this->getService()->updateRole($request->all());

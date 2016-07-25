@@ -89,7 +89,7 @@ Public.ajaxPost = function(url, params, callback, errCallback){
             if(err.status == 422){
                 data = {'code': 422, 'msg': '输入参数有误'};
             }else if(err.status == 500 && typeof(err.responseJSON) !== "undefined"){
-                data = err.responseJSON;;
+                data = err.responseJSON;
             }
             errCallback && errCallback(data);
         }
@@ -222,28 +222,27 @@ $.fn.table = function( options ) {
                         if(index > 0){
                             postData["_method"] = "POST";
                         }
+                        dialog.close();
 
                         Public.ajaxPost(url, postData, function(event) {
                             if(200 == event.code){
-                                Public.tips({
+                                Widgets.tips({
                                     message: "CODE " + event.code + ': ' + event.msg,
                                     type: 'success'
                                 });
                                 //删除行
                                 self.find('.del-row-btn[data-id='+index+']').parents('tr').remove();
-
-                                dialog.close();
                             }else {
                                 Public.tips({
                                     message: "CODE " + event.code + ': ' + event.msg,
                                     type: 'error'
-                                }), dialog.close();
+                                });
                             }
                         }, function(event){
                             Public.tips({
                                 message: "CODE " + event.code + ': ' + event.msg,
                                 type: 'error'
-                            }), dialog.close();
+                            });
                         });
                     }
                 }, {
