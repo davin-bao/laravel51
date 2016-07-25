@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Zizaco\Entrust\EntrustRole;
-
-class Role extends EntrustRole
+class Role extends Model
 {
     const NAME_ADMINISTRATOR = 'administrator';
 
     protected $fillable = ['name', 'display_name', 'description'];
 
-    protected $searchColumns = ['name', 'display_name', 'description'];
+    protected static $searchColumns = ['name', 'display_name', 'description'];
 
     /**
      * 用户列表
@@ -67,7 +65,7 @@ class Role extends EntrustRole
             return $query;
         }
         $query = $query->where(function($query) use ($match, $otherFields) {
-            foreach(static::$searchColumns as $searchColumn) {
+            foreach(self::$searchColumns as $searchColumn) {
                 $query->orWhere($query->getModel()->table.'.'.$searchColumn, "like", '%'.$match.'%');
             }
 

@@ -92,7 +92,7 @@ abstract class Controller extends BaseController {
         $message = isset($data['msg']) ? $data['msg'] : '操作成功';
 
         if ($request->ajax() || $request->wantsJson()) {
-            return new JsonResponse(array_merge($data, ['msg'=>$message, 'next_url'=>$nextUrl]), 200, $headers = [], 0);
+            return new JsonResponse(array_merge($data, ['msg'=>$message, 'next_url'=>$nextUrl, 'code'=>200]), 200, $headers = [], 0);
         }
 
         \Html::success($message, 200);
@@ -108,24 +108,29 @@ abstract class Controller extends BaseController {
      * @return array
      */
     protected function queryData(Request $request, $query, $countColumns = '*'){
-        $page = intval($request->input('page',0));
-        $limit = intval($request->input('rows',100));
-        $sortOrder = $request->input('sord', 'DESC');
-        $sortName = $request->input('sidx', 'id');
+        //起始记录
+        $start = intval($request->input('start',0));
+        //每页数量
+        $length = intval($request->input('length',100));
+        $sortOrder = $request->input('order', [0=>['dir'=>'DESC']])[0]['dir'];
+        $sortColumnId = $request->input('order', [0=>['column'=>'id']])[0]['column'];
+        $columns = $request->input('columns',null);
+        if(is_array($columns) && isset($columns[$sortColumnId]) && isset($columns[$sortColumnId]['data'])){
+            $sortName = $columns[$sortColumnId]['data'];
+        }
 
         $sortName = empty($sortName) ? 'id' : $sortName;
         // Order
         $query = $query->orderBy($query->getModel()->getTable().'.'.$sortName, $sortOrder);
 
         $totalCount = $query->count($countColumns);
-        $results = $query->skip($limit * ($page-1))->take($limit)->get()->toArray();
+        $results = $query->skip($start)->take($length)->get()->toArray();
 
         $data = [
             'rows' => $results,
-            'limit' => $limit,
-            'page' => $page,
-            'records' => $totalCount,
-            'total' => ceil($totalCount/$limit)
+            'start' => $start,
+            'length' => $length,
+            'recordsTotal' => $totalCount
         ];
 
         return $data;

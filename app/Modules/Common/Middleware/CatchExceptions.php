@@ -6,6 +6,7 @@ use App\Exceptions\BusinessException;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Http\Exception\HttpResponseException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class CatchExceptions
@@ -33,7 +34,7 @@ class CatchExceptions
             return $next($request);
         } catch(BusinessException $exception){
             //业务逻辑错误
-            $errors = ['msg'=>$exception->getMessage()];
+            $errors = ['msg'=>$exception->getMessage(), 'code'=>$exception->getCode()];
 
             if ($request->ajax() || $request->wantsJson()) { //输出 JSON 字符串
                 return new JsonResponse($errors, $exception->getCode());

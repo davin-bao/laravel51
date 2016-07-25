@@ -1,6 +1,10 @@
-<?php namespace App\Components\Html;
+<?php
+namespace App\Components\Html;
 
 use App\Models\Permission;
+use App\Models\Staff;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Form 自定义组件
@@ -17,6 +21,13 @@ trait CentaurusHtmlTrait {
         "font-awesome" => "centaurus/css/libs/font-awesome.css",
         "nanoscroller" => "centaurus/css/libs/nanoscroller.css",
         "theme_styles" => "centaurus/css/libs/theme_styles.css",
+        "ns-default" => "centaurus/css/libs/ns-default.css",
+        "ns-style-attached" => "centaurus/css/libs/ns-style-attached.css",
+        "ns-style-bar" => "centaurus/css/libs/ns-style-bar.css",
+        "ns-style-growl" => "centaurus/css/libs/ns-style-growl.css",
+        "ns-style-other" => "centaurus/css/libs/ns-style-other.css",
+        "ns-style-theme" => "centaurus/css/libs/ns-style-theme.css",
+        "bootstrap-dialog" => "centaurus/css/bootstrap/bootstrap-dialog.min.css",
         "Open_Sans400-600-700-00Titillium-Web200-300-400" => "centaurus/fonts/Open_Sans400-600-700-00Titillium-Web200-300-400.css"
     ];
 
@@ -25,7 +36,12 @@ trait CentaurusHtmlTrait {
         "bootstrap-script" => "centaurus/js/bootstrap.js",
         "jquery.nanoscroller" => "centaurus/js/jquery.nanoscroller.min.js",
         "demo" => "centaurus/js/demo.js",
-        "jquery-script" => "centaurus/js/scripts.js"
+        "jquery-script" => "centaurus/js/scripts.js",
+        "classie" => "centaurus/js/classie.js",
+        "modernizr-custom" => "centaurus/js/modernizr.custom.js",
+        "notificationFx" => "centaurus/js/notificationFx.js",
+        "bootstrap-dialog" => "centaurus/js/bootstrap-dialog.min.js",
+        "common-script" => "js/common.js",
     ];
 
     public function headerLink(){
@@ -150,5 +166,107 @@ trait CentaurusHtmlTrait {
         $this->session->flash('centaurus:notifications', $this->notifications);
     }
 
+    /**
+     * 得到当前登录用户的信息
+     * @return mixed
+     */
+    public function getStaff(){
+        return Auth::staff()->get();
+    }
 
+    /**
+     * 得到当前登录用户权限内的菜单栏
+     * @author chuanhangyu
+     * @version 4.0
+     * @since 2016/7/21 15:30
+     * @return string
+     */
+    public function getMenu() {
+        $permissions = Auth::staff()->get()->getPermissions();
+        $menus = [];
+
+        // 循环得到所有顶级菜单下的子菜单
+        foreach($permissions as $permission){
+            if($permission->fid === 0 && $permission->is_menu === Permission::IS_MENU_YES){
+                $subPermissions = [];
+                foreach($permissions as $subPermission) {
+                    if ($subPermission->fid === $permission->id && $subPermission->is_menu === 1) {
+                        array_push($subPermissions, $subPermission);
+                    }
+                }
+                $permission->sub = $subPermissions;
+                array_push($menus, $permission);
+            }
+        }
+
+        // 将所有菜单包裹在HTML中
+
+        // 菜单栏样式主题主体，不管该用户有没有权限菜单
+        $html = '<div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+                    <ul class="nav nav-pills nav-stacked">';
+
+        // 当该用户有对应权限的菜单时
+        if ($menus) {
+
+            // 得到当前路由信息
+            $currentRouteName = json_decode(Route::currentRouteName());
+            $routeDisplayName = $currentRouteName->display_name;
+
+            // 循环包裹菜单
+            // 循环包裹顶级菜单
+            foreach ($menus as $menu) {
+
+                // 为当前路由对应的菜单配置激活class
+                if ($menu->display_name === $routeDisplayName) {
+                    $active = ' class="active"';
+                } else {
+                    $active = '';
+                }
+                $icon = $menu->icon;
+                $display_name = $menu->display_name;
+
+                // 如果此菜单无子菜单，设置其对应的右图标
+                if (!$menu->sub) {
+                    $aTagHref = \URL::action('\\'.$menu->action);
+                    $aTagClass = '';
+                    $menuRightIcon = "<span class=\"label label-info label-circle pull-right\">Jump</span>";
+                    $subMenu = '';
+                } else {
+
+                    // 如果此菜单有子菜单，为其设置右下拉图标，并为其配置子菜单
+                    $aTagHref = '#';
+                    $aTagClass = " class=\"dropdown-toggle\"";
+                    $menuRightIcon = "<i class=\"fa fa-chevron-circle-right drop-icon\"></i>";
+                    $subMenu = "<ul class=\"submenu\">";
+
+                    // 循环配置子菜单
+                    foreach ($menu->sub as $sub) {
+                        $subHref = \URL::action('\\'.$menu->action);;
+                        $subDisplayName = $sub->display_name;
+                        $subMenu .= "<li>
+                                        <a href=\"".URL::action('App\Modules\Admin\Controllers\RoleController@getIndex')."\">
+                                            $subDisplayName
+                                        </a>
+                                    </li>";
+                    }
+                    $subMenu .= '</ul>';
+                }
+
+                // 拼接所有html
+                $html .= "<li$active>
+                            <a href=\"$aTagHref\"$aTagClass>
+                                <i class=\"fa fa-$icon\"></i>
+                                <span>$display_name</span>
+                                $menuRightIcon
+                            </a>
+                            $subMenu
+                          </li>";
+            }
+        }
+
+        // 闭合主体
+        $html .= '</ul>
+               </div>';
+        return $html;
+    }
 }
