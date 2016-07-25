@@ -180,10 +180,11 @@ trait CentaurusHtmlTrait {
      * 得到当前登录用户的头像
      * @return string
      */
-    public function avatar($email, $s = 80, $d = 'mm', $r = 'g'){
+    public function avatar( $s = 80, $d = 'mm', $r = 'g'){
         if($this->getStaff()->avatar){
             return $this->getStaff()->avatar;
         }else{
+            $email = $this->getStaff()->email;
             $avatar ="http://www.gravatar.com/avatar/".md5($email)."?s=$s&d=$d&r=$r";
             return $avatar;
         }
