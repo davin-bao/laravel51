@@ -28,6 +28,7 @@ trait CentaurusHtmlTrait {
         "ns-style-other" => "centaurus/css/libs/ns-style-other.css",
         "ns-style-theme" => "centaurus/css/libs/ns-style-theme.css",
         "bootstrap-dialog" => "centaurus/css/bootstrap/bootstrap-dialog.min.css",
+//        "bootstrap-override" => "centaurus/css/bootstrap/bootstrap-override.css",
         "Open_Sans400-600-700-00Titillium-Web200-300-400" => "centaurus/fonts/Open_Sans400-600-700-00Titillium-Web200-300-400.css"
     ];
 
@@ -176,10 +177,10 @@ trait CentaurusHtmlTrait {
 
     /**
      * 得到当前登录用户权限内的菜单栏
-     * @author chuanhangyu
-     * @version 4.0
-     * @since 2016/7/21 15:30
      * @return string
+     *
+     * @author chuanhangyu
+     * @since 2016/7/21 15:30
      */
     public function getMenu() {
         $permissions = Auth::staff()->get()->getPermissions();
@@ -205,11 +206,12 @@ trait CentaurusHtmlTrait {
         $html = '<div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
                     <ul class="nav nav-pills nav-stacked">';
 
-        // 当该用户有对应权限的菜单时
-        if ($menus) {
+        // 得到当前路由信息
+        $currentRouteName = json_decode(Route::currentRouteName());
 
-            // 得到当前路由信息
-            $currentRouteName = json_decode(Route::currentRouteName());
+        // 当该用户有对应权限的菜单时
+        if ($menus && $currentRouteName) {
+
             $routeDisplayName = $currentRouteName->display_name;
 
             // 循环包裹菜单

@@ -27,6 +27,10 @@ class RoleService {
         return Role::getSearchQuery($query, $matchCon);
     }
 
+    public function getRole($id){
+        return Role::find($id);
+    }
+
     /**
      * 创建角色
      * @param array $parameters

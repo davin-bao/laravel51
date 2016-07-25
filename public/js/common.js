@@ -45,7 +45,7 @@ Public.ajaxGet = function(url, params, callback, errCallback){
         url: Public.ROOT_URL() + url,
         dataType: "json",
         data: params,
-        mode: "limit",
+        //mode: "limit",
         success: function(data, status){
             callback(data);
         },
@@ -126,7 +126,7 @@ $.fn.table = function( options ) {
         "bPaginate": true,
         "index": "/admin/",
         "list": "/list",
-        "edit": "/edit",
+        "edit": "/add",
         "delete": "/delete",
         "delete_able": !0,
         "edit_able": !0,
@@ -144,7 +144,7 @@ $.fn.table = function( options ) {
             "thousands":      ",",
             "lengthMenu":     "Show _MENU_ entries",
             "loadingRecords": "Loading...",
-            "processing":     "Processing...",
+            "processing":     " ",
             "search":         "Search:",
             "zeroRecords":    "没有找到匹配的记录",
             "paginate": {
@@ -184,7 +184,7 @@ $.fn.table = function( options ) {
     if(options.edit_able){
         self.on('click', '.edit-row-btn', function(){
             var index = $(this).data('id');
-            window.location = Public.ROOT_URL() + options.index + options.edit + '/' + index;
+            window.location = Public.ROOT_URL() + options.index + options.edit + '?id=' + index;
         });
     }
 

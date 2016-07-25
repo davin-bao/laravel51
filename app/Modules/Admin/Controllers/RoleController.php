@@ -1,6 +1,7 @@
 <?php
 namespace App\Modules\Admin\Controllers;
 
+use Breadcrumbs;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
 use App\Modules\Admin\Controllers\Controller as BaseController;
@@ -29,7 +30,22 @@ class RoleController extends BaseController {
         ];
     }
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        Breadcrumbs::register('admin-role', function ($breadcrumbs) {
+            $breadcrumbs->parent('dashboard');
+            $breadcrumbs->push('角色管理', adminAction('RoleController@getIndex'));
+        });
+    }
+
     public function getIndex(){
+        Breadcrumbs::register('admin-role-index', function ($breadcrumbs) {
+            $breadcrumbs->parent('admin-role');
+            $breadcrumbs->push('角色列表', adminAction('RoleController@getIndex'));
+        });
+
         return $this->render('role.index');
     }
 
@@ -43,10 +59,25 @@ class RoleController extends BaseController {
     }
 
     public function getAdd(){
+        Breadcrumbs::register('admin-role-add', function ($breadcrumbs) {
+            $breadcrumbs->parent('admin-role');
+            $breadcrumbs->push('编辑角色', adminAction('RoleController@getAdd'));
+        });
+
         return $this->render('role.add');
     }
 
-    public function getEdit($id){}
+    public function getEdit(Request $request){
+
+        $this->validateRequest([
+            'id' => 'required|min:0',
+        ], $request);
+
+        $id = $request->input('id', 0);
+        $role = $this->getService()->getRole($id);
+
+        return $this->response($request, $role->toArray(), 'admin/role/index');
+    }
 
     public function postAdd(Request $request){
 
