@@ -29,7 +29,7 @@ class Role extends Model
     }
 
     public static function create(array $attributes = array()) {
-        $model = DB::transaction(function() use($attributes) {
+        $model = \DB::transaction(function() use($attributes) {
             $model = parent::create($attributes);
 
             return $model;
@@ -39,9 +39,12 @@ class Role extends Model
     }
 
     public function update(array $attributes = array()){
-        $model = DB::transaction(function() use($attributes) {
+        $model = \DB::transaction(function() use($attributes) {
             $model = parent::update($attributes);
-            $model->permissions()->attach(array_values($attributes['permissions']));
+            //更新权限列表
+            if(isset($attributes['permissions'])){
+                $model->permissions()->attach(array_values($attributes['permissions']));
+            }
 
             return $model;
         });

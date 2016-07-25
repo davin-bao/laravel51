@@ -5,39 +5,36 @@ var page = {
     urlParam: Public.urlParam(),
     urlParamId: -1,
     hasLoaded: false,
+    idDom: $('#id'),
     nameDom: $('#name'),
     displayNameDom: $('#display_name'),
     descriptionDom: $('#description'),
 
-    toolBarDom: $('tool_bar'),
+    toolBarDom: $('.tool-bar'),
 
     init: function(data){
         this.initDom(data), this.addEvent();
     },
     initDom: function(data){
         var self = this;
+        self.idDom.val(data.id);
         self.nameDom.val(data.name);
         self.displayNameDom.val(data.display_name);
         self.descriptionDom.val(data.description);
-        //TODO 封装 Button
-        self.toolBarDom.add(Public.saveButton('admin/role/edit', function(result){
-            200 === result.code ? (parent.Public.tips({
-                type: 'success',
-                message: result.msg,
-                onClose : function() {
-                    //关闭
-                    window.location = Public.ROOT_URL() + '/admin/role';
-                }
-            })) : (parent.Public.tips({
-                type: 'error',
-                message: result.msg
-            }))
-        }));
+
+        //添加操作按钮
+        self.toolBarDom.html(
+            Widgets.OperateButtons.save(self, 'save', 'admin/role/edit', '保存', function(){
+                window.location = Public.ROOT_URL + 'admin/role';
+            }) +
+            Widgets.OperateButtons.back(self)
+        );
     },
     addEvent: function(){},
     getPostData: function(){
         var self = this;
         return {
+            id: self.idDom.val(),
             name: self.nameDom.val(),
             display_name: self.displayNameDom.val(),
             description: self.descriptionDom.val()
@@ -45,6 +42,7 @@ var page = {
     },
     getOrigData: function(){
         return {
+            id: -1,
             name: '',
             display_name: '',
             description: ''
@@ -57,7 +55,7 @@ $(function() {
     page.urlParamId = page.urlParam.id ? page.urlParam.id : -1;
     if (page.urlParamId != -1) {
         if (!page.hasLoaded) {
-            Public.ajaxGet("/admin/role/edit/", {'id': page.urlParamId}, function(result) {
+            Public.ajaxGet("admin/role/edit/", {'id': page.urlParamId}, function(result) {
                 200 === result.code ? (data = result, page.init(data), page.hasLoaded = !0) : (parent.Public.tips({
                     type: 'error',
                     message: result.msg

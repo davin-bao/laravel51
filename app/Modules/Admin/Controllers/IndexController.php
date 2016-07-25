@@ -24,7 +24,7 @@ class IndexController extends BaseController {
     public static function actionName()
     {
         return [
-            'getLogin'=> json_encode(['parent'=>0, 'icon'=>'home', 'display_name'=>'登录', 'is_menu'=>1, 'sort'=>0, 'allow'=>1, 'description'=>''])
+            'getLogin'=> json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'登录', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>''])
         ];
     }
 
@@ -51,4 +51,6 @@ class IndexController extends BaseController {
 
         return $this->response($request,['msg'=>'管理员登录成功'], '/admin');
     }
+
+
 }

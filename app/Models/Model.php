@@ -105,7 +105,7 @@ abstract class Model extends ModelBase
 
         parent::update($attributes);
 
-        return self::get($self->id, true);
+        return method_exists($self, 'get') ? self::get($self->id, true) : self::find($self->id);
     }
 
     /**

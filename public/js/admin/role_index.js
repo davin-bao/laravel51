@@ -16,7 +16,7 @@ var page = {
         var self = this;
 
         var options = {
-            "index": "/admin/role",
+            "index": "admin/role",
             "list": "/list",
             "columns": [
                 {
