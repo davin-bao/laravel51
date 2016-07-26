@@ -5,7 +5,7 @@
                 <img alt="" src="{!! Html::avatar() !!}">
                 <div class="user-box">
                     <span class="name">
-                        Welcome<br>
+                        <br>
                         {!! Html::getStaff()->name !!}
                     </span>
                     <span class="status">
