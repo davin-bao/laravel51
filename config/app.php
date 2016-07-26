@@ -220,4 +220,5 @@ return [
 
     ],
 
+    'SSORedirectUrl' => 'http://51.laravel.com/admin'
 ];
