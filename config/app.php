@@ -151,7 +151,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Modules\ServiceProvider::class,
         App\Providers\Translation\TranslationServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
 
@@ -164,6 +163,7 @@ return [
         Kbwebs\MultiAuth\AuthServiceProvider::class,
         Kbwebs\MultiAuth\PasswordResets\PasswordResetServiceProvider::class,
 
+        App\Modules\ServiceProvider::class,
     ],
 
     /*

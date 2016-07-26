@@ -1,5 +1,8 @@
 /**
  * 验证器 全局配置及自定义验证方法
+ *
+ * @author davin.bao
+ * @since 2016/7/25 10:34
  */
 $(function() {
     /* Global configuration
@@ -45,6 +48,14 @@ $(function() {
             $(targetInput).valid()
         }), value === equalInput.val()
     });
+    $.validator.addMethod( "notEqualTo", function( value, element, param ) {
+        return this.optional(element) || !$.validator.methods.equalTo.call( this, value, element, param );
+    }, "请输入一个不同的值." );
+
+    $.validator.addMethod("nowhitespace", function(value, element) {
+        return this.optional(element) || /^\S+$/i.test(value);
+    }, "不允许输入空格.");
+
     $.validator.addMethod("checked", function (value, target) {
         var min = (target.attributes['min-check'] !== undefined) ? parseInt(target.attributes['min-check'].value) : 0;
         var max = (target.attributes['max-check'] !== undefined) ? parseInt(target.attributes['max-check'].value) : 9999;
@@ -52,6 +63,36 @@ $(function() {
 
         return length >= min && length <= max;
     });
+    $.validator.addMethod("integer", function(value, element) {
+        return this.optional(element) || /^-?\d+$/.test(value);
+    }, "请输入一个正、负整数");
+
+    $.validator.addMethod("ipv4", function(value, element) {
+        return this.optional(element) || /^(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)$/i.test(value);
+    }, "请输入有效的 IP v4 地址.");
+
+    $.validator.addMethod("ipv6", function(value, element) {
+        return this.optional(element) || /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/i.test(value);
+    }, "请输入有效的 IP v6 地址.");
+    $.validator.addMethod("time", function(value, element) {
+        return this.optional(element) || /^([01]\d|2[0-3]|[0-9])(:[0-5]\d){1,2}$/.test(value);
+    }, "请输入有效的时间, 在 00:00 与 23:59 之间");
+
+    $.validator.addMethod("time12h", function(value, element) {
+        return this.optional(element) || /^((0?[1-9]|1[012])(:[0-5]\d){1,2}(\ ?[AP]M))$/i.test(value);
+    }, "请输入有效的12小时制时间, 如 05:32 am/pm");
+    /**
+     * 自定义正则验证
+     */
+    $.validator.addMethod("pattern", function(value, element, param) {
+        if (this.optional(element)) {
+            return true;
+        }
+        if (typeof param === "string") {
+            param = new RegExp("^(?:" + param + ")$");
+        }
+        return param.test(value);
+    }, "格式无效.");
 
     $.validator.messages = {
         digits: "请输入数字",

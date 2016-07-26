@@ -20,17 +20,14 @@
                     <div class="form-group col-md-6 col-lg-3 name-group">
                         <label for="name">角色英文标示</label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="">
-                        <span class="help-block"></span>
                     </div>
                     <div class="form-group col-md-6 col-lg-3 display_name-group">
                         <label for="display_name">角色中文名称</label>
                         <input type="text" class="form-control" id="display_name" name="display_name" placeholder="">
-                        <span class="help-block"></span>
                     </div>
                     <div class="form-group col-md-12 col-lg-12 description-group">
                         <label for="description">描述</label>
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                        <span class="help-block"></span>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10 tool-bar"></div>
