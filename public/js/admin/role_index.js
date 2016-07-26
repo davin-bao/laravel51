@@ -25,6 +25,11 @@ var page = {
                     "orderable": true,
                 },
                 {
+                    "data": "name" ,
+                    "title": "name",
+                    "orderable": true,
+                },
+                {
                     "data": "display_name",
                     "title": "display_name",
                     "orderable": true,

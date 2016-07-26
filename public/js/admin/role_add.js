@@ -5,6 +5,8 @@ var page = {
     urlParam: Public.urlParam(),
     urlParamId: -1,
     hasLoaded: false,
+
+    saveFormDom: $("#save-form"),
     idDom: $('#id'),
     nameDom: $('#name'),
     displayNameDom: $('#display_name'),
@@ -13,7 +15,7 @@ var page = {
     toolBarDom: $('.tool-bar'),
 
     init: function(data){
-        this.initDom(data), this.addEvent();
+        this.initDom(data), this.initValidator(), this.addEvent();
     },
     initDom: function(data){
         var self = this;
@@ -30,6 +32,22 @@ var page = {
             Widgets.OperateButtons.back(self)
         );
     },
+    initValidator: function(){
+        var self = this;
+        self.saveFormDom.validate({
+            rules: {
+                name: {
+                    required: ["角色英文标示"],
+                    rangelength: [6, 30]
+                },
+                display_name: {
+                    required: ["角色中文名称"],
+                    rangelength: [6, 30]
+                }
+            },
+            errorClass: "has-error"
+        });
+    },
     addEvent: function(){},
     getPostData: function(){
         var self = this;
@@ -42,7 +60,7 @@ var page = {
     },
     getOrigData: function(){
         return {
-            id: -1,
+            id: 0,
             name: '',
             display_name: '',
             description: ''
