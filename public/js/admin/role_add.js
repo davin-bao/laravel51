@@ -74,7 +74,7 @@ $(function() {
     if (page.urlParamId != -1) {
         if (!page.hasLoaded) {
             Public.ajaxGet("admin/role/edit/", {'id': page.urlParamId}, function(result) {
-                200 === result.code ? (data = result, page.init(data), page.hasLoaded = !0) : (parent.Public.tips({
+                200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
                     type: 'error',
                     message: result.msg
                 }))

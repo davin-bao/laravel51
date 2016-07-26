@@ -1,5 +1,15 @@
-//UI 小组件
+/**
+ * UI 小组件
+ * 前端的UI组件封装
+ *
+ * @author davin.bao
+ * @since 2016/7/25 10:34
+ */
 var Widgets = Widgets || {};
+
+Widgets.init = function () {
+    //
+};
 
 //<editor-fold desc="杂类">
 Widgets.tips = function(options){
@@ -19,9 +29,8 @@ Widgets.tips = function(options){
 
 //<editor-fold desc="按钮类">
 Widgets.OperateButtons = Widgets.OperateButtons || {};
-
 Widgets.OperateButtons._button = function($_obj, id, url, label, callback){
-    if(true){
+    if(Public.power(url)){
         label = typeof(label) === 'undefined' ? '保存' : label;
         var formDom = $('#save-form');
 
@@ -87,10 +96,10 @@ Widgets.OperateButtons._button = function($_obj, id, url, label, callback){
             });
         });
 
-        return '<a id="'+id+'" class="btn btn-success">'+label+'</a>';
+        return '<a id="'+id+'" class="btn btn-success"><i class="fa fa-'+id+'"></i> '+label+'</a>';
     }
     return '';
-}
+};
 Widgets.OperateButtons.save = function($_obj, id, url, label, callback){
     return Widgets.OperateButtons._button($_obj, id, url, label, callback);
 };
@@ -102,7 +111,82 @@ Widgets.OperateButtons.back = function($_obj, id, label){
         window.history.go(-1);
     });
 
-    return '<a id="'+id+'" class="btn btn-default">'+label+'</a>';
+    return '<a id="'+id+'" class="btn btn-default"><i class="fa fa-backward"></i> '+label+'</a>';
 };
 
 //</editor-fold>
+
+//<editor-fold desc="对话框类">
+Widgets.Dialogs = Widgets.Dialogs || {};
+/**
+ * 确认对话框
+ * @param title
+ * @param message
+ * @param callback
+ * @param okLabel
+ */
+Widgets.Dialogs.confirm = function(title, message, callback, okLabel){
+
+    okLabel = typeof(okLabel) == 'undefined' ? '确定' : okLabel;
+
+    var dialog = BootstrapDialog.show({
+        title: title,
+        message: message,
+        type: BootstrapDialog.TYPE_WARNING,
+        buttons: [{
+            cssClass: 'btn-danger',
+            label: okLabel,
+            action: function (dialog) {
+                dialog.close();
+                callback();
+            }
+        }, {
+            label: '取消',
+            action: function (dialog) {
+                dialog.close();
+            }
+        }]
+    });
+}
+/**
+ * 确认删除某条信息
+ *
+ * @param url 删除地址
+ * @param id 删除数据ID
+ * @param callback 删除成功的回调
+ * @param message  消息内容
+ * @returns {*}
+ */
+Widgets.Dialogs.deleteConfirm = function(url, id, callback, message){
+
+    message = typeof(message) == 'undefined' ? '确认删除该信息？' : message;
+
+    return Widgets.Dialogs.confirm('删除信息', message, function(){
+        var postData = {
+            id: index,
+            _method: "POST"
+        };
+
+        dialog.close();
+
+        Public.ajaxPost(url, postData, function(event) {
+            if(200 == event.code){
+                Widgets.tips({
+                    message: "CODE " + event.code + ': ' + event.msg,
+                    type: 'success'
+                });
+                callback();
+            }else {
+                Widgets.tips({
+                    message: "CODE " + event.code + ': ' + event.msg,
+                    type: 'error'
+                });
+            }
+        }, function(event){
+            Widgets.tips({
+                message: "CODE " + event.code + ': ' + event.msg,
+                type: 'error'
+            });
+        });
+    }, '删除');
+}
