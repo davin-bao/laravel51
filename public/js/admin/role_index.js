@@ -59,7 +59,7 @@ var page = {
             var data = {
                 'matchCon': self.matchConDom.val()
             };
-            self.listDataTable.fnSearch(data);
+            self.listDataTable.search(data);
         });
     }
 };

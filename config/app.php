@@ -15,6 +15,12 @@ return [
 
     'debug' => env('APP_DEBUG', false),
 
+    /**
+     * 配置avatar的地址
+     * 主要用于头像的地址引用
+     */
+    'avatar_host' =>"http://www.gravatar.com/avatar/",
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -145,7 +151,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Modules\ServiceProvider::class,
         App\Providers\Translation\TranslationServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
 
@@ -158,6 +163,7 @@ return [
         Kbwebs\MultiAuth\AuthServiceProvider::class,
         Kbwebs\MultiAuth\PasswordResets\PasswordResetServiceProvider::class,
 
+        App\Modules\ServiceProvider::class,
     ],
 
     /*

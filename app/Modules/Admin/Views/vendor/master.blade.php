@@ -114,7 +114,12 @@
 
     {{--初始化脚本--}}
     <script type="application/javascript">
-        //提前声明
+        (function(){
+            //初始化公共方法
+            Public.init();
+            //初始化 UI 组件
+            Widgets.init();
+        })();
     </script>
     @yield('foot-scripts')
 @endsection

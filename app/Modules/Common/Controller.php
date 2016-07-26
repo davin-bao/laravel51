@@ -132,7 +132,7 @@ abstract class Controller extends BaseController {
         $results = $query->skip($start)->take($length)->get()->toArray();
 
         $data = [
-            'rows' => $results,
+            'data' => $results,
             'start' => $start,
             'length' => $length,
             'recordsTotal' => $totalCount
