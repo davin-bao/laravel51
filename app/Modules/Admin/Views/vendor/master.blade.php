@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div id="config-tool" class="">
+    <div id="config-tool" class="closed">
         <a id="config-tool-cog">
             <i class="fa fa-cog"></i>
         </a>

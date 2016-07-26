@@ -43,6 +43,7 @@ trait CentaurusHtmlTrait {
         "notificationFx" => "centaurus/js/notificationFx.js",
         "bootstrap-dialog" => "centaurus/js/bootstrap-dialog.min.js",
         "jquery-validate" => "js/common/jquery.validate.min.js",
+        "jquery-validator" => "js/common/validator.js",
         "public-script" => "js/common/public.js",
         "widgets-script" => "js/common/widgets.js",
     ];
