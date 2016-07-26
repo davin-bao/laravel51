@@ -187,7 +187,7 @@ trait CentaurusHtmlTrait {
             return $this->getStaff()->avatar;
         }else{
             $email = $this->getStaff()->email;
-            $avatar ="http://www.gravatar.com/avatar/".md5($email)."?s=$s&d=$d&r=$r";
+            $avatar =\Config::get('app.avatar_host').md5($email)."?s=$s&d=$d&r=$r";
             return $avatar;
         }
     }
