@@ -86,4 +86,60 @@ class IndexController extends BaseController {
 
         return redirect('/');
     }
+
+    /**
+     * 管理员注册接口
+     * @param Request $request
+     * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @author chuanhangyu
+     * @since 2016/7/25 16:00
+     */
+    public function postRegisterStaff(Request $request) {
+        // 验证规则
+        $this->validateRequest([
+            'username' => 'required|unique:staff|max:50',
+            'email' => 'required|email|unique:staff',
+            'password' => 'required|min:6',
+            'name' => 'required|max:50',
+            'mobile' => 'required|digits_between:10,20',
+            'roles' => 'required',
+        ], $request);
+
+        // 得到注册用户信息，多角色用','分割
+        $staff['username'] = $request->input('username', null);
+        $staff['email'] = $request->input('email', null);
+        $staff['password'] = $request->input('password', null);
+        $staff['name'] = $request->input('name', null);
+        $staff['mobile'] = $request->input('mobile', null);
+        $staff['roles'] = explode(',', $request->input('roles', null));
+        $this->getService()->register($staff);
+
+        return $this->response($request,['msg'=>'注册成功！'], '/admin');
+    }
+
+    /**
+     * 实现单点登录，并跳转到指定页面
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     *
+     * @author chuanhangyu
+     * @since 2016/7/26 14:00
+     */
+    public function getLoginApi(Request $request) {
+        $this->validateRequest([
+            'username' => 'required|max:50',
+            'password' => 'required|min:6',
+        ], $request);
+
+        $username = $request->input('username', null);
+        $password = $request->input('password', null);
+        $rememberMe = $request->input('remember_me', false);
+        $re = $request->input('redirect_url', 'http://51.laravel.com/admin');
+
+        //登录
+        $this->getService()->login($username, $password, $rememberMe);
+
+        return redirect($re);
+    }
 }

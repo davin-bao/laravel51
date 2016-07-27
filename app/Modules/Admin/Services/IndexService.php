@@ -41,4 +41,20 @@ class IndexService {
 
         return true;
     }
+
+    /**
+     * 注册服务
+     * @param $staff
+     * @return bool
+     *
+     * @author chuanhangyu
+     * @since 2016/7/25 16:00
+     */
+    public function register($staff) {
+        if (Staff::create($staff)) {
+            return true;
+        } else {
+            throw new NoticeMessageException('注册失败!');
+        }
+    }
 }
