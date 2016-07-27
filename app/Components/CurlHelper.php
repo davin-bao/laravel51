@@ -39,6 +39,7 @@ class CurlHelper
         $class = basename(get_called_class());
         $infoMessage = $class. ' '. $header. ' '. $message['code']. ' ';
         if ($header === self::LOG_TYPE_RESPONSE) {
+            $infoMessage .= $message['http_code']. ' ';
             $infoMessage .= json_encode(json_decode($message['msg']),JSON_UNESCAPED_UNICODE);
         } else {
             $infoMessage .= "{";
@@ -103,10 +104,11 @@ class CurlHelper
         $data = CurlHelper::translateData($data, $dataType);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         $info = curl_exec($ch);
+        $httpCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         // 写响应日志
-        $logMessage = ['code' => $code, 'msg' => $info];
+        $logMessage = ['code' => $code, 'http_code' =>$httpCode, 'msg' => $info];
         CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_RESPONSE);
         return $info;
     }
