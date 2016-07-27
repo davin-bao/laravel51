@@ -1,7 +1,6 @@
 <?php
 namespace App\Components;
 
-use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -37,9 +36,8 @@ class CurlHelper
      */
     private static function log($message, $header)
     {
-        $code = $message['code'];
-        $class = get_called_class();
-        $infoMessage = $header. "  {\"code\":\"$code\",\"class\":\"$class\",\"msg\":";
+        $class = basename(get_called_class());
+        $infoMessage = $class. ' '. $header. ' '. $message['code']. ' ';
         if ($header === self::LOG_TYPE_RESPONSE) {
             $infoMessage .= json_encode(json_decode($message['msg']),JSON_UNESCAPED_UNICODE);
         } else {
