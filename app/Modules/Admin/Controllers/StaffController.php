@@ -47,7 +47,18 @@ class StaffController extends BaseController {
 
         return $this->render('staff.index');
     }
-
+    /**
+     * 获取个人信息
+     * @author cunqinghuang
+     * @since 2016/7/26 19:00
+     */
+    public function getProfile(){
+        Breadcrumbs::register('admin-staff-profile', function ($breadcrumbs) {
+            $breadcrumbs->parent('admin-staff');
+            $breadcrumbs->push('个人信息', adminAction('StaffController@getProfile'));
+             });
+        return $this->render('staff.profile',['staff'=> Auth::staff()->get()]);
+    }
     /**
      * 获取当前管理员权限Uri列表
      * @param Request $request

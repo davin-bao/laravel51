@@ -69,11 +69,9 @@ Widgets.OperateButtons._button = function($_obj, id, url, label, callback){
                             message: "CODE 422: 输入参数有误"
                         });
                         //解析输入参数并显示到前端
-                        var returnData = event.target.responseText;
-                        if(returnData == null)  break;
-                        var data = $.parseJSON(returnData);
-                        if(typeof($.parseJSON(returnData)) != "object") break;
-                        $.each(data,function(n,value) {
+                        if(typeof(err.errData) != "object") break;
+
+                        $.each(err.errData,function(n,value) {
                             if(value.length > 0 && $('#'+n).length > 0 ) {
                                 formDom.validate().errorList.push({
                                     message: value.pop(),
