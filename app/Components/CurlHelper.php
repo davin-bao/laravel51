@@ -31,35 +31,31 @@ class CurlHelper
 
     /**
      * 日志记录器
-     * @param $message
-     * @param $header
+     * @param $info
+     * @param $type
+     * @param $logCode
+     * @param $httpCode
      */
-    private static function log($message, $header)
+    private static function log($info, $type, $logCode, $httpCode = null)
     {
         // 得到基础类名
         $class = basename(get_called_class());
 
         // 公共头部信息
-        $infoMessage = $class. ' '. $header. ' '. $message['code']. ' ';
+        $message = $class. ' '. $type. ' '. $logCode. ' ';
 
         // 写响应日志时
-        if ($header === self::LOG_TYPE_RESPONSE) {
+        if ($type === self::LOG_TYPE_RESPONSE) {
 
             // 添加响应的http code，和响应信息
-            $infoMessage .= $message['http_code']. ' ';
-            $infoMessage .= json_encode(json_decode($message['msg']),JSON_UNESCAPED_UNICODE);
+            $message .= $httpCode. ' ';
+            $message .= unicodeDecode($info);
         } else {
 
-            // 写请求日志时，组装日志信息
-            $infoMessage .= "{";
-            foreach ($message['msg'] as $key => $value) {
-                $infoMessage .= "\"$key\":\"$value\",";
-            }
-            $infoMessage = rtrim($infoMessage, ',');
-            $infoMessage .= "}";
+            // 写请求日志时
+            $message .= json_encode($info, JSON_UNESCAPED_UNICODE);
         }
-        $infoMessage .= '}';
-        Log::info($infoMessage);
+        Log::info($message);
     }
 
 
@@ -86,15 +82,15 @@ class CurlHelper
      * 发送post方式的curl
      * @param $url
      * @param $data
+     * @param $dataType
      * @param array $headers
      * @return mixed
      */
     public static function postCurl($url, $data, $dataType, $headers = array())
     {
         // 写访问日志
-        $code = Str::random(CurlHelper::CURLHELPER_CODE_LENGTH);
-        $logMessage = ['code' => $code, 'msg' => $data];
-        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_REQUEST);
+        $logCode = Str::random(CurlHelper::CURLHELPER_CODE_LENGTH);
+        CurlHelper::log($data, CurlHelper::LOG_TYPE_REQUEST, $logCode);
 
         $ch = curl_init();
 
@@ -119,8 +115,7 @@ class CurlHelper
         curl_close($ch);
 
         // 写响应日志
-        $logMessage = ['code' => $code, 'http_code' =>$httpCode, 'msg' => $info];
-        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_RESPONSE);
+        CurlHelper::log($info, CurlHelper::LOG_TYPE_RESPONSE, $logCode, $httpCode);
         return $info;
     }
 
@@ -134,9 +129,8 @@ class CurlHelper
     public static function getCurl($url, $data, $headers = array())
     {
         // 写访问日志
-        $code = Str::random(CurlHelper::CURLHELPER_CODE_LENGTH);
-        $logMessage = ['code' => $code, 'msg' => $data];
-        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_REQUEST);
+        $logCode = Str::random(CurlHelper::CURLHELPER_CODE_LENGTH);
+        CurlHelper::log($data, CurlHelper::LOG_TYPE_REQUEST, $logCode);
 
         $ch = curl_init();
 
@@ -155,8 +149,7 @@ class CurlHelper
         curl_close($ch);
 
         // 写响应日志
-        $logMessage = ['code' => $code, 'http_code' =>$httpCode, 'msg' => $info];
-        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_RESPONSE);
+        CurlHelper::log($info, CurlHelper::LOG_TYPE_RESPONSE, $logCode, $httpCode);
         return $info;
     }
 }
