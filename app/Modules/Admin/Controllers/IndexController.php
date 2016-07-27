@@ -20,8 +20,7 @@ class IndexController extends BaseController {
      * 定义 permission list
      * @return array
      */
-    public static function actionName()
-    {
+    public static function actionName(){
         return [
             'getLogin'=> json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'登录', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'getLogout' => json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'登出', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
@@ -71,8 +70,7 @@ class IndexController extends BaseController {
      * 登出操作
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function getLogout()
-    {
+    public function getLogout(){
         $staff = Auth::staff()->get();
 
         if($staff){
