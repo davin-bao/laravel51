@@ -219,6 +219,4 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustServiceProvider::class,
 
     ],
-
-    'SSORedirectUrl' => 'http://51.laravel.com/admin'
 ];

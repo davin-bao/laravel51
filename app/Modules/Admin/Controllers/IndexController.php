@@ -138,7 +138,7 @@ class IndexController extends BaseController {
         $username = $request->input('username', null);
         $password = $request->input('password', null);
         $rememberMe = $request->input('remember_me', false);
-        $re = $request->input('remember_me', \Config::get('app.SSORedirectUrl'));
+        $re = $request->input('redirect_url', 'http://51.laravel.com/admin');
 
         //登录
         $this->getService()->login($username, $password, $rememberMe);

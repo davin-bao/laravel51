@@ -19,12 +19,15 @@ use Illuminate\Support\Str;
 class CurlHelper
 {
 
-    const CURLHELPER_JSON_DATA = '0';
-    const CURLHELPER_QUERY_STRING_DATA = '1';
+    // 发送的数据格式
+    const REQUEST_JSON_DATA = '0';
+    const REQUEST_QUERY_STRING_DATA = '1';
 
-    const CURLHELPER_BEFORE_LOG = 'Curl-Log-Request';
-    const CURLHELPER_AFTER_LOG = 'Curl-Log-Response';
+    // 日志信息头部
+    const LOG_TYPE_REQUEST = 'REQ';
+    const LOG_TYPE_RESPONSE = 'RES';
 
+    // code长度
     const CURLHELPER_CODE_LENGTH = 10;
 
     /**
@@ -34,7 +37,21 @@ class CurlHelper
      */
     private static function log($message, $header)
     {
-        Log::info($header, $message);
+        $code = $message['code'];
+        $class = get_called_class();
+        $infoMessage = $header. "  {\"code\":\"$code\",\"class\":\"$class\",\"msg\":";
+        if ($header === self::LOG_TYPE_RESPONSE) {
+            $infoMessage .= json_encode(json_decode($message['msg']),JSON_UNESCAPED_UNICODE);
+        } else {
+            $infoMessage .= "{";
+            foreach ($message['msg'] as $key => $value) {
+                $infoMessage .= "\"$key\":\"$value\",";
+            }
+            $infoMessage = rtrim($infoMessage, ',');
+            $infoMessage .= "}";
+        }
+        $infoMessage .= '}';
+        Log::info($infoMessage);
     }
 
 
@@ -47,46 +64,14 @@ class CurlHelper
     private static function translateData($data, $dataType)
     {
         switch ($dataType) {
-            case self::CURLHELPER_JSON_DATA :
+            case self::REQUEST_JSON_DATA :
                 $data = json_encode($data);
                 break;
-            case  self::CURLHELPER_QUERY_STRING_DATA :
+            case  self::REQUEST_QUERY_STRING_DATA :
                 $data = http_build_query($data);
                 break;
         }
         return $data;
-    }
-
-    /**
-     * Unicode编码解码
-     * @param $uniStr
-     * @return string
-     */
-    public static function unicode_decode($uniStr)
-    {
-        $pattern = '/([\w"{:\ }\[\]]+)|(\\\u([\w]{4}))/i';
-        preg_match_all($pattern, $uniStr, $matches);
-        if (!empty($matches))
-        {
-            $uniStr = '';
-            for ($j = 0; $j < count($matches[0]); $j++)
-            {
-                $str = $matches[0][$j];
-                if (strpos($str, '\\u') === 0)
-                {
-                    $code = base_convert(substr($str, 2, 2), 16, 10);
-                    $code2 = base_convert(substr($str, 4), 16, 10);
-                    $c = chr($code).chr($code2);
-                    $c = iconv('UCS-2', 'UTF-8', $c);
-                    $uniStr .= $c;
-                }
-                else
-                {
-                    $uniStr .= $str;
-                }
-            }
-        }
-        return $uniStr;
     }
 
     /**
@@ -101,12 +86,12 @@ class CurlHelper
         // 写访问日志
         $code = Str::random(CurlHelper::CURLHELPER_CODE_LENGTH);
         $logMessage = ['code' => $code, 'msg' => $data];
-        CurlHelper::log($logMessage, CurlHelper::CURLHELPER_BEFORE_LOG);
+        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_REQUEST);
 
         $ch = curl_init();
 
         // 合并头部信息
-        if ($dataType === self::CURLHELPER_JSON_DATA) {
+        if ($dataType === self::REQUEST_JSON_DATA) {
             $headers = array_merge(array('Content-Type:application/json; charset=utf-8', 'Accept:application/json'), $headers);
         }
 
@@ -123,8 +108,8 @@ class CurlHelper
         curl_close($ch);
 
         // 写响应日志
-        $logMessage = ['code' => $code, 'msg' => self::unicode_decode($info)];
-        CurlHelper::log($logMessage, CurlHelper::CURLHELPER_AFTER_LOG);
+        $logMessage = ['code' => $code, 'msg' => $info];
+        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_RESPONSE);
         return $info;
     }
 
@@ -140,16 +125,13 @@ class CurlHelper
         // 写访问日志
         $code = Str::random(CurlHelper::CURLHELPER_CODE_LENGTH);
         $logMessage = ['code' => $code, 'msg' => $data];
-        CurlHelper::log($logMessage, CurlHelper::CURLHELPER_BEFORE_LOG);
+        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_REQUEST);
 
         $ch = curl_init();
 
-        // 合并头部信息
-        $headers = array_merge(array('Content-Type:application/json; charset=utf-8', 'Accept:application/json'), $headers);
-
         // 拼接get方式的url
         $url .= '?';
-        $url .= self::translateData($data, self::CURLHELPER_QUERY_STRING_DATA);
+        $url .= self::translateData($data, self::REQUEST_QUERY_STRING_DATA);
 
         // 设置相关参数
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -160,8 +142,8 @@ class CurlHelper
         curl_close($ch);
 
         // 写响应日志
-        $logMessage = ['code' => $code, 'msg' => self::unicode_decode($info)];
-        CurlHelper::log($logMessage, CurlHelper::CURLHELPER_AFTER_LOG);
+        $logMessage = ['code' => $code, 'msg' => $info];
+        CurlHelper::log($logMessage, CurlHelper::LOG_TYPE_RESPONSE);
         return $info;
     }
 }
