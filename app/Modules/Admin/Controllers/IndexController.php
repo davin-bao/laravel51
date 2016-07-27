@@ -1,7 +1,6 @@
 <?php
 namespace App\Modules\Admin\Controllers;
 
-use App\Components\CurlHelper;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

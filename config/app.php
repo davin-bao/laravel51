@@ -219,4 +219,5 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustServiceProvider::class,
 
     ],
+
 ];
