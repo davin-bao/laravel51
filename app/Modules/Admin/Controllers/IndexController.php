@@ -52,10 +52,14 @@ class IndexController extends BaseController {
      */
     public function postLogin(Request $request){
         //验证参数是否有误
+        $customAttributes = [
+            'username' => '用户名',
+            'password' => '密码'
+        ];
         $this->validateRequest([
             'username' => 'required|max:50',
             'password' => 'required|min:6',
-        ], $request);
+        ], $request, $customAttributes);
 
         $username = $request->input('username', null);
         $password = $request->input('password', null);
@@ -97,6 +101,14 @@ class IndexController extends BaseController {
      */
     public function postRegisterStaff(Request $request) {
         // 验证规则
+        $customAttributes = [
+            'username' => '用户名',
+            'email' => '邮箱',
+            'password' =>'密码',
+            'name' => '姓名',
+            'mobile' => '手机号码',
+            'roles' => '角色'
+        ];
         $this->validateRequest([
             'username' => 'required|unique:staff|max:50',
             'email' => 'required|email|unique:staff',
@@ -104,7 +116,7 @@ class IndexController extends BaseController {
             'name' => 'required|max:50',
             'mobile' => 'required|digits_between:10,20',
             'roles' => 'required',
-        ], $request);
+        ], $request, $customAttributes);
 
         // 得到注册用户信息，多角色用','分割
         $staff['username'] = $request->input('username', null);
@@ -127,10 +139,14 @@ class IndexController extends BaseController {
      * @since 2016/7/26 14:00
      */
     public function getLoginApi(Request $request) {
+        $customAttributes = [
+            'username' => '用户名',
+            'password' => '密码'
+        ];
         $this->validateRequest([
             'username' => 'required|max:50',
             'password' => 'required|min:6',
-        ], $request);
+        ], $request, $customAttributes);
 
         $username = $request->input('username', null);
         $password = $request->input('password', null);

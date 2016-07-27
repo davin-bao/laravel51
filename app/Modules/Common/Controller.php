@@ -54,8 +54,8 @@ abstract class Controller extends BaseController {
      * @param array $rules
      * @param Request $request
      */
-    protected function validateRequest(array $rules, Request $request){
-        $validator = Validator::make($request->all(), $rules);
+    protected function validateRequest(array $rules, Request $request, $customAttributes=[]){
+        $validator = Validator::make($request->all(), $rules, [], $customAttributes);
 
         if ($validator->fails()) {
             $this->throwValidationException(
