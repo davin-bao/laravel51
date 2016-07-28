@@ -20,22 +20,23 @@
                                         <img src="{!! URL::asset('centaurus/img/logo.png') !!}" alt=""/>
                                     </div>
                                 </header>
-                                <div id="login-box-inner">
-                                    <form role="form" method="post" action="">
-                                        <div class="input-group has-error">
+                                <ul id="login-box-inner">
+                                    <form id="login-form">
+                                        <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                             <input class="form-control" type="text" placeholder="Email address" name="username" id="username" value="{{ Input::old('username') }}">
-                                            <strong>{{ $errors->first() }}</strong>
                                         </div>
+                                        <label id="username-error" class="has-error"></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
                                             <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                                         </div>
+                                        <label id="password-error" class="has-error"></label>
                                         <div id="remember-me-wrapper">
                                             <div class="row">
                                                 <div class="col-xs-6">
                                                     <div class="checkbox-nice">
-                                                        <input type="checkbox" id="remember-me" checked="checked"/>
+                                                        <input type="checkbox" id="remember-me" name="remember-me" checked="checked"/>
                                                         <label for="remember-me">
                                                             Remember me
                                                         </label>
@@ -47,16 +48,18 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12">
-                                                <button type="submit" class="btn btn-success col-xs-12">Login</button>
+                                            <div class="col-xs-12 tool-bar">
+                                                <a class="btn btn-success col-xs-12" id="login-btn">Login</a>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <ul class="list-unstyled row error-list">
+                                        </ul>
+                                        <div class="row hidden">
                                             <div class="col-xs-12">
                                                 <p class="social-text">Or login with</p>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row hidden">
                                             <div class="col-xs-12 col-sm-6">
                                                 <button type="submit" class="btn btn-primary col-xs-12 btn-facebook">
                                                     <i class="fa fa-facebook"></i> facebook
@@ -76,12 +79,7 @@
                     </div>
                     <div id="login-box-footer">
                         <div class="row">
-                            <div class="col-xs-12">
-                                Do not have an account?
-                                <a href="registration-full.html">
-                                    Register now
-                                </a>
-                            </div>
+                            <div class="col-xs-12">&nbsp;</div>
                         </div>
                     </div>
                 </div>
@@ -177,5 +175,7 @@
 </div>
 
 {!! Html::footerScript() !!}
+
+<script type="text/javascript" src="{{ asset('js/admin/login.js') }}"></script>
 
 @endsection
