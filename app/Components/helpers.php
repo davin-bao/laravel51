@@ -50,3 +50,32 @@ function formatEndDate($endDate){
 function adminAction($action){
     return action('\App\Modules\Admin\Controllers\\'.$action);
 }
+
+/**
+ * unicode转utf8
+ * @param $uniStr
+ * @return string
+ *
+ * @author chuanhangyu
+ * @since 2016/7/28/ 11:30
+ */
+function unicodeDecode($uniStr) {
+    $pattern = '/([^\\\u]+)|(\\\u([\w]{4}))/i';
+    preg_match_all($pattern, $uniStr, $matches);
+    if (!empty($matches)) {
+        $deStr = '';
+        for ($j = 0; $j < count($matches[0]); $j++) {
+            $str = $matches[0][$j];
+            if (strpos($str, '\\u') === 0) {
+                $code = base_convert(substr($str, 2, 2), 16, 10);
+                $code2 = base_convert(substr($str, 4), 16, 10);
+                $c = chr($code) . chr($code2);
+                $c = iconv('UCS-2', 'UTF-8', $c);
+                $deStr .= $c;
+            } else {
+                $deStr .= $str;
+            }
+        }
+    }
+    return $deStr;
+}
