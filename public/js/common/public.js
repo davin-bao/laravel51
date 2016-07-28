@@ -235,13 +235,12 @@ Public.ajaxPost = function(url, params, callback, errCallback){
         data: params,
         dataType: "json",
         mode: "limit",
-        complete: function(xMLHttpRequest, textStatus){
-            $('.loading').hide();
-        },
         success: function(data, status){
             callback(data);
+            setTimeout(function(){ $('.loading').hide() }, 2500);
         },
         error: function(err,msg){
+            $('.loading').hide();
             var errData = {'code': 500, 'msg': '服务器内部错误'};
             if(err.status == 422 && typeof(err.responseJSON) !== "undefined"){
                 errData = $.extend(true, {'code': 422, 'msg': '输入参数有误', 'errData': err.responseJSON });
