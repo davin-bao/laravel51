@@ -186,7 +186,7 @@ trait CentaurusHtmlTrait {
      */
     public function avatar( $s = 80, $d = 'mm', $r = 'g'){
         if($this->getStaff()->avatar){
-            return $this->getStaff()->avatar;
+            return asset($this->getStaff()->avatar);
         }else{
             $email = $this->getStaff()->email;
             $avatar =\Config::get('app.avatar_host').md5($email)."?s=$s&d=$d&r=$r";
