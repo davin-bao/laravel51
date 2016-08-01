@@ -62,7 +62,7 @@ class StaffController extends BaseController {
             $breadcrumbs->push('编辑管理员', adminAction('StaffController@getAdd'));
         });
 
-        return $this->render('staff.add',["role"=>$this->getService()->getAllRoleList()]);
+        return $this->render('staff.add',["role"=>$this->getService()->getAllRoleList(), 'staffRoles'=>Auth::staff()->get()->getRoleIds()]);
     }
 
     public function getEdit(Request $request){
@@ -99,9 +99,9 @@ class StaffController extends BaseController {
             $this->getService()->createStaff($request->all());
         }else{ //修改
             $this->validateRequest([
-                'username' => 'required|alpha_num|min:6|max:30|unique:staff',
+                'username' => 'required|alpha_num|min:6|max:30|unique:staff,username,' . $request->input('id', 0),
                 'name' => 'required|min:1|max:20',
-                'email' => 'required|min:6|max:30|email|unique:staff',
+                'email' => 'required|min:6|max:30|email|unique:staff,email,' . $request->input('id', 0),
                 'password' => 'min:6|max:30',
                 'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
                 'roles'=>'required|',
@@ -122,18 +122,6 @@ class StaffController extends BaseController {
         return $this->response($request, [], 'admin/staff/index');
     }
 
-    /**
-     * 获取个人信息
-     * @author cunqinghuang
-     * @since 2016/7/26 19:00
-     */
-    public function getProfile(){
-        Breadcrumbs::register('admin-staff-profile', function ($breadcrumbs) {
-            $breadcrumbs->parent('admin-staff');
-            $breadcrumbs->push('个人信息', adminAction('StaffController@getProfile'));
-             });
-        return $this->render('staff.profile',['staff'=> Auth::staff()->get()]);
-    }
     /**
      * 获取当前管理员权限Uri列表
      * @param Request $request

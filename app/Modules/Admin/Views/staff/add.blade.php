@@ -63,6 +63,8 @@
                         placeholder: '请选择角色',
                 allowClear: true
             });
+            $("#sel2Multi").val(["1","2"]).trigger("change");
+
         });
     </script>
     <script type="text/javascript" src="{{ asset('js/admin/staff_add.js') }}"></script>

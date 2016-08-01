@@ -55,7 +55,7 @@ class FileService {
 
         // 存储失败，发送json请求
         if( !$uploadSuccess1 || !$uploadSuccess2 ) {
-            return self::respondJson(500, true, '上传失败！');
+            return new NoticeMessageException('上传失败！');
         }
 
         // 存储成功，更新数据库staff表信息；更新失败，删除本地文件

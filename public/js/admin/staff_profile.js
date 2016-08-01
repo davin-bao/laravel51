@@ -11,7 +11,7 @@ var page = {
 
     toolBarDom: $('.tool-bar'),
 
-    uploadAvatarContainerDom: $('.center-block'),
+    updateAvatarDom: $('#update-avatar'),
 
     init: function(data){
         this.initDom(data), this.initValidator(), this.addEvent();
@@ -41,7 +41,7 @@ var page = {
                     rangelength: [0, 30]
                 },
                 name: {
-                    required: ["名字"],
+                    required: ["用户名"],
                     rangelength: [0, 30]
                 },
                 mobile: {
@@ -60,7 +60,7 @@ var page = {
     },
     addEvent: function(){
         var self = this;
-        self.uploadAvatarContainerDom.on('click', function () {
+        self.updateAvatarDom.on('click', function () {
 
             var header = '无需保存即可设置';
             var title = '头像设置';

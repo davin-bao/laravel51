@@ -15,7 +15,7 @@
                             <h2>{{ $staff->username }}</h2>
                         </header>
                         <div class="main-box-body clearfix">
-                            <img src="{!! Html::avatar(159) !!}" alt="" role="button" title="设置头像" class="profile-img img-responsive center-block"/>
+                            <img src="{!! Html::avatar(159) !!}" alt="" role="button" title="设置头像" class="profile-img img-responsive center-block" id="update-avatar"/>
                             <div class="profile-label">
                                 <span class="label label-danger">{{ $staff->name }}</span>
                             </div><br>
@@ -50,7 +50,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-lg-offset-1 col-md-10 col-lg-10 name-group">
-                                                    <label for="name">名字</label>
+                                                    <label for="name">用户名</label>
                                                     <input type="text" class="form-control valid" id="name" name="name"
                                                            placeholder="" aria-required="true" aria-invalid="false">
                                                 </div>

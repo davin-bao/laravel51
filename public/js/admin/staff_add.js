@@ -25,7 +25,6 @@ var page = {
         self.nameDom.val(data.name);
         self.userNameDom.val(data.username);
         self.emailDom.val(data.email);
-        self.passwordDom.val(data.password);
         self.rolesDom.val(data.roles);
         self.mobileDom.val(data.mobile);
         //添加操作按钮
@@ -38,7 +37,9 @@ var page = {
 
         //判断是否为编辑场景
         if(data.id > 0){
+            self.passwordDom.val("CantEditPwdHere");
             self.userNameDom.addClass('disabled');
+            self.passwordDom.addClass('disabled');
         }
 
     },
