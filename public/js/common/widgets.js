@@ -161,11 +161,10 @@ Widgets.Dialogs.deleteConfirm = function(url, id, callback, message){
 
     return Widgets.Dialogs.confirm('删除信息', message, function(){
         var postData = {
-            id: index,
+            id: id,
             _method: "POST"
         };
 
-        dialog.close();
 
         Public.ajaxPost(url, postData, function(event) {
             if(200 == event.code){

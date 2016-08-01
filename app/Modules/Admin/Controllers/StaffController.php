@@ -41,12 +41,78 @@ class StaffController extends BaseController {
 
     public function getIndex(){
         Breadcrumbs::register('admin-staff-index', function ($breadcrumbs) {
-            $breadcrumbs->parent('admin-role');
+            $breadcrumbs->parent('admin-staff');
             $breadcrumbs->push('管理员列表', adminAction('StaffController@getIndex'));
         });
 
         return $this->render('staff.index');
     }
+
+    public function getList(Request $request){
+        $matchCon = $request->input('matchCon', null);
+        $query = $this->getService()->staffList($matchCon);
+        $queryData = $this->queryData($request, $query);
+        return $this->response($request, $queryData, 'admin/staff/index');
+    }
+
+    public function getAdd(){
+        Breadcrumbs::register('admin-staff-add', function ($breadcrumbs) {
+            $breadcrumbs->parent('admin-staff');
+            $breadcrumbs->push('编辑管理员', adminAction('StaffController@getAdd'));
+        });
+
+        return $this->render('staff.add',["role"=>$this->getService()->getAllRoleList()]);
+    }
+
+    public function getEdit(Request $request){
+
+        $this->validateRequest([
+            'id' => 'required|min:0',
+        ], $request);
+        $id = $request->input('id', 0);
+        $staff = $this->getService()->getStaff($id);
+
+        return $this->response($request, ['data'=>$staff->toArray()], 'admin/staff/index');
+    }
+
+    public function postEdit(Request $request){
+
+        $id = $request->input('id', 0);
+        if(empty($id)){  //创建
+            $this->validateRequest([
+                'username' => 'required|alpha_num|min:6|max:30|unique:staff',
+                'name' => 'required|min:1|max:20',
+                'email' => 'required|min:6|max:30|email',
+                'password' => 'required|min:6|max:30',
+                'mobile' => 'required|min:7|max:20',
+                'roles'=>'required',
+            ], $request);
+            $this->getService()->createStaff($request->all());
+        }else{ //修改
+            $this->validateRequest([
+                'username' => 'required|alpha_num|min:6|max:30|unique:staff,username,' . $request->input('id', 0),
+                'name' => 'required|min:1|max:20',
+                'email' => 'required|min:6|max:30|email',
+                'password' => 'required|min:6|max:30',
+                'mobile' => 'required|min:7|max:20',
+                'roles'=>'required',
+            ], $request);
+            $this->getService()->updateStaff($request->all());
+        }
+
+        return $this->response($request, [], 'admin/staff/index');
+    }
+
+    public function postDelete(Request $request){
+        $this->validateRequest([
+            'id' => 'required|min:0',
+        ], $request);
+
+        $id = $request->input('id', 0);
+        $this->getService()->deleteStaff($id);
+        return $this->response($request, [], 'admin/staff/index');
+    }
+
     /**
      * 获取个人信息
      * @author cunqinghuang
