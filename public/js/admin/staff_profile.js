@@ -23,8 +23,8 @@ var page = {
 
         //添加操作按钮
         self.toolBarDom.html(
-            Widgets.OperateButtons.save(self, 'save', 'admin/staff/update-info', '保存', function(){
-                window.location = Public.ROOT_URL + 'admin/staff/profile';
+            Widgets.OperateButtons.save(self, 'save', 'admin/edit', '保存', function(){
+                window.location = Public.ROOT_URL + 'admin/profile';
             }) +
             Widgets.OperateButtons.back(self)
         );
@@ -45,7 +45,7 @@ var page = {
                 mobile: {
                     required: ["手机号"],
                     number: [],
-                    rangelength: [7, 20]
+                    rangelength: [7, 13]
                 },
             },
             messages: {

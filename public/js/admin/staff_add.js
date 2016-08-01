@@ -35,6 +35,12 @@ var page = {
             }) +
             Widgets.OperateButtons.back(self)
         );
+
+        //判断是否为编辑场景
+        if(data.id > 0){
+            self.userNameDom.addClass('disabled');
+        }
+
     },
     initValidator: function(){
         var self = this;

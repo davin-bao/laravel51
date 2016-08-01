@@ -82,25 +82,32 @@ class StaffController extends BaseController {
     public function postEdit(Request $request){
 
         $id = $request->input('id', 0);
+        $attribute = [
+            'email' => '该邮箱',
+            'username' => '用户名',
+            'name' => '名字',
+            'mobile' => '手机号',
+            'password' => '密码',
+            'roles' => '角色'
+        ];
         if(empty($id)){  //创建
             $this->validateRequest([
                 'username' => 'required|alpha_num|min:6|max:30|unique:staff',
                 'name' => 'required|min:1|max:20',
-                'email' => 'required|min:6|max:30|email',
+                'email' => 'required|min:6|max:30|email|unique:staff',
                 'password' => 'required|min:6|max:30',
                 'mobile' => 'required|min:7|max:20',
                 'roles'=>'required',
-            ], $request);
+            ], $request, $attribute);
             $this->getService()->createStaff($request->all());
         }else{ //修改
             $this->validateRequest([
-                'username' => 'required|alpha_num|min:6|max:30|unique:staff,username,' . $request->input('id', 0),
                 'name' => 'required|min:1|max:20',
-                'email' => 'required|min:6|max:30|email',
-                'password' => 'required|min:6|max:30',
-                'mobile' => 'required|min:7|max:20',
-                'roles'=>'required',
-            ], $request);
+                'email' => 'required|min:6|max:30|email|unique:staff',
+                'password' => 'min:6|max:30',
+                'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
+                'roles'=>'required|',
+            ], $request, $attribute);
             $this->getService()->updateStaff($request->all());
         }
 
@@ -144,32 +151,4 @@ class StaffController extends BaseController {
         return $this->response($request, ['data'=>$uris], 'admin/staff/index');
     }
 
-    public function getEdit(Request $request){
-
-        $this->validateRequest([
-            'id' => 'required|min:0',
-        ], $request);
-
-        $id = $request->input('id', 0);
-        $role = $this->getService()->getStaff($id);
-
-        return $this->response($request, ['data'=>$role->toArray()], '');
-    }
-
-    /**
-     * 处理用户信息修改提交
-     * @param Request $request
-     * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function postUpdateInfo(Request $request) {
-        $this->validateRequest([
-            'email' => 'required|email|max:50|unique:staff',
-            'name' => 'required|max:30',
-            'mobile' => 'required|numeric|max:99999999999999999999|min:9999999',
-        ], $request);
-
-        if ($this->getService()->updateInfo($request->all())) {
-            return $this->response($request, [], '/admin/staff/profile');
-        }
-    }
 }

@@ -65,6 +65,21 @@ use Symfony\Component\HttpFoundation\Request;
         if(!$staff){
             throw new NoticeMessageException('编辑的管理员不存在!');
         }
+
+        //不允许修改用户名
+        if(isset($parameters['username'])){
+            unset($parameters['username']);
+        }
+
+        //密码未修改时密码不变
+        if(isset($parameters['password'])&&empty($parameters['password'])){
+            unset($parameters['password']);
+        }
+
+        //角色未修改时密码不变
+        if(isset($parameters['roles'])&&empty($parameters['roles'])){
+            unset($parameters['roles']);
+        }
         return $staff->update($parameters);
     }
 
