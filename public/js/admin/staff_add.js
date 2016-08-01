@@ -4,12 +4,13 @@
 var page = {
         urlParam: Public.urlParam(),
         urlParamId: -1,
+        allRoleList:[],
         hasLoaded: false,
 
         saveFormDom: $("#save-form"),
         idDom: $('#id'),
         nameDom: $('#name'),
-        rolesDom: $('.roles'),
+        sel2MultiDom: $('#sel2Multi'),
         mobileDom: $('#mobile'),
         userNameDom: $('#username'),
         emailDom: $('#email'),
@@ -21,11 +22,27 @@ var page = {
         },
     initDom: function(data){
         var self = this;
+
+        self.sel2MultiDom.select2({
+            placeholder: '请选择角色',
+            allowClear: true
+        });
+
+        for(var i = 0;i < self.allRoleList.length; i++){
+            self.sel2MultiDom.append('<option value="' + self.allRoleList[i].id + '">' + self.allRoleList[i].name + '</option>');
+        }
+        var roleIds =[];
+        for(var i = 0;i < data.roles.length; i++){
+            roleIds.push(data.roles[i].id);
+        }
+
+        self.sel2MultiDom.val(roleIds).trigger('change');
+
+
         self.idDom.val(data.id);
         self.nameDom.val(data.name);
         self.userNameDom.val(data.username);
         self.emailDom.val(data.email);
-        self.rolesDom.val(data.roles);
         self.mobileDom.val(data.mobile);
         //添加操作按钮
         self.toolBarDom.html(
@@ -85,7 +102,7 @@ var page = {
                 username: self.userNameDom.val(),
                 email: self.emailDom.val(),
                 password: self.passwordDom.val(),
-                roles: self.rolesDom.val(),
+                roles: self.sel2MultiDom.val(),
                 mobile: self.mobileDom.val()
         };
     },
@@ -104,14 +121,27 @@ var page = {
     $(function() {
         var data = page.getOrigData();
         page.urlParamId = page.urlParam.id ? page.urlParam.id : -1;
-        if (page.urlParamId != -1) {
-            if (!page.hasLoaded) {
-                Public.ajaxGet("admin/staff/edit/", {'id': page.urlParamId}, function(result) {
-                    200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
-                            type: 'error',
-                        message: result.msg
-                    }))
-                });
+
+        Public.ajaxGet("admin/role/list/", {}, function(result) {
+            if(200 === result.code){
+                page.allRoleList = result.data;
+
+                if (page.urlParamId != -1) {
+                    if (!page.hasLoaded) {
+                        Public.ajaxGet("admin/staff/edit/", {'id': page.urlParamId}, function(result) {
+                            200 === result.code ? (data = result.data, allRoleList = result.all_role_list, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
+                                type: 'error',
+                                message: result.msg
+                            }))
+                        });
+                    }
+                } else page.init(data);
+
+            }else{
+                Widgets.tips({
+                    type: 'error',
+                    message: result.msg
+                })
             }
-        } else page.init(data);
+        });
     });

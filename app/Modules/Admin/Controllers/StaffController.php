@@ -62,7 +62,7 @@ class StaffController extends BaseController {
             $breadcrumbs->push('编辑管理员', adminAction('StaffController@getAdd'));
         });
 
-        return $this->render('staff.add',["role"=>$this->getService()->getAllRoleList(), 'staffRoles'=>Auth::staff()->get()->getRoleIds()]);
+        return $this->render('staff.add');
     }
 
     public function getEdit(Request $request){

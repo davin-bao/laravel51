@@ -135,10 +135,9 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
      * @return mixed
      */
     public function getRoleIds() {
-        $staffId = Auth::staff()->get()->toArray()['id'];
         $roleIds = self::select('staff_role.role_id')
             ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
-            ->where('staff.id', $staffId)
+            ->where('staff.id', $this->id)
             ->get()
             ->toArray();
         return $roleIds;

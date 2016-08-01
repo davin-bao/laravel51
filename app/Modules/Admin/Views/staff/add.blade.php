@@ -41,9 +41,6 @@
                     <div class="form-group form-group-select2">
                         <label>角色</label>
                         <select style="width:300px" id="sel2Multi" class="roles" name="roles" multiple value="{{ Input::old('roles') }}">
-                            @foreach($role as $value)
-                                <option value="{{ $value->id }}">{{ $value->name }}</option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
@@ -57,17 +54,6 @@
 
 @section('foot-scripts')
     @parent
-    <script type="text/javascript">
-        $(function($) {
-            $('#sel2Multi').select2({
-                        placeholder: '请选择角色',
-                allowClear: true
-            });
-            $("#sel2Multi").val(["1","2"]).trigger("change");
-
-        });
-    </script>
-    <script type="text/javascript" src="{{ asset('js/admin/staff_add.js') }}"></script>
     <script src="{{ asset('centaurus/js/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/admin/staff_add.js') }}"></script>
 @endsection

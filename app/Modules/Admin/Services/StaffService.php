@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
       * @return mixed
       */
      public function getStaff($id){
-         return Staff::find($id);
+         return Staff::with('roles')->find($id);
      }
 
     /**
@@ -44,14 +44,6 @@ use Symfony\Component\HttpFoundation\Request;
      */
      public function createStaff(array $parameters){
      return Staff::create($parameters);
-     }
-
-
-     /**
-      * 获取角色信息
-      */
-     public function getAllRoleList(){
-         return Role::all();
      }
 
     /**
