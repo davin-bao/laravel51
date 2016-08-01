@@ -21,19 +21,6 @@
             </div>
             <div class="nav-no-collapse pull-right" id="header-nav">
                 <ul class="nav navbar-nav pull-right">
-                    <li class="mobile-search">
-                        <a class="btn">
-                            <i class="fa fa-search"></i>
-                        </a>
-                        <div class="drowdown-search">
-                            <form role="search">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search...">
-                                    <i class="fa fa-search nav-search-icon"></i>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
                     <li class="dropdown hidden-xs">
                         <a class="btn dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-warning"></i>
@@ -88,74 +75,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown hidden-xs">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="count">16</span>
-                        </a>
-                        <ul class="dropdown-menu notifications-list messages-list">
-                            <li class="pointer">
-                                <div class="pointer-inner">
-                                    <div class="arrow"></div>
-                                </div>
-                            </li>
-                            <li class="item first-item">
-                                <a href="#">
-                                    <img src="img/samples/messages-photo-1.png" alt="">
-                                    <span class="content">
-                                        <span class="content-headline">
-                                        George Clooney
-                                        </span>
-                                        <span class="content-text">
-                                        Look, just because I don't be givin' no man a foot massage don't make it
-                                        right for Marsellus to throw...
-                                        </span>
-                                    </span>
-                                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                                </a>
-                            </li>
-                            <li class="item">
-                                <a href="#">
-                                    <img src="img/samples/messages-photo-2.png" alt="">
-                                    <span class="content">
-                                        <span class="content-headline">
-                                        Emma Watson
-                                        </span>
-                                        <span class="content-text">
-                                        Look, just because I don't be givin' no man a foot massage don't make it
-                                        right for Marsellus to throw...
-                                        </span>
-                                    </span>
-                                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                                </a>
-                            </li>
-                            <li class="item">
-                                <a href="#">
-                                    <img src="img/samples/messages-photo-3.png" alt="">
-                                    <span class="content">
-                                        <span class="content-headline">
-                                            Robert Downey Jr.
-                                        </span>
-                                        <span class="content-text">
-                                        Look, just because I don't be givin' no man a foot massage don't make it
-                                        right for Marsellus to throw...
-                                        </span>
-                                    </span>
-                                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                                </a>
-                            </li>
-                            <li class="item-footer">
-                                <a href="#">
-                                    View all messages
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="hidden-xs">
-                        <a class="btn">
-                            <i class="fa fa-cog"></i>
-                        </a>
-                    </li>
                     <li class="dropdown profile-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{!! Html::avatar(35) !!}" alt="">
@@ -163,8 +82,6 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ adminAction('StaffController@getProfile') }}"><i class="fa fa-user"></i>Profile</a></li>
-                            <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
-                            <li><a href="#"><i class="fa fa-envelope-o"></i>Messages</a></li>
                             <li><a href="{{ adminAction('IndexController@getLogout') }}"><i class="fa fa-power-off"></i>Logout</a></li>
                         </ul>
                     </li>
