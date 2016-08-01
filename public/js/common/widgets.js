@@ -277,6 +277,11 @@ Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel){
     var dropzoneConfig = $('#dz-config').val();
     var uploadUrl = $('#upload-url').val();
     var userid = $('#user-id').val();
+    var dropZoneInfo = '<ul style="margin-top: 50px">';
+    for (var i = 0; i < info.length; i++) {
+        dropZoneInfo += '<li>' + info[i] + '</li>';
+    }
+    dropZoneInfo += '</ul>';
     var html = '<link id="bootstrap" media="all" type="text/css" rel="stylesheet" href="' + dropzoneStyle + '">\
     <div class="container">\
         <div class="row">\
@@ -292,7 +297,7 @@ Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel){
                         <input type="hidden" name="_token" value="' + token + '">\
                         \<input type="hidden" name="id" value="' + userid + '">\
                     </form>'
-                    + info + '\
+                    + dropZoneInfo + '\
                 </div>\
             </div>\
         </div>\

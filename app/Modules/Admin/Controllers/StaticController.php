@@ -5,7 +5,6 @@ use App\Modules\Admin\Services\FileService;
 use App\Modules\Common\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Route;
 
 /**
  * Class StaticController
@@ -24,12 +23,13 @@ class StaticController extends BaseController {
 
     /**
      * 提交头像上传
-     * @return mixed
+     * @param Request $request
+     * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function postUploadAvatar() {
+    public function postUploadAvatar(Request $request) {
         $avatar = Input::all();
-        $response = FileService::uploadAvatar($avatar);
-        return $response;
+        FileService::uploadAvatar($avatar);
+        return $this->response($request, ['msg' => '设置成功！'], '/admin/profile');
     }
 
     /**
@@ -40,6 +40,6 @@ class StaticController extends BaseController {
     public function getAvatar(Request $request) {
         $id = $request->input('id');
         $response = FileService::getStaffAvatar($id);
-        return $response;
+        return $this->response($request, ['msg'=>$response], '/admin/profile');
     }
 }

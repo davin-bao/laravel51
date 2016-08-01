@@ -5,8 +5,6 @@ use Auth;
 use Breadcrumbs;
 use Illuminate\Http\Request;
 use App\Modules\Admin\Controllers\Controller as BaseController;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\URL;
 
 /**
  * 管理员 管理
@@ -28,7 +26,6 @@ class StaffController extends BaseController {
 
             'getIndex'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'user', 'display_name'=>'管理员列表', 'is_menu'=>1, 'sort'=>11, 'allow'=>1, 'description'=>'']),
             'getPermissionUrlList'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postUpdateInfo'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'getEdit'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
@@ -96,12 +93,13 @@ class StaffController extends BaseController {
                 'name' => 'required|min:1|max:20',
                 'email' => 'required|min:6|max:30|email|unique:staff',
                 'password' => 'required|min:6|max:30',
-                'mobile' => 'required|min:7|max:20',
+                'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
                 'roles'=>'required',
             ], $request, $attribute);
             $this->getService()->createStaff($request->all());
         }else{ //修改
             $this->validateRequest([
+                'username' => 'required|alpha_num|min:6|max:30|unique:staff',
                 'name' => 'required|min:1|max:20',
                 'email' => 'required|min:6|max:30|email|unique:staff',
                 'password' => 'min:6|max:30',

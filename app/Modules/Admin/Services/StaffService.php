@@ -76,7 +76,7 @@ use Symfony\Component\HttpFoundation\Request;
             unset($parameters['password']);
         }
 
-        //角色未修改时密码不变
+        //角色未修改时角色不变
         if(isset($parameters['roles'])&&empty($parameters['roles'])){
             unset($parameters['roles']);
         }

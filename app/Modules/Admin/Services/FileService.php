@@ -1,6 +1,7 @@
 <?php
 namespace App\Modules\Admin\Services;
 
+use App\Exceptions\NoticeMessageException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
@@ -17,6 +18,14 @@ use Intervention\Image\ImageManager;
  */
 class FileService {
 
+    // 头像大图宽度
+    const AVATAR_WIDTH = 159;
+    // 头像大图高度
+    const AVATAR_HEIGHT =159;
+    // 头像缩略图宽度
+    const AVATAR_THUMB_WIDTH = 50;
+    // 头像缩略图高度
+    const AVATAR_THUMB_HEIGHT = 50;
     /**
      * 处理头像上传操作，包括更新
      * @param $avatar
@@ -30,7 +39,7 @@ class FileService {
         $validator = Validator::make($avatar, $rules);
 
         if ($validator->fails()) {
-            return self::respondJson(400, true, $validator->messages()->first());
+            throw new NoticeMessageException($validator->messages()->first());
         }
 
         $photo = $avatar['file'];
@@ -40,9 +49,9 @@ class FileService {
         // 得到图片在本地存储的唯一文件名
         $allowed_filename = self::createUniqueFilename( $extension, Config::get('upload.avatar_save_path'));
         // 保存图片，并压缩在159*159
-        $uploadSuccess1 = self::saveImage( $photo, $allowed_filename, Config::get('upload.avatar_width'), Config::get('upload.avatar_height'));
+        $uploadSuccess1 = self::saveImage( $photo, $allowed_filename, self::AVATAR_WIDTH, self::AVATAR_HEIGHT);
         // 保存图片缩略图
-        $uploadSuccess2 = self::savaThumbImage( $photo, $allowed_filename, Config::get('upload.avatar_thumb_width'), Config::get('upload.avatar_thumb_height') );
+        $uploadSuccess2 = self::savaThumbImage( $photo, $allowed_filename, self::AVATAR_THUMB_WIDTH, self::AVATAR_THUMB_HEIGHT);
 
         // 存储失败，发送json请求
         if( !$uploadSuccess1 || !$uploadSuccess2 ) {
@@ -54,10 +63,10 @@ class FileService {
             'id' => $avatar['id'],
             'avatar' => Config::get('upload.avatar_save_path'). $allowed_filename
         ])) {
-            return self::respondJson(200, false, null, $allowed_filename);
+            return true;
         } else {
             self::delete($allowed_filename);
-            return self::respondJson(500, true, '设置失败！');
+            throw new NoticeMessageException('设置失败！');
         }
 
     }
@@ -90,7 +99,7 @@ class FileService {
      * @param bool $isRatio 是否按比例压缩
      * @return \Intervention\Image\Image
      */
-    static public function saveImage($photo, $filename, $thumbWidth = null, $thumbHeight = null, $isRatio = false)
+    static private function saveImage($photo, $filename, $thumbWidth = null, $thumbHeight = null, $isRatio = false)
     {
         // 实例化intervention/image依赖
         $manager = new ImageManager();
@@ -121,7 +130,7 @@ class FileService {
      * @param bool $isRatio 是否按比例压缩
      * @return \Intervention\Image\Image
      */
-    static public function savaThumbImage($photo, $filename, $thumbWidth, $thumbHeight, $isRatio = false)
+    static private function savaThumbImage($photo, $filename, $thumbWidth, $thumbHeight, $isRatio = false)
     {
         $manager = new ImageManager();
         if ($isRatio) {
@@ -162,23 +171,7 @@ class FileService {
             File::delete( $full_path2 );
         }
 
-        return self::respondJson(200, false);
-    }
-
-    /**
-     * 封装json响应
-     * @param $httpCode
-     * @param null $isError
-     * @param null $message
-     * @param null $filename
-     * @return mixed
-     */
-    static function respondJson($httpCode, $isError = null, $message = null, $filename = null) {
-        $array['code'] = $httpCode;
-        isset($isError) ? $array['error'] = $isError : null;
-        isset($message) ? $array['message'] = $message : null;
-        isset($filename) ? $array['filename'] = $filename : null;
-        return Response::json($array, $httpCode);
+        return true;
     }
 
     /**
@@ -186,8 +179,7 @@ class FileService {
      * @param $id
      * @return mixed
      */
-    static function getStaffAvatar($id) {
-        $avatar = StaffService::getAvatar($id);
-        return self::respondJson(200, false, $avatar);
+    static public function getStaffAvatar($id) {
+        return StaffService::getAvatar($id);
     }
 }

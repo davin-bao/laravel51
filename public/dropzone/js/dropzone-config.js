@@ -20,7 +20,7 @@ var dropz = new Dropzone("#dropzone", {
 
             $.ajax({
                 type: 'POST',
-                url: 'upload/delete',
+                url: 'admin/static/delete',
                 data: {id: file.name, _token: $('#csrf-token').val()},
                 dataType: 'html',
                 success: function(data){
@@ -40,7 +40,7 @@ var dropz = new Dropzone("#dropzone", {
         if($.type(response) === "string")
             var message = response; //dropzone sends it's own error messages in string
         else
-            var message = response.message;
+            var message = response.msg;
         file.previewElement.classList.add("dz-error");
         _ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
         _results = [];
@@ -53,18 +53,18 @@ var dropz = new Dropzone("#dropzone", {
     success: function(file,done) {
         $.ajax({
             type: 'GET',
-            url: '/file/avatar?id=' + $('#user-id').val(),
+            url: '/admin/static/avatar?id=' + $('#user-id').val(),
             success: function(data) {
                 if (data.code === 200) {
-                    $('#user-left-box img').attr('src', Public.ROOT_URL + data.message);
-                    $('.profile-dropdown img').attr('src', Public.ROOT_URL + data.message);
-                    $('.main-box-body img').attr('src', Public.ROOT_URL + data.message);
+                    $('#user-left-box img').attr('src', Public.ROOT_URL + data.msg);
+                    $('.profile-dropdown img').attr('src', Public.ROOT_URL + data.msg);
+                    $('.main-box-body img').attr('src', Public.ROOT_URL + data.msg);
                 } else {
-                    Widgets.Dialogs.custom('设置头像', '设置头像失败！', function() {});
+                    Widgets.Dialogs.custom('设置头像', '获取头像失败！', function() {});
                 }
             },
             error: function() {
-                Widgets.Dialogs.custom('设置头像', '设置头像失败！', function() {});
+                Widgets.Dialogs.custom('设置头像', '获取头像失败！', function() {});
             }
         });
         photo_counter++;

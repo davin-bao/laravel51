@@ -1,6 +1,8 @@
-@extends('Admin::vendor.index')
+@extends('Admin::vendor.master')
 @section('container')
-    <link rel="stylesheet" href="{{ asset('centaurus/css/libs/select2.css') }}" type="text/css"/>
+    @section('stylesheets')
+        <link rel="stylesheet" href="{{ asset('centaurus/css/libs/select2.css') }}" type="text/css"/>
+    @endsection
     <div class="row">
         <div class="col-lg-12">
             {!! Breadcrumbs::render('admin-staff-add') !!}

@@ -11,6 +11,8 @@ var page = {
 
     toolBarDom: $('.tool-bar'),
 
+    uploadAvatarContainerDom: $('.center-block'),
+
     init: function(data){
         this.initDom(data), this.initValidator(), this.addEvent();
     },
@@ -56,7 +58,20 @@ var page = {
             errorClass: "has-error"
         });
     },
-    addEvent: function(){},
+    addEvent: function(){
+        var self = this;
+        self.uploadAvatarContainerDom.on('click', function () {
+
+            var header = '无需保存即可设置';
+            var title = '头像设置';
+            var info = [
+                '一拖到此处就可更换你的头像',
+                '图片大小需小于1M'
+            ];
+
+            Widgets.Dialogs.uploadImage(header, title, info, function() {}, '完成');
+        });
+    },
     getPostData: function(){
         var self = this;
         return {
@@ -89,23 +104,3 @@ $(function() {
         }
     } else page.init(data);
 });
-
-$('.center-block').click(function () {
-    var header = '无需保存即可设置';
-    var title = '头像设置';
-    var info = [
-        '一拖到此处就可更换你的头像',
-        '图片大小需小于1M'
-    ];
-    uploadAvatar(header, title, info, function () {}, '完成');
-});
-
-function uploadAvatar(header, title, info, callback, okLabel) {
-    var dropZoneInfo = '<ul style="margin-top: 50px">';
-    for (var i = 0; i < info.length; i++) {
-        dropZoneInfo += '<li>' + info[i] + '</li>';
-    }
-    dropZoneInfo += '</ul>';
-
-    Widgets.Dialogs.uploadImage(header, title, dropZoneInfo, callback, okLabel);
-}
