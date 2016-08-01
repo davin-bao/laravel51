@@ -2,64 +2,108 @@
 namespace App\Modules\Admin\Services;
 
 use App\Exceptions\NoticeMessageException;
+use Auth;
+use App\Models\Role;
 use App\Models\Staff;
+use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class StaffService
- * @package App\Modules\Admin\Services
- *
- * @author chuanhangyu
- * @since 2016/7/29 9:30
- */
-class StaffService {
+ /**
+  * 管理员 Service
+  * Class StaffService
+  * @package App\Modules\Admin\Services
+  *
+  * @author
+  * @since
+  */
+ class StaffService {
+
     /**
-     * 更新用户头像
+     * 获取权限列表
+     * @param $matchCon
+     * @return mixed
+     */
+     public function staffList($matchCon){
+         $query = new Staff();
+         //返回检索的Query
+         return Staff::getSearchQuery($query, $matchCon);
+     }
+
+     /**
+      * 得到用户信息
+      * @param $id
+      * @return mixed
+      */
+     public function getStaff($id){
+         return Staff::find($id);
+     }
+
+    /**
+     * 创建管理员
      * @param array $parameters
-     * @return mixed
+     * @return static
      */
-    public static function updateAvatar(array $parameters) {
+     public function createStaff(array $parameters){
+     return Staff::create($parameters);
+     }
+
+
+     /**
+      * 获取角色信息
+      */
+     public function getAllRoleList(){
+         return Role::all();
+     }
+
+    /**
+     * 修改管理员
+     * @param array $parameters
+     * @return static
+     */
+    public function updateStaff(array $parameters){
         $id = array_get($parameters, 'id', 0);
         $staff = Staff::find($id);
         if(!$staff){
-            throw new NoticeMessageException('该管理员不存在!');
-        }
-        FileService::delete(basename($staff->avatar));
-        return $staff->update($parameters);
-    }
-
-    /**
-     * 根据id得到用户头像
-     * @param $id
-     * @return mixed
-     */
-    public static function getAvatar($id) {
-        $staff = Staff::find($id);
-        if (!$staff) {
-            throw new NoticeMessageException('该管理员不存在!');
-        }
-        return $staff->avatar;
-    }
-
-    /**
-     * 更新用户信息
-     * @param $parameters
-     * @return mixed
-     */
-    public function updateInfo($parameters) {
-        $id = array_get($parameters, 'id', 0);
-        $staff = Staff::find($id);
-        if(!$staff){
-            throw new NoticeMessageException('改管理员不存在!');
+            throw new NoticeMessageException('编辑的管理员不存在!');
         }
         return $staff->update($parameters);
     }
 
-    /**
-     * 得到用户信息
-     * @param $id
-     * @return mixed
-     */
-    public function getStaff($id) {
-        return Staff::find($id);
-    }
+     public function deleteStaff($id){
+         $staff = Staff::find($id);
+         if(!$staff){
+             throw new NoticeMessageException('选择的管理员不存在!');
+         }else if ($staff->id < 2) {
+             throw new NoticeMessageException('系统管理员不允许删除!');
+         }else {
+                        $staff->remove($id);
+                    }
+         return true;
+     }
+     /**
+      * 更新用户头像
+      * @param array $parameters
+      * @return mixed
+      */
+     public static function updateAvatar(array $parameters) {
+         $id = array_get($parameters, 'id', 0);
+         $staff = Staff::find($id);
+         if(!$staff){
+             throw new NoticeMessageException('该管理员不存在!');
+         }
+         FileService::delete(basename($staff->avatar));
+         return $staff->update($parameters);
+     }
+
+     /**
+      * 根据id得到用户头像
+      * @param $id
+      * @return mixed
+      */
+     public static function getAvatar($id) {
+         $staff = Staff::find($id);
+         if (!$staff) {
+             throw new NoticeMessageException('该管理员不存在!');
+         }
+         return $staff->avatar;
+     }
 }

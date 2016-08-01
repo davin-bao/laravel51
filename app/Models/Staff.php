@@ -29,7 +29,7 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
         CacheTrait;
 
     protected $table = 'staff';
-    protected $fillable = ['username', 'email', 'password', 'name','delete_at','mobile', 'dept_id','confirm_token', 'confirmed_at','avatar'];
+    protected $fillable = ['username', 'email', 'password', 'name','deleted_at','mobile', 'dept_id','confirm_token','avatar', 'confirmed_at'];
     protected $hidden = ['password', 'remember_token'];
     protected static $searchColumns = ['username', 'name'];
 
@@ -49,23 +49,33 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
 
     public function update(array $attributes = array()) {
         $self = $this;
-        $hasUpdateRole = isset($attributes['roles']);
 
         isset($attributes['password']) && empty($attributes['password']) ? $attributes = array_except($attributes, 'password') :'';
         isset($attributes['password_confirmation']) && empty($attributes['password_confirmation']) ? $attributes = array_except($attributes, 'password_confirmation') :'';
         if(!empty($attributes['password'])) $attributes['password'] = Hash::make($attributes['password']);
 
-        if($hasUpdateRole){
+        if(isset($attributes['roles'])){
             DB::transaction(function() use($attributes, $self) {
                 parent::update($attributes);
-                AdminRole::cleanUpRoles($self->id);
-                $self->roles()->attach(array_values($attributes['roles']));
+                $self->roles()->sync(array_values($attributes['roles']));
             });
         }else{
             return parent::update($attributes);
         }
+
     }
 
+    public function remove($id){
+        $self = $this;
+        DB::transaction(function () use ($id, $self) {
+            $roleIdList = array_column($this->roles->toArray(), 'id');
+            if (is_array($roleIdList) && count($roleIdList)) {
+                $self->roles()->detach($roleIdList);
+            }
+            parent::delete($id);
+        });
+
+    }
     /**
      * Get last seen
      *
