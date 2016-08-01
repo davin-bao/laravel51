@@ -29,77 +29,101 @@ Widgets.tips = function(options){
 
 //<editor-fold desc="按钮类">
 Widgets.OperateButtons = Widgets.OperateButtons || {};
-Widgets.OperateButtons._button = function($_obj, id, url, label, callback){
-    if(Public.power(url)){
-        label = typeof(label) === 'undefined' ? '保存' : label;
-        var formDom = $('#save-form');
+/**
+ * 操作按钮基类
+ * @param $_obj 当前页中 page 对象
+ * @param id 按钮的ID
+ * @param url 按钮动作地址
+ * @param label 显示的名称
+ * @param callback 回调
+ * @param classes 按钮class样式
+ * @returns {*}
+ * @private
+ */
+Widgets.OperateButtons._button = function($_obj, id, url, label, callback, classes){
+    label = typeof(label) === 'undefined' ? '保存' : label;
+    classes = typeof(classes) === 'undefined' ? '' : classes;
+    var formDom = $('#'+id+'-form');
 
-        $_obj.toolBarDom.on('click', '#' + id, function(){
-            var paramData = $_obj.getPostData();
-            if(!paramData) return false;
+    $_obj.toolBarDom.on('click', '#' + id, function(){
+        var paramData = $_obj.getPostData();
+        if(!paramData) return false;
 
-            if (!formDom.valid()) {
-                formDom.find("input.has-error").eq(0).focus();
-                return false;
+        if (!formDom.valid()) {
+            formDom.find("input.has-error").eq(0).focus();
+            return false;
+        }
+
+        Public.ajaxPost(url, paramData, function(event) {
+            switch(event.code){
+                case 200:   //操作成功
+                    Widgets.tips({
+                        type: "success",
+                        message: event.msg,
+                        onClose : function() {
+                            typeof(callback) !== 'undefined' && callback();
+                        }
+                    });
+                    break;
+                default:   //其他错误
+                    Widgets.tips({
+                        type: "error",
+                        message: event.msg
+                    });
+                    break;
             }
+        }, function (err) {
+            switch(err.code){
+                case 422:   //输入参数错误
+                    Widgets.tips({
+                        type: "error",
+                        message: "CODE 422: 输入参数有误"
+                    });
+                    //解析输入参数并显示到前端
+                    if(typeof(err.errData) != "object") break;
 
-            Public.ajaxPost(url, paramData, function(event) {
-                switch(event.code){
-                    case 200:   //操作成功
-                        Widgets.tips({
-                            type: "success",
-                            message: event.msg,
-                            onClose : function() {
-                                typeof(callback) !== 'undefined' && callback();
-                            }
-                        });
-                        break;
-                    default:   //其他错误
-                        Widgets.tips({
-                            type: "error",
-                            message: event.msg
-                        });
-                        break;
-                }
-            }, function (err) {
-                switch(err.code){
-                    case 422:   //输入参数错误
-                        Widgets.tips({
-                            type: "error",
-                            message: "CODE 422: 输入参数有误"
-                        });
-                        //解析输入参数并显示到前端
-                        if(typeof(err.errData) != "object") break;
+                    $.each(err.errData,function(n,value) {
+                        if(value.length > 0 && $('#'+n).length > 0 ) {
+                            formDom.validate().errorList.push({
+                                message: value.pop(),
+                                element: $('#' + n)[0],
+                                method: 'server-error'
+                            });
+                        }
+                    });
+                    //显示错误信息
+                    formDom.validate().defaultShowErrors();
 
-                        $.each(err.errData,function(n,value) {
-                            if(value.length > 0 && $('#'+n).length > 0 ) {
-                                formDom.validate().errorList.push({
-                                    message: value.pop(),
-                                    element: $('#' + n)[0],
-                                    method: 'server-error'
-                                });
-                            }
-                        });
-                        //显示错误信息
-                        formDom.validate().defaultShowErrors();
-
-                        break;
-                    default:   //其他错误
-                        Widgets.tips({
-                            type: "error",
-                            message: err.msg
-                        });
-                        break;
-                }
-            });
+                    break;
+                default:   //其他错误
+                    Widgets.tips({
+                        type: "error",
+                        message: err.msg
+                    });
+                    break;
+            }
         });
+    });
 
-        return '<a id="'+id+'" class="btn btn-success"><i class="fa fa-'+id+'"></i> '+label+'</a>';
+    return '<a id="'+id+'" class="btn '+classes+'"><i class="fa fa-'+id+'"></i> '+label+'</a>';
+};
+
+/**
+ * 带有权限验证的按钮基类
+ * @see Widgets.OperateButtons._button()
+ */
+Widgets.OperateButtons._powerButton = function($_obj, id, url, label, callback, classes){
+    if(Public.power(url)){
+        return Widgets.OperateButtons._button($_obj, id, url, label, callback, classes);
     }
     return '';
 };
+/**
+ * 保存按钮
+ * @see Widgets.OperateButtons._button()
+ */
 Widgets.OperateButtons.save = function($_obj, id, url, label, callback){
-    return Widgets.OperateButtons._button($_obj, id, url, label, callback);
+    return Widgets.OperateButtons._powerButton($_obj, id, url, label, callback, 'btn-success');
 };
 Widgets.OperateButtons.back = function($_obj, id, label){
     id = typeof(id) === 'undefined' ? 'back' : id;
@@ -161,11 +185,10 @@ Widgets.Dialogs.deleteConfirm = function(url, id, callback, message){
 
     return Widgets.Dialogs.confirm('删除信息', message, function(){
         var postData = {
-            id: index,
+            id: id,
             _method: "POST"
         };
 
-        dialog.close();
 
         Public.ajaxPost(url, postData, function(event) {
             if(200 == event.code){

@@ -1,4 +1,4 @@
-@extends('Admin::vendor.index')
+@extends('Admin::vendor.master')
 
 @section('container')
 
@@ -19,15 +19,15 @@
                     <input type="hidden" id="id" name="id">
                     <div class="form-group col-md-6 col-lg-3 name-group">
                         <label for="name">角色英文标示</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="" value="{{ Input::old('name') }}">
                     </div>
                     <div class="form-group col-md-6 col-lg-3 display_name-group">
                         <label for="display_name">角色中文名称</label>
-                        <input type="text" class="form-control" id="display_name" name="display_name" placeholder="">
+                        <input type="text" class="form-control" id="display_name" name="display_name" placeholder="" value="{{ Input::old('display_name') }}">
                     </div>
                     <div class="form-group col-md-12 col-lg-12 description-group">
                         <label for="description">描述</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="3" value="{{ Input::old('description') }}" ></textarea>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10 tool-bar"></div>
