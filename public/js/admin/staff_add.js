@@ -131,7 +131,7 @@ var page = {
                 if (page.urlParamId != -1) {
                     if (!page.hasLoaded) {
                         Public.ajaxGet("admin/staff/edit/", {'id': page.urlParamId}, function(result) {
-                            200 === result.code ? (data = result.data, allRoleList = result.all_role_list, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
+                            200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
                                 type: 'error',
                                 message: result.msg
                             }))
