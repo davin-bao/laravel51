@@ -42,6 +42,7 @@ trait CentaurusHtmlTrait {
         "modernizr-custom" => "centaurus/js/modernizr.custom.js",
         "notificationFx" => "centaurus/js/notificationFx.js",
         "bootstrap-dialog" => "centaurus/js/bootstrap-dialog.min.js",
+        "jquery-maskedinput" => "centaurus/js/jquery.maskedinput.min.js",
         "jquery-validate" => "js/common/jquery.validate.min.js",
         "jquery-validator" => "js/common/validator.js",
         "cache-script" => "js/common/cache.js",

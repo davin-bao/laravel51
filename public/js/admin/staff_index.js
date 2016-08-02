@@ -25,40 +25,43 @@ var page = {
                 },
                 {
                     "data": "name" ,
-                    "title": "name",
+                    "title": "姓名",
                     "orderable": true,
                 },
                 {
                     "data": "email",
-                    "title": "email",
+                    "title": "Email",
                     "orderable": true,
                 },
                 {
                     "data": "username",
-                    "title": "username",
+                    "title": "用户名",
                     "orderable": true,
                 },
                 {
                     "data": "mobile" ,
-                    "title": "mobile",
-                    "orderable": false,
-                },
-                {
-                    "data": "confirm_token" ,
-                    "title": "confirm_token",
+                    "title": "手机号",
                     "orderable": false,
                 },
                 {
                     "data": "confirmed_at" ,
-                    "title": "confirmed_at",
+                    "title": "是否已验证",
                     "orderable": false,
                 },
                 {
                     "data": "operate",
-                    "title": "operate",
+                    "title": "操作",
                     "orderable": false,
                 },
             ],
+            "columnDefs": [{
+                "targets": 5,//index of column starting from 0
+                "data": "confirmed_at", //this name should exist in your JSON response
+                "render": function (data, type, full, meta) {
+                    if(data == null) return '<span class="label label-danger">否</span>';
+                    return '<span class="label label-success">是</span>';
+                }
+            }]
         };
         self.listDataTable = self.listDom.table(options);
     },
