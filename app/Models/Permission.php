@@ -44,7 +44,7 @@ class Permission extends EntrustPermission
 
     public function getSubPermissionAttribute()
     {
-        return ($this->attributes['fid'] == 0) ? $this->where('fid',$this->attributes['id'])->orderBy('sort', 'asc')->get() : null;
+        return (empty($this->attributes['parent'])) ? $this->where('parent', basename($this->attributes['action']))->orderBy('sort', 'asc')->get() : null;
     }
 
 
@@ -88,5 +88,16 @@ class Permission extends EntrustPermission
     public static function can($action){
         $roleIds = (\Auth::staff()->check()) ? \Auth::staff()->get()->getRoleIds() : null;
         return self::getPermission($action, $roleIds);
+    }
+
+    /**
+     * 取得所有权限
+     * @return mixed
+     *
+     * @author chuanhangyu
+     * @since 2016/8/2 10:30
+     */
+    public static function getAllPermission() {
+        return self::get();
     }
 }

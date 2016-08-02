@@ -215,7 +215,16 @@ Public.ajaxGet = function(url, params, callback, errCallback){
             callback(data);
         },
         error: function(err){
-            errCallback && errCallback(err);
+            $('.loading').hide();
+            var errData = {'code': 500, 'msg': '服务器内部错误'};
+            if(err.status == 422 && typeof(err.responseJSON) !== "undefined"){
+                errData = $.extend(true, {'code': 422, 'msg': '输入参数有误', 'errData': err.responseJSON });
+            }else if(err.status == 500 && typeof(err.responseJSON) !== "undefined"){
+                errData = err.responseJSON;
+            }else if(err.status == 403){
+                errData = {'code': 403, 'msg': '禁止访问'};
+            }
+            errCallback && errCallback(errData);
         }
     });
 };
@@ -246,6 +255,8 @@ Public.ajaxPost = function(url, params, callback, errCallback){
                 errData = $.extend(true, {'code': 422, 'msg': '输入参数有误', 'errData': err.responseJSON });
             }else if(err.status == 500 && typeof(err.responseJSON) !== "undefined"){
                 errData = err.responseJSON;
+            }else if(err.status == 403){
+                errData = $.extend(true, {'code': 403, 'msg': '禁止访问'});
             }
             errCallback && errCallback(errData);
         }
@@ -459,6 +470,7 @@ $.fn.table = function( options ) {
             "render": function(data, type, full) {
                 var operateHtml = '';
                 options.edit_able && Public.power(options.index + options.edit) && (operateHtml += '<a class="btn btn-success btn-xs edit-row-btn" data-id="'+full.id+'"><i class="fa fa-pencil"></i> 编辑</a>');
+                options.assign_able && Public.power(options.index + options.assignPermissions) && (operateHtml += '<a class="btn btn-success btn-xs edit-row-btn" data-id="'+full.id+'"><i class="fa fa-wrench"></i> 权限</a>');
                 options.delete_able && Public.power(options.index + options.delete) && (operateHtml += '<a class="btn btn-danger btn-xs del-row-btn" data-id="'+full.id+'" data-href=""><i class="fa fa-trash-o"></i> 删除</a>');
 
                 return operateHtml;
