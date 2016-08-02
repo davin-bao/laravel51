@@ -81,7 +81,7 @@
                             <span class="hidden-xs">{!! Html::getStaff()->name !!}</span> <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ adminAction('StaffController@getProfile') }}"><i class="fa fa-user"></i>Profile</a></li>
+                            <li><a href="{{ adminAction('DashboardController@getProfile') }}"><i class="fa fa-user"></i>Profile</a></li>
                             <li><a href="{{ adminAction('IndexController@getLogout') }}"><i class="fa fa-power-off"></i>Logout</a></li>
                         </ul>
                     </li>

@@ -2182,4 +2182,7 @@ html,body{font-family:"Open Sans",sans-serif;-webkit-font-smoothing:antialiased;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
+.disabled{color:#acacac!important; border-color:#acacac!important; text-shadow:1px 1px #fff!important; outline:0!important; cursor:default!important; pointer-events:none;}
+.disabled:hover{text-decoration:none!important;}
+.disabled input{color:#acacac!important; border-color:#acacac!important; text-shadow:1px 1px #fff!important; outline:0!important; cursor:default!important; pointer-events:none;}
 
