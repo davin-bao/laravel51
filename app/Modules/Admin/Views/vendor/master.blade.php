@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    @include('Admin::vendor.layoutoption')
+    @include('Admin::vendor.layout_option')
     {!! Html::footerScript() !!}
 
     {{--初始化脚本--}}

@@ -44,13 +44,8 @@ var page = {
                     "orderable": false,
                 },
                 {
-                    "data": "confirm_token" ,
-                    "title": "confirm_token",
-                    "orderable": false,
-                },
-                {
-                    "data": "confirmed_at" ,
-                    "title": "confirmed_at",
+                    "data": "created_at" ,
+                    "title": "created_at",
                     "orderable": false,
                 },
                 {
