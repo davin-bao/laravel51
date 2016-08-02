@@ -28,8 +28,13 @@ use Symfony\Component\HttpFoundation\Request;
          return Staff::getSearchQuery($query, $matchCon);
      }
 
+     /**
+      * 得到用户信息
+      * @param $id
+      * @return mixed
+      */
      public function getStaff($id){
-         return Staff::find($id);
+         return Staff::with('roles')->find($id);
      }
 
     /**
@@ -39,14 +44,6 @@ use Symfony\Component\HttpFoundation\Request;
      */
      public function createStaff(array $parameters){
      return Staff::create($parameters);
-     }
-
-
-     /**
-      * 获取角色信息
-      */
-     public function getAllRoleList(){
-         return Role::all();
      }
 
     /**
@@ -59,6 +56,21 @@ use Symfony\Component\HttpFoundation\Request;
         $staff = Staff::find($id);
         if(!$staff){
             throw new NoticeMessageException('编辑的管理员不存在!');
+        }
+
+        //不允许修改用户名
+        if(isset($parameters['username'])){
+            unset($parameters['username']);
+        }
+
+        //密码未修改时密码不变
+        if(isset($parameters['password'])&&empty($parameters['password'])){
+            unset($parameters['password']);
+        }
+
+        //角色未修改时角色不变
+        if(isset($parameters['roles'])&&empty($parameters['roles'])){
+            unset($parameters['roles']);
         }
         return $staff->update($parameters);
     }
@@ -73,5 +85,32 @@ use Symfony\Component\HttpFoundation\Request;
                         $staff->remove($id);
                     }
          return true;
+     }
+     /**
+      * 更新用户头像
+      * @param array $parameters
+      * @return mixed
+      */
+     public static function updateAvatar(array $parameters) {
+         $id = array_get($parameters, 'id', 0);
+         $staff = Staff::find($id);
+         if(!$staff){
+             throw new NoticeMessageException('该管理员不存在!');
+         }
+         FileService::delete(basename($staff->avatar));
+         return $staff->update($parameters);
+     }
+
+     /**
+      * 根据id得到用户头像
+      * @param $id
+      * @return mixed
+      */
+     public static function getAvatar($id) {
+         $staff = Staff::find($id);
+         if (!$staff) {
+             throw new NoticeMessageException('该管理员不存在!');
+         }
+         return $staff->avatar;
      }
 }
