@@ -29,7 +29,7 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
         CacheTrait;
 
     protected $table = 'staff';
-    protected $fillable = ['username', 'email', 'password', 'name','deleted_at','mobile', 'dept_id','confirm_token', 'confirmed_at'];
+    protected $fillable = ['username', 'email', 'password', 'name','deleted_at','mobile', 'dept_id','confirm_token','avatar', 'confirmed_at'];
     protected $hidden = ['password', 'remember_token'];
     protected static $searchColumns = ['username', 'name'];
 
@@ -60,7 +60,7 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
                 $self->roles()->sync(array_values($attributes['roles']));
             });
         }else{
-            parent::update($attributes);
+            return parent::update($attributes);
         }
 
     }
@@ -135,10 +135,9 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
      * @return mixed
      */
     public function getRoleIds() {
-        $staffId = Auth::staff()->get()->toArray()['id'];
         $roleIds = self::select('staff_role.role_id')
             ->join('staff_role', 'staff.id', '=', 'staff_role.staff_id')
-            ->where('staff.id', $staffId)
+            ->where('staff.id', $this->id)
             ->get()
             ->toArray();
         return $roleIds;

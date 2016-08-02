@@ -26,6 +26,7 @@ class StaffController extends BaseController {
 
             'getIndex'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'user', 'display_name'=>'管理员列表', 'is_menu'=>1, 'sort'=>11, 'allow'=>1, 'description'=>'']),
             'getPermissionUrlList'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'getEdit'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
 
@@ -61,7 +62,7 @@ class StaffController extends BaseController {
             $breadcrumbs->push('编辑管理员', adminAction('StaffController@getAdd'));
         });
 
-        return $this->render('staff.add',["role"=>$this->getService()->getAllRoleList()]);
+        return $this->render('staff.add');
     }
 
     public function getEdit(Request $request){
@@ -78,25 +79,33 @@ class StaffController extends BaseController {
     public function postEdit(Request $request){
 
         $id = $request->input('id', 0);
+        $attribute = [
+            'email' => '该邮箱',
+            'username' => '用户名',
+            'name' => '名字',
+            'mobile' => '手机号',
+            'password' => '密码',
+            'roles' => '角色'
+        ];
         if(empty($id)){  //创建
             $this->validateRequest([
                 'username' => 'required|alpha_num|min:6|max:30|unique:staff',
                 'name' => 'required|min:1|max:20',
-                'email' => 'required|min:6|max:30|email',
+                'email' => 'required|min:6|max:30|email|unique:staff',
                 'password' => 'required|min:6|max:30',
-                'mobile' => 'required|min:7|max:20',
+                'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
                 'roles'=>'required',
-            ], $request);
+            ], $request, $attribute);
             $this->getService()->createStaff($request->all());
         }else{ //修改
             $this->validateRequest([
                 'username' => 'required|alpha_num|min:6|max:30|unique:staff,username,' . $request->input('id', 0),
                 'name' => 'required|min:1|max:20',
-                'email' => 'required|min:6|max:30|email',
-                'password' => 'required|min:6|max:30',
-                'mobile' => 'required|min:7|max:20',
-                'roles'=>'required',
-            ], $request);
+                'email' => 'required|min:6|max:30|email|unique:staff,email,' . $request->input('id', 0),
+                'password' => 'min:6|max:30',
+                'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
+                'roles'=>'required|',
+            ], $request, $attribute);
             $this->getService()->updateStaff($request->all());
         }
 
@@ -114,18 +123,6 @@ class StaffController extends BaseController {
     }
 
     /**
-     * 获取个人信息
-     * @author cunqinghuang
-     * @since 2016/7/26 19:00
-     */
-    public function getProfile(){
-        Breadcrumbs::register('admin-staff-profile', function ($breadcrumbs) {
-            $breadcrumbs->parent('admin-staff');
-            $breadcrumbs->push('个人信息', adminAction('StaffController@getProfile'));
-             });
-        return $this->render('staff.profile',['staff'=> Auth::staff()->get()]);
-    }
-    /**
      * 获取当前管理员权限Uri列表
      * @param Request $request
      * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
@@ -139,4 +136,5 @@ class StaffController extends BaseController {
 
         return $this->response($request, ['data'=>$uris], 'admin/staff/index');
     }
+
 }

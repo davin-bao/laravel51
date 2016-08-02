@@ -49,11 +49,6 @@ var page = {
                     "orderable": false,
                 },
                 {
-                    "data": "deleted_at" ,
-                    "title": "deleted_at",
-                    "orderable": false,
-                },
-                {
                     "data": "confirmed_at" ,
                     "title": "confirmed_at",
                     "orderable": false,
