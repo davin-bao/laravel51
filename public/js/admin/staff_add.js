@@ -48,7 +48,7 @@ var page = {
         self.mobileDom.val(data.mobile);
         //添加操作按钮
         self.toolBarDom.html(
-            Widgets.OperateButtons.save(self, 'save', 'admin/staff/edit', '保存', function(){
+            Widgets.OperateButtons.save(self, 'save', 'admin/staff/update', '保存', function(){
                 window.location = Public.ROOT_URL + 'admin/staff';
             }) +
             Widgets.OperateButtons.back(self)
