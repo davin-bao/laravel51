@@ -10,7 +10,6 @@ var page = {
     mobileDom: $('#mobile'),
 
     sel2Dom: $('#sel2'),
-    select2ChosenDom: $('.select2-chosen'),
 
     setAvatarContainerDom: $('#set-avatar-container'),
     toolBarDom: $('.tool-bar'),
