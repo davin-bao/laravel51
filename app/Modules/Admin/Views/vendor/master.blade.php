@@ -15,7 +15,7 @@
                     @yield('container')
                     <footer id="footer-bar" class="row">
                         <p id="footer-copyright" class="col-xs-12">
-                            &copy; 2014 <a href="http://www.adbee.sk/" target="_blank">Adbee digital</a>. Powered by Centaurus Theme.
+                            &copy; 2016 <a href="http://www.xmisp.com/" target="_blank">xmisp</a>. Powered by XMISP.
                         </p>
                     </footer>
                 </div>
