@@ -93,9 +93,10 @@ class StaffController extends BaseController {
                 'name' => 'required|min:1|max:20',
                 'email' => 'required|min:6|max:30|email|unique:staff',
                 'password' => 'required|min:6|max:30',
-                'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
+                'mobile' => 'regex:/^\([0-9]{3}\)\ 1[34578][0-9]\-[0-9]{4}\ x[0-9]{4}$/',
                 'roles'=>'required',
             ], $request, $attribute);
+
             $this->getService()->createStaff($request->all());
         }else{ //修改
             $this->validateRequest([
@@ -103,8 +104,8 @@ class StaffController extends BaseController {
                 'name' => 'required|min:1|max:20',
                 'email' => 'required|min:6|max:30|email|unique:staff,email,' . $request->input('id', 0),
                 'password' => 'min:6|max:30',
-                'mobile' => 'required|regex:/^1[34578][0-9]{7,20}$/',
-                'roles'=>'required|',
+                'mobile' => 'regex:/^\([0-9]{3}\)\ 1[34578][0-9]\-[0-9]{4}\ x[0-9]{4}$/',
+                'roles'=>'required',
             ], $request, $attribute);
             $this->getService()->updateStaff($request->all());
         }

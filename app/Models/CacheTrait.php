@@ -100,10 +100,9 @@ trait CacheTrait
     /**
      * 添加事件
      */
-    public static function boot()
+    public static function bootCacheTrait()
     {
-        parent::boot();
-        self::saving(function($model){
+        static::saving(function($model){
             \Log::info(get_class($model).' saving ...');
             $model->forgetAllDependencyCache();
         });

@@ -23,6 +23,8 @@ var page = {
     initDom: function(data){
         var self = this;
 
+        self.mobileDom.mask("(999) 999-9999? x9999");
+
         self.sel2MultiDom.select2({
             placeholder: '请选择角色',
             allowClear: true
@@ -77,7 +79,7 @@ var page = {
                     rangelength: [6, 30]
                 },
                 mobile: {
-                    required: ["手机"],
+                    mobileExt: ["手机"],
                     rangelength: [7, 20]
                 },
                 email: {
@@ -129,7 +131,7 @@ var page = {
                 if (page.urlParamId != -1) {
                     if (!page.hasLoaded) {
                         Public.ajaxGet("admin/staff/edit/", {'id': page.urlParamId}, function(result) {
-                            200 === result.code ? (data = result.data, allRoleList = result.all_role_list, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
+                            200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
                                 type: 'error',
                                 message: result.msg
                             }))

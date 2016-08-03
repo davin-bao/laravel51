@@ -29,6 +29,9 @@ $(function() {
     $.validator.addMethod("mobile", function(a) {
         return !a && a.length == 0 || /^1[3-9]\d{9}$/.test(a)
     });
+    $.validator.addMethod("mobileExt", function(a) {
+        return !a && a.length == 0 || /^\(\d{3}\)\ 1[3-9]\d-\d{4}\ \x\d{4}$/.test(a)
+    });
     $.validator.addMethod("zipcode", function(a) {
         return !a && a.length == 0 || /^\d{6}$/.test(a)
     });
@@ -105,6 +108,7 @@ $(function() {
         IDcard: "请输入正确的身份证号码",
         tel: "请输入有效的电话号码",
         mobile: "请输入有效的手机号",
+        mobileExt: "请输入有效的手机号,如 (086) 138-1234 x5678",
         zipcode: "请检查邮政编码格式",
         chinese: "请输入中文字符",
         password: "请输入6-16位字符，不能包含空格",

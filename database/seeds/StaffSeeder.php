@@ -18,6 +18,7 @@ class StaffSeeder extends Seeder
         $admin->username = 'admin';
         $admin->name = 'Administrator';
         $admin->password = Hash::make('123456');
+        $admin->timezone = 'Asia/Shanghai';
         $admin->email = 'admin@domain.com';
         $admin->mobile = '18800000000';
         $admin->deleted_at = null;
