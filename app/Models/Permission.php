@@ -89,4 +89,34 @@ class Permission extends EntrustPermission
         $roleIds = (\Auth::staff()->check()) ? \Auth::staff()->get()->getRoleIds() : null;
         return self::getPermission($action, $roleIds);
     }
+
+
+    /**
+     * 获取检索query
+     * @param $query
+     * @param $match 检索信息
+     * @return mixed query
+     */
+    public static function getSearchQuery($query, $match, $otherFields = array(), $hasAccess = false){
+        //添加数据访问权限
+        if($hasAccess) {
+            $query = self::access($query);
+        }
+
+        if(empty($match)) {
+            return $query;
+        }
+        $query = $query->where(function($query) use ($match, $otherFields) {
+            foreach(static::$searchColumns as $searchColumn) {
+                $query->orWhere($query->getModel()->table.'.'.$searchColumn, "like", '%'.$match.'%');
+            }
+
+            foreach($otherFields as $searchColumn) {
+                $query->orWhere($searchColumn, "like", '%'.$match.'%');
+            }
+        });
+
+        return $query;
+    }
+
 }
