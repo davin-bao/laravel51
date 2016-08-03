@@ -202,11 +202,13 @@ Public.floatDiv = function(arg1,arg2){
  */
 Public.ajaxGet = function(url, params, callback, errCallback){
     $('.loading').show();
+
     $.ajax({
         type: "GET",
         url: Public.ROOT_URL + url,
         dataType: "json",
         data: params,
+        async: (typeof(params.async) == 'undefined') ? true : params.async,
         mode: "limit",
         complete: function(xMLHttpRequest, textStatus){
             $('.loading').hide();
@@ -242,6 +244,7 @@ Public.ajaxPost = function(url, params, callback, errCallback){
         type: "POST",
         url: Public.ROOT_URL + url,
         data: params,
+        async: (typeof(params.async) == 'undefined') ? true : params.async,
         dataType: "json",
         mode: "limit",
         success: function(data, status){

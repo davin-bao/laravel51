@@ -60,7 +60,7 @@ class DashboardController extends BaseController {
         $this->validateRequest([
             'email' => 'unique:staff,email,' . $request->input('id', 0),
             'name' => 'required|max:30',
-            'mobile' => 'required|regex:/^1[34578][0-9]{7,11}$/',
+            'mobile' => 'regex:/^\([0-9]{3}\)\ 1[34578][0-9]\-[0-9]{4}\ x[0-9]{4}$/',
         ], $request, $attribute);
 
         $staffService = new StaffService();

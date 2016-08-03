@@ -55,5 +55,6 @@
 @section('foot-scripts')
     @parent
     <script src="{{ asset('centaurus/js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/common/selector.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/admin/staff_add.js') }}"></script>
 @endsection
