@@ -23,7 +23,6 @@ var page = {
             "assignPermissions": '/assign-permissions',
             "delete_able": !0,
             "edit_able": !0,
-            "assign_able": !0,
             "columns": [
                 {
                     "data": "id" ,
@@ -62,7 +61,7 @@ var page = {
                 "render": function(data, type, full) {
                     var operateHtml = '';
                     options.edit_able && Public.power(options.index + options.edit) && (operateHtml += '<a class="btn btn-success btn-xs edit-row-btn" data-id="'+full.id+'"><i class="fa fa-pencil"></i> 编辑</a>');
-                    options.assign_able && Public.power(options.index + options.assignPermissions) && (operateHtml += '<a class="btn btn-default btn-xs assign-row-btn" data-id="'+full.id+'"><i class="fa fa-wrench"></i> 权限</a>');
+                    Public.power(options.index + options.assignPermissions) && (operateHtml += '<a class="btn btn-default btn-xs assign-row-btn" data-id="'+full.id+'"><i class="fa fa-wrench"></i> 权限</a>');
                     options.delete_able && Public.power(options.index + options.delete) && (operateHtml += '<a class="btn btn-danger btn-xs del-row-btn" data-id="'+full.id+'" data-href=""><i class="fa fa-trash-o"></i> 删除</a>');
 
                     return operateHtml;
@@ -70,12 +69,12 @@ var page = {
             }],
         };
         self.listDataTable = self.listDom.table(options);
-        if(options.assign_able){
-            self.listDataTable.on('click', '.assign-row-btn', function(){
-                var index = $(this).data('id');
-                window.location = Public.ROOT_URL + options.index + options.assignPermissions + '?id=' + index;
-            });
-        }
+
+        // 为权限按钮配置点击事件
+        self.listDataTable.on('click', '.assign-row-btn', function () {
+            var index = $(this).data('id');
+            window.location = Public.ROOT_URL + options.index + options.assignPermissions + '?id=' + index;
+        });
     },
     addEvent: function(){
         var self = this;

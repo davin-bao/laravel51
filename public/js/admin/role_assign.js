@@ -30,7 +30,7 @@ var page = {
 
         //添加操作按钮
         self.toolBarDom.html(
-            Widgets.OperateButtons.save(self, 'save', 'admin/role/edit-permission', '保存', function(){
+            Widgets.OperateButtons.save(self, 'save', 'admin/role/permission-list', '保存', function(){
                 window.location = Public.ROOT_URL + 'admin/role';
             }) +
             Widgets.OperateButtons.back(self)
@@ -157,7 +157,7 @@ $(function() {
                 if (!page.hasLoaded) {
 
                     // 异步取得当前角色所有权限
-                    Public.ajaxGet("admin/role/permission/", {'id': page.urlParamId}, function(result) {
+                    Public.ajaxGet("admin/role/permission-list/", {'id': page.urlParamId}, function(result) {
 
                         // 两次异步请求都成功时，初始化页面
                         200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({

@@ -32,8 +32,8 @@ class RoleController extends BaseController {
             'postEdit'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'修改角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'postDelete'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'删除角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'getAssignPermissions'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'权限分配', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'getPermissions'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postEditPermission'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'getPermissionList'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postPermissionList'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
 
@@ -146,7 +146,7 @@ class RoleController extends BaseController {
      * @author chuanhangyu
      * @since 2016/8/2 10:30
      */
-    public function getPermission(Request $request) {
+    public function getPermissionList(Request $request) {
         $this->validateRequest([
             'id' => 'required|min:0',
         ], $request);
@@ -164,7 +164,7 @@ class RoleController extends BaseController {
      * @author chuanhangyu
      * @since 2016/8/2 14:00
      */
-    public function postEditPermission(Request $request) {
+    public function postPermissionList(Request $request) {
         $this->validateRequest([
             'id' => 'required|min:0',
         ], $request);

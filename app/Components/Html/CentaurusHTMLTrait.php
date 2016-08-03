@@ -206,17 +206,6 @@ trait CentaurusHtmlTrait {
         $permissions = Auth::staff()->get()->getPermissions();
         $menus = [];
 
-        // 菜单去重
-        $uniquePermissionArray = [];
-        $uniquePermission = [];
-        foreach ($permissions as $permission) {
-           if (!in_array($permission->toArray(), $uniquePermissionArray)) {
-               $uniquePermissionArray[] = $permission->toArray();
-                $uniquePermission[] = $permission;
-           }
-        }
-        $permissions = $uniquePermission;
-
         // 循环得到所有顶级菜单下的子菜单
         foreach($permissions as $permission){
             if(empty($permission->parent) && $permission->is_menu === Permission::IS_MENU_YES){
