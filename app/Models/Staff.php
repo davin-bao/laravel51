@@ -158,6 +158,7 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
                 ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
                 ->where('staff.id', $this->id)
                 ->orderBy('sort', 'asc')
+                ->distinct('permissions.id')
                 ->get();
         return $permissions;
     }

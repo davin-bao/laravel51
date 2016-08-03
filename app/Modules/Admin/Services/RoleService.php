@@ -68,4 +68,35 @@ class RoleService {
         }
         return true;
     }
+
+    /**
+     * 得到角色以及其对于的权限
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     *
+     * @author chuanhangyu
+     * @since 2016/8/2 10:40
+     */
+    public function getRolePerimission($id) {
+        return Role::with('permissions')->find($id);
+    }
+
+    /**
+     * 更新角色权限
+     * @param $id
+     * @param $permissions
+     * @return mixed
+     *
+     * @author chuanhanhyu
+     * @since 2016/8/2 14:10
+     */
+    public function updateRolePermission($id, $permissions) {
+        $role = Role::find($id);
+
+        if ($role) {
+            return $role->updatePermission($permissions);
+        } else {
+            throw new NoticeMessageException('角色不存在!');
+        }
+    }
 }
