@@ -477,7 +477,6 @@ $.fn.table = function( options ) {
             "render": function(data, type, full) {
                 var operateHtml = '';
                 options.edit_able && Public.power(options.index + options.edit) && (operateHtml += '<a class="btn btn-success btn-xs edit-row-btn" data-id="'+full.id+'"><i class="fa fa-pencil"></i> 编辑</a>');
-                options.assign_able && Public.power(options.index + options.assignPermissions) && (operateHtml += '<a class="btn btn-success btn-xs edit-row-btn" data-id="'+full.id+'"><i class="fa fa-wrench"></i> 权限</a>');
                 options.delete_able && Public.power(options.index + options.delete) && (operateHtml += '<a class="btn btn-danger btn-xs del-row-btn" data-id="'+full.id+'" data-href=""><i class="fa fa-trash-o"></i> 删除</a>');
 
                 return operateHtml;
