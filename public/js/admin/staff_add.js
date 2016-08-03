@@ -30,16 +30,8 @@ var page = {
             allowClear: true
         });
 
-        for(var i = 0;i < self.allRoleList.length; i++){
-            self.sel2MultiDom.append('<option value="' + self.allRoleList[i].id + '">' + self.allRoleList[i].name + '</option>');
-        }
-        var roleIds =[];
-        for(var i = 0;i < data.roles.length; i++){
-            roleIds.push(data.roles[i].id);
-        }
-
-        self.sel2MultiDom.val(roleIds).trigger('change');
-
+        var select2 = new Selector.select2(self.sel2MultiDom, {dataType: 'serverSide', data: 'admin/role/list/'});
+        select2.val(data.roles);
 
         self.idDom.val(data.id);
         self.nameDom.val(data.name);
@@ -124,26 +116,14 @@ var page = {
         var data = page.getOrigData();
         page.urlParamId = page.urlParam.id ? page.urlParam.id : -1;
 
-        Public.ajaxGet("admin/role/list/", {}, function(result) {
-            if(200 === result.code){
-                page.allRoleList = result.data;
-
-                if (page.urlParamId != -1) {
-                    if (!page.hasLoaded) {
-                        Public.ajaxGet("admin/staff/edit/", {'id': page.urlParamId}, function(result) {
-                            200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
-                                type: 'error',
-                                message: result.msg
-                            }))
-                        });
-                    }
-                } else page.init(data);
-
-            }else{
-                Widgets.tips({
-                    type: 'error',
-                    message: result.msg
-                })
+        if (page.urlParamId != -1) {
+            if (!page.hasLoaded) {
+                Public.ajaxGet("admin/staff/edit/", {'id': page.urlParamId}, function (result) {
+                    200 === result.code ? (data = result.data, page.init(data), page.hasLoaded = !0) : (Widgets.tips({
+                        type: 'error',
+                        message: result.msg
+                    }))
+                });
             }
-        });
+        } else page.init(data);
     });

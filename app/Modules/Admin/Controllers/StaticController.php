@@ -18,7 +18,7 @@ class StaticController extends BaseController {
     public static function actionName(){
         return [
             'getModule'=> json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'文件管理', 'is_menu'=>0, 'sort'=>20, 'allow'=>1, 'description'=>'']),
-            'postUpload'=> json_encode(['parent'=>'StaticController@getModule', 'icon'=>'upload', 'display_name'=>'', 'is_menu'=>0, 'sort'=>1, 'allow'=>1, 'description'=>'']),
+            'postUploadAvatar'=> json_encode(['parent'=>'StaticController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>1, 'allow'=>1, 'description'=>'']),
         ];
     }
 

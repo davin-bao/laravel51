@@ -64,7 +64,7 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
         //密码未修改时密码不变
-        if(isset($parameters['password'])&&empty($parameters['password'])){
+        if(isset($parameters['password'])){
             unset($parameters['password']);
         }
 

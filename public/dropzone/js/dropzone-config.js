@@ -3,7 +3,7 @@ var dropz = new Dropzone("#dropzone", {
 
     url: this.action,
     uploadMultiple: false,
-    maxFiles: 10,
+    maxFiles: 1,
     parallelUploads: 1,
     maxFilesize: 1,
     previewsContainer: '#dropzonePreview',
@@ -11,6 +11,7 @@ var dropz = new Dropzone("#dropzone", {
     addRemoveLinks: true,
     dictRemoveFile: '删除',
     dictFileTooBig: '图片大小需小于1M！',
+    dictMaxFilesExceeded: '一次只能上传一张头像！',
 
     // The setting up of the dropzone
     init:function() {

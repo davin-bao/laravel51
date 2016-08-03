@@ -1,5 +1,8 @@
 @extends('Admin::vendor.index')
 @section('container')
+    @section('stylesheets')
+        <link rel="stylesheet" href="{{ asset('centaurus/css/libs/select2.css') }}" type="text/css"/>
+    @endsection
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
@@ -39,6 +42,13 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="tab-newsfeed">
                                     <div class="main-box-body clearfix">
+                                        <div class="row">
+                                            <div class="row-offset">&nbsp;</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-lg-offset-1 col-md-6 col-lg-6 avatar-group" id="set-avatar-container">
+                                            </div>
+                                        </div>
                                         <form id="save-form">
                                             <div class="row">
                                                 <div class="form-group col-lg-offset-1 col-md-6 col-lg-6 name-group">
@@ -63,8 +73,21 @@
                                                            placeholder="" aria-required="true" aria-invalid="false">
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-offset-2 col-lg-10 tool-bar"></div>
+                                            <div class="row">
+                                                <div class="form-group col-lg-offset-1 col-md-10 col-lg-10 timezone-group">
+                                                    <label for="name">时区</label>
+                                                    <div class="form-group form-group-select2">
+                                                        <select style="width:300px" id="sel2" tabindex="-1"
+                                                                class="select2-offscreen">
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-2 col-lg-10 tool-bar"></div>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -90,5 +113,7 @@
 @endsection
 @section('foot-scripts')
     @parent
+    <script src="{{ asset('centaurus/js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/common/selector.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/admin/staff_profile.js') }}"></script>
 @endsection
