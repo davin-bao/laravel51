@@ -15,7 +15,7 @@ class Permission extends EntrustPermission
 
     protected $table = 'permissions';
 
-    protected $fillable = ['id', 'parent', 'icon', 'uri', 'action', 'display_name', 'description', 'is_menu', 'sort'];
+    protected $fillable = ['id', 'parent', 'icon', 'uri', 'action', 'display_name', 'description', 'is_menu', 'allow', 'sort'];
 
     protected $appends = ['icon_html', 'sub_permission'];
 

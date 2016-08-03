@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group col-md-6 col-lg-3 display_name-group">
                         <label for="mobile">手机</label>
-                        <input type="number" class="form-control" id="mobile" name="mobile" placeholder="" value="{{ Input::old('mobile') }}">
+                        <input type="text" class="form-control" id="mobile" name="mobile" placeholder="" value="{{ Input::old('mobile') }}">
                     </div>
                     <div class="form-group form-group-select2">
                         <label>角色</label>

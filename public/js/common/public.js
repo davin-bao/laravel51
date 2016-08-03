@@ -463,8 +463,15 @@ $.fn.table = function( options ) {
                 "sortAscending":  ": 正序",
                 "sortDescending": ": 反序"
             }
-        },
-        "columnDefs": [ {
+        }
+    }, options);
+
+    if((typeof(options.columnDefs) === 'undefined')){
+        options.columnDefs = [];
+    }
+
+    if(options.edit_able || options.delete_able){
+        options.columnDefs.push({
             "targets": -1,
             "data": 'operate',
             "render": function(data, type, full) {
@@ -475,8 +482,8 @@ $.fn.table = function( options ) {
 
                 return operateHtml;
             }
-        }]
-    }, options);
+        });
+    }
 
     options = $.extend(true, options, {
         "serverSide": true,

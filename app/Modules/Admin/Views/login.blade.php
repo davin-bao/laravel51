@@ -87,7 +87,7 @@
         </div>
     </div>
 </div>
-@include('Admin::vendor.layoutoption')
+@include('Admin::vendor.layout_option')
 {!! Html::footerScript() !!}
 
 <script type="text/javascript" src="{{ asset('js/admin/login.js') }}"></script>
