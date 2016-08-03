@@ -26,10 +26,10 @@ class PermissionController extends BaseController
             'getModule'=> json_encode(['parent'=>null, 'icon'=>'home', 'display_name'=>'权限管理', 'is_menu'=>1, 'sort'=>30, 'allow'=>1, 'description'=>'']),
             'getIndex'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'user', 'display_name'=>'权限列表', 'is_menu'=>1, 'sort'=>31, 'allow'=>1, 'description'=>'']),
             'getAdd'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'plus', 'display_name'=>'添加权限', 'is_menu'=>1, 'sort'=>32, 'allow'=>1, 'description'=>'']),
-
+            'getEdit'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'getList'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'postAdd'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'', 'display_name'=>'添加权限', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postEdit'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'', 'display_name'=>'修改权限', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postUpdate'=> json_encode(['parent'=>'PermissionController@getModule', 'icon'=>'', 'display_name'=>'修改权限', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
 
@@ -83,7 +83,7 @@ class PermissionController extends BaseController
         return $this->response($request, ['data'=>$permission->toArray()], 'admin/permission/index');
     }
 
-    public function postEdit(Request $request){
+    public function postUpdate(Request $request){
 
         $id = $request->input('id', 0);
         $customAttributes = [

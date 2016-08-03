@@ -37,7 +37,7 @@ var page = {
 
         //添加操作按钮
         self.toolBarDom.html(
-            Widgets.OperateButtons.save(self, 'save', 'admin/permission/edit', '保存', function(){
+            Widgets.OperateButtons.save(self, 'save', 'admin/permission/update', '保存', function(){
                 window.location = Public.ROOT_URL + 'admin/permission';
             }) +
             Widgets.OperateButtons.back(self)

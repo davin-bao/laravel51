@@ -27,6 +27,12 @@ class StaffController extends BaseController {
             'getIndex'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'user', 'display_name'=>'管理员列表', 'is_menu'=>1, 'sort'=>11, 'allow'=>1, 'description'=>'']),
             'getPermissionUrlList'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'getEdit'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+
+            'getAdd'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'plus', 'display_name'=>'添加管理员', 'is_menu'=>1, 'sort'=>22, 'allow'=>1, 'description'=>'']),
+            'getList'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postUpdate'=>json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'修改管理员', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postAdd'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'添加管理员', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postDelete'=> json_encode(['parent'=>'StaffController@getModule', 'icon'=>'', 'display_name'=>'删除管理员', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
 
@@ -76,7 +82,7 @@ class StaffController extends BaseController {
         return $this->response($request, ['data'=>$staff->toArray()], 'admin/staff/index');
     }
 
-    public function postEdit(Request $request){
+    public function postUpdate(Request $request){
 
         $id = $request->input('id', 0);
         $attribute = [
