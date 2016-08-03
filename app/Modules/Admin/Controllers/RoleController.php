@@ -31,6 +31,9 @@ class RoleController extends BaseController {
             'postAdd'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'添加角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'postUpdate'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'修改角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'postDelete'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'删除角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'getAssignPermissions'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'权限分配', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'getPermissionList'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postPermissionList'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
 
@@ -121,5 +124,55 @@ class RoleController extends BaseController {
         $this->getService()->deleteRole($id);
 
         return $this->response($request, [], 'admin/role/index');
+    }
+
+    /**
+     * 权限分配页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getAssignPermissions() {
+        Breadcrumbs::register('admin-role-assign', function ($breadcrumbs) {
+            $breadcrumbs->parent('admin-role');
+            $breadcrumbs->push('权限分配', adminAction('RoleController@getAssignPermissions'));
+        });
+        return $this->render('role.assign');
+    }
+
+    /**
+     * 根据角色id得到对应的所有权限
+     * @param Request $request
+     * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @author chuanhangyu
+     * @since 2016/8/2 10:30
+     */
+    public function getPermissionList(Request $request) {
+        $this->validateRequest([
+            'id' => 'required|min:0',
+        ], $request);
+
+        $id = $request->input('id', 0);
+        $permission = $this->getService()->getRolePerimission($id);
+        return $this->response($request, ['data'=>$permission->toArray()], 'admin/role/index');
+    }
+
+    /**
+     * 提交权限修改
+     * @param Request $request
+     * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @author chuanhangyu
+     * @since 2016/8/2 14:00
+     */
+    public function postPermissionList(Request $request) {
+        $this->validateRequest([
+            'id' => 'required|min:0',
+        ], $request);
+
+        $id = $request->input('id', 0);
+        $permissions = explode(',', $request->input('permissions', 0));
+        $this->getService()->updateRolePermission($id, $permissions);
+
+        return $this->response($request, [], 'admin/role');
     }
 }

@@ -52,5 +52,17 @@ class Role extends Model
         return $model;
     }
 
+    /**
+     * 更新角色的权限
+     * @param $permissions
+     * @return array
+     *
+     * @author chuanhangyu
+     * @since 2016/8/2 14:30
+     */
+    public function updatePermission($permissions) {
+        return $this->permissions()->sync($permissions);
+    }
+
 }
 

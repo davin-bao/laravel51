@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Modules\Admin\Controllers\Controller as BaseController;
 
 /**
- * 角色 管理
+ * 权限 管理
  * Class PermissionController
  * @package App\Modules\Admin\Controllers
  *
@@ -53,7 +53,11 @@ class PermissionController extends BaseController
         return $this->render('permission.index');
     }
 
-
+    /**
+     * 得到所有权限列表
+     * @param Request $request
+     * @return $this|\Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function getList(Request $request){
         $matchCon = $request->input('matchCon', null);
 
