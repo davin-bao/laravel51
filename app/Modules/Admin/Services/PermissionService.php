@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class PermissionService
  * @package App\Modules\Admin\Services
  *
- * @author davin.bao
- * @since 2016/7/20 9:34
+ * @author cunqinghuang
+ * @since 2016/8/2 11:00
  */
 class PermissionService{
 
@@ -32,7 +32,7 @@ class PermissionService{
     }
 
     /**
-     * 创建角色
+     * 创建权限
      * @param array $parameters
      * @return static
      */
@@ -41,7 +41,7 @@ class PermissionService{
     }
 
     /**
-     * 修改角色
+     * 修改权限
      * @param array $parameters
      * @return static
      */

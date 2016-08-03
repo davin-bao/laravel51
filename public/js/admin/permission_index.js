@@ -1,5 +1,5 @@
 /**
- * 角色列表脚本
+ * 权限列表脚本
  */
 var page = {
     urlParam: Public.urlParam(),
@@ -26,47 +26,47 @@ var page = {
                 },
                 {
                     "data": "parent" ,
-                    "title": "parent",
-                    "orderable": true,
+                    "title": "父菜单",
+                    "orderable": false,
                 },
                 {
                     "data": "icon",
-                    "title": "icon",
-                    "orderable": true,
+                    "title": "图标",
+                    "orderable": false,
                 },
                 {
                     "data": "uri" ,
-                    "title": "uri",
+                    "title": "路径",
                     "orderable": false,
                 },
                 {
                     "data": "action" ,
-                    "title": "action",
+                    "title": "URL地址对接的接口地址",
                     "orderable": false,
                 },
                 {
                     "data": "display_name",
-                    "title": "display_name",
+                    "title": "权限名称",
                     "orderable": false,
                 },
                 {
                     "data": "is_menu",
-                    "title": "is_menu",
+                    "title": "作为菜单显示",
                     "orderable": true,
                 },
                 {
                     "data": "sort",
-                    "title": "sort",
-                    "orderable": false,
+                    "title": "排序",
+                    "orderable": true,
                 },
                 {
                     "data": "created_at",
-                    "title": "created_at",
+                    "title": "创建时间",
                     "orderable": true,
                 },
                 {
                     "data": "operate",
-                    "title": "operate",
+                    "title": "操作",
                     "orderable": false,
                 },
             ],

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12">
             {!! Breadcrumbs::render('admin-permission-index') !!}
-            <h1><i class="fa fa-home"></i> 角色 <small>列表</small></h1>
+            <h1><i class="fa fa-home"></i> 权限 <small>列表</small></h1>
         </div>
     </div>
     <div class="row">

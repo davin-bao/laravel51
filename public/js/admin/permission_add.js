@@ -1,5 +1,5 @@
 /**
- * 角色编辑脚本
+ * 权限编辑脚本
  */
 var page = {
     urlParam: Public.urlParam(),
@@ -69,7 +69,7 @@ var page = {
                 },
                 is_menu: {
                     required: ["是否作为菜单显示"],
-                    rangelength: [0, 1]
+                    pattern: "[0,1]"
                 },
                 sort: {
                     required: ["排序"],

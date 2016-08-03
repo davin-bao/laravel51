@@ -118,7 +118,7 @@ class PermissionController extends BaseController
                 'uri'=>'required|min:0|max:255',
                 'sort'=>'required|regex:/^[0-9]{0,10}$/',
                 'description'=>'min:0|max:255',
-                'is_menu'=>'required|regex:/^[01]$/',
+                'is_menu'=>'required|regex:/^[0,1]$/',
                 'display_name' => 'required|min:0|max:30',
             ], $request, $customAttributes);
 

@@ -44,7 +44,7 @@ class Permission extends EntrustPermission
 
     public function getSubPermissionAttribute()
     {
-//        return ($this->attributes['fid'] == 0) ? $this->where('fid',$this->attributes['id'])->orderBy('sort', 'asc')->get() : null;
+        return ($this->attributes['fid'] == 0) ? $this->where('fid',$this->attributes['id'])->orderBy('sort', 'asc')->get() : null;
     }
 
 
