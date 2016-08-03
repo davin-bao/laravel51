@@ -29,7 +29,7 @@ class RoleController extends BaseController {
 
             'getList'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'postAdd'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'添加角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
-            'postEdit'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'修改角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
+            'postUpdate'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'修改角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
             'postDelete'=> json_encode(['parent'=>'RoleController@getModule', 'icon'=>'', 'display_name'=>'删除角色', 'is_menu'=>0, 'sort'=>0, 'allow'=>1, 'description'=>'']),
         ];
     }
@@ -83,7 +83,7 @@ class RoleController extends BaseController {
         return $this->response($request, ['data'=>$role->toArray()], 'admin/role/index');
     }
 
-    public function postEdit(Request $request){
+    public function postUpdate(Request $request){
 
         $id = $request->input('id', 0);
         $customAttributes = [
