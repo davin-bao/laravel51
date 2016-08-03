@@ -26,27 +26,27 @@ var page = {
                 },
                 {
                     "data": "name" ,
-                    "title": "name",
+                    "title": "角色名称",
                     "orderable": true,
                 },
                 {
                     "data": "display_name",
-                    "title": "display_name",
+                    "title": "中文名称",
                     "orderable": true,
                 },
                 {
                     "data": "description" ,
-                    "title": "description",
+                    "title": "描述",
                     "orderable": false,
                 },
                 {
                     "data": "created_at" ,
-                    "title": "created_at",
+                    "title": "创建时间",
                     "orderable": false,
                 },
                 {
                     "data": "operate",
-                    "title": "operate",
+                    "title": "操作",
                     "orderable": false,
                 },
             ],
