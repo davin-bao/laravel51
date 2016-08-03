@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model as ModelBase;
  */
 abstract class Model extends ModelBase
 {
+    use TimezoneTrait;
 
     /**
      * 可以进行模糊查询的列
