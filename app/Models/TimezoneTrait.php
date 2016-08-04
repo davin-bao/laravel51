@@ -45,6 +45,8 @@ trait TimezoneTrait
         if(in_array($key, $this->getDates())){
             if($value instanceof Carbon){
                 $value = $value->timezone(Config::get('app.timezone'))->timestamp;
+            }else if(is_numeric($value)){
+                //直接给了 timestamp
             }else if(!is_null($value)){
                 throw new InterruptMessageException('The ' . get_called_class() . '->'. $key .' expect Carbon object!');
             }

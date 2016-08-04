@@ -44,6 +44,11 @@ var page = {
                     "orderable": false,
                 },
                 {
+                    "data": "last_seen" ,
+                    "title": "最近登录",
+                    "orderable": false,
+                },
+                {
                     "data": "confirmed_at" ,
                     "title": "是否已验证",
                     "orderable": false,
@@ -55,7 +60,7 @@ var page = {
                 },
             ],
             "columnDefs": [{
-                "targets": 5,//index of column starting from 0
+                "targets": 6,//index of column starting from 0
                 "data": "confirmed_at", //this name should exist in your JSON response
                 "render": function (data, type, full, meta) {
                     if(data == null) return '<span class="label label-danger">否</span>';

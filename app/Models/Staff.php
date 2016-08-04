@@ -30,7 +30,7 @@ class Staff extends Model implements AuthenticatableContract, CanResetPasswordCo
 
     protected $table = 'staff';
     protected $fillable = ['username', 'email', 'password', 'timezone', 'name','deleted_at','mobile', 'dept_id','confirm_token','avatar', 'confirmed_at'];
-    protected $dates = ['deleted_at', 'confirmed_at'];
+    protected $dates = ['deleted_at', 'confirmed_at', 'last_seen'];
     protected $hidden = ['password', 'remember_token'];
     protected static $searchColumns = ['username', 'name'];
 

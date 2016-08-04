@@ -24,6 +24,7 @@ class CreateStaffTable extends Migration
             $table->string('confirm_token', 100)->nullable();
             $table->string('avatar',255)->nullable();
             $table->rememberToken();
+            $table->unsignedInteger('last_seen')->nullable();
             $table->unsignedInteger('confirmed_at')->nullable();
             $table->unsignedInteger('deleted_at')->nullable();
             $table->unsignedInteger('created_at')->nullable();

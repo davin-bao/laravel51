@@ -17,7 +17,7 @@ class LastActivity {
      */
     public function handle($request, Closure $next) {
         if (Auth::staff()->check()) {
-            Cache::forever('last_seen_' . Auth::staff()->get()->id, date('Y-m-d H:i:s'));
+            Cache::forever('last_seen_' . Auth::staff()->get()->id, time());
         }
 
         return $next($request);
