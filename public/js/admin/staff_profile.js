@@ -207,7 +207,17 @@ var page = {
                 '图片大小需小于1M'
             ];
 
-            Widgets.Dialogs.uploadImage(header, title, info, function() {}, '完成');
+            Widgets.Dialogs.uploadImage(header, title, info, function() {}, '完成', {
+                onshown: function () {
+                    Public.dropzone('#dropzone', {
+                        url: '/admin/static/avatar',
+                        title: '设置头像',
+                        dictFileTooBig: '图片大小需小于1M！！',
+                        dictMaxFilesExceeded: '一次只能上传一张头像！',
+                        uploadFailMessage: '获取头像失败！'
+                    });
+                }
+            });
         });
 
         // 为设置头像按钮配置点击事件

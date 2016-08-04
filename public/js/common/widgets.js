@@ -144,6 +144,7 @@ Widgets.Dialogs = Widgets.Dialogs || {};
 Widgets.Dialogs._base = function(title, message, options){
 
     var dialog = BootstrapDialog.show($.extend(true, {
+        id: 'bootstrap',
         title: title,
         message: message,
         type: BootstrapDialog.TYPE_DEFAULT,
@@ -158,7 +159,10 @@ Widgets.Dialogs._base = function(title, message, options){
             action: function (dialog) {
                 dialog.close();
             }
-        }]
+        }],
+        onshown: function (e) {
+            options.onshown();
+        }
     }, options));
 };
 /**
@@ -239,7 +243,7 @@ Widgets.Dialogs.deleteConfirm = function(url, id, callback, message){
  * @param okLabel 确立按钮名
  * @returns {*}
  */
-Widgets.Dialogs.custom = function(title, message, callback, okLabel){
+Widgets.Dialogs.custom = function(title, message, callback, okLabel, options){
 
     okLabel = typeof(okLabel) == 'undefined' ? '确定' : okLabel;
 
@@ -257,7 +261,8 @@ Widgets.Dialogs.custom = function(title, message, callback, okLabel){
             action: function (dialog) {
                 dialog.close();
             }
-        }]
+        }],
+        onshown: options.onshown
     });
 };
 /**
@@ -270,11 +275,9 @@ Widgets.Dialogs.custom = function(title, message, callback, okLabel){
  * @param okLabel
  * @returns {*}
  */
-Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel){
+Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel, options){
     var token = $('meta[name="csrf-token"]').attr('content');
     var dropzoneStyle = $('#dz-style').val();
-    var dropzoneJs = $('#dz-js').val();
-    var dropzoneConfig = $('#dz-config').val();
     var uploadUrl = $('#upload-url').val();
     var userid = $('#user-id').val();
     var dropZoneInfo = '<ul style="margin-top: 50px">';
@@ -336,8 +339,7 @@ Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel){
                 </div>\
             </div>\
         </div>\
-    </div>\
-    <script id="dropzone-js" src="' + dropzoneJs + '"></script>\
-        <script id="dropzone-config" src="' + dropzoneConfig + '"></script>';
-    Widgets.Dialogs.custom(header, html, callback, okLabel);
+    </div>';
+
+    Widgets.Dialogs.custom(header, html, callback, okLabel, options);
 }

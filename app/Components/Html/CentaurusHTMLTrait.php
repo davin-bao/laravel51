@@ -46,6 +46,7 @@ trait CentaurusHtmlTrait {
         "jquery-validate" => "js/common/jquery.validate.min.js",
         "jquery-validator" => "js/common/validator.js",
         "cache-script" => "js/common/cache.js",
+        "dropzone-script" => "dropzone/js/dropzone.min.js",
         "public-script" => "js/common/public.js",
         "widgets-script" => "js/common/widgets.js",
     ];
