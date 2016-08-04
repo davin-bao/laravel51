@@ -24,16 +24,16 @@ var page = {
 
         //添加操作按钮
 
-        var jumpUri = 'admin';
+        var historyUri = 'admin';
         var reg = new RegExp("(^|&)" + 'historyUri' + "=([^&]*)(&|$)");
         var uriResult = window.location.search.substr(1).match(reg);
         if (uriResult != null) {
-            jumpUri = unescape(uriResult[2]);
+            historyUri = unescape(uriResult[2]);
         }
 
         self.toolBarDom.html(
             Widgets.OperateButtons._button(self, 'login', 'login',  'LOGIN', function(){
-                window.location = jumpUri;
+                window.location = historyUri;
             }, 'btn-success col-xs-12')
         );
     },
