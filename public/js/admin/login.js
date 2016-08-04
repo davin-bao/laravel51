@@ -23,9 +23,17 @@ var page = {
         var self = this;
 
         //添加操作按钮
+
+        var jumpUri = 'admin';
+        var reg = new RegExp("(^|&)" + 'jumpUri' + "=([^&]*)(&|$)");
+        var uriResult = window.location.search.substr(1).match(reg);
+        if (uriResult != null) {
+            jumpUri = unescape(uriResult[2]);
+        }
+
         self.toolBarDom.html(
             Widgets.OperateButtons._button(self, 'login', 'login',  'LOGIN', function(){
-                window.location = Public.ROOT_URL + 'admin';
+                window.location = jumpUri;
             }, 'btn-success col-xs-12')
         );
     },
@@ -64,10 +72,11 @@ var page = {
     },
     getPostData: function(){
         var self = this;
+        var isRememberMe = $('#remember-me').is(':checked');
         return {
             username: self.usernameDom.val(),
             password: self.passwordDom.val(),
-            remember_me: self.rememberMeDom.val(),
+            remember_me: isRememberMe,
         };
     }
 };

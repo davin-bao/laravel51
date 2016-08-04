@@ -2,6 +2,8 @@
 
 namespace App\Modules\Common\Middleware;
 
+use App\Exceptions\ErrorMessageException;
+use App\Exceptions\NoticeMessageException;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Support\Facades\Auth;
@@ -28,13 +30,22 @@ class StaffPermissions
     public function handle($request, Closure $next)
     {
         $action = $request->route()->getActionName();
-        $roleIds = (Auth::staff()->check()) ? Auth::staff()->get()->getRoleIds() : null;
-        $permission = Permission::getPermission($action, $roleIds);
+        if (!Auth::staff()->check()) {
 
-        if ($permission) {
-            return $next($request);
+            $jumpUri = $request->getUri();
+
+            \Html::error('登录超时，请重新登录！', 401);
+            return redirect("login?jumpUri=$jumpUri");
         } else {
-            throw new AccessDeniedHttpException('Forbidden');
+            $roleIds = Auth::staff()->get()->getRoleIds();
+            $permission = Permission::getPermission($action, $roleIds);
+
+            if ($permission) {
+                return $next($request);
+            } else {
+                throw new AccessDeniedHttpException('Forbidden');
+            }
         }
+
     }
 }
