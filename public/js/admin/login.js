@@ -64,7 +64,7 @@ var page = {
         document.onkeydown = function(e){
             var ev = document.all ? window.event : e;
             if(ev.keyCode==13) {
-                window.event.keyCode=0;
+                ev.keyCode=0;
                 self.toolBarDom.find('#login').click();
                 return false;
             }
