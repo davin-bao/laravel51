@@ -159,10 +159,7 @@ Widgets.Dialogs._base = function(title, message, options){
             action: function (dialog) {
                 dialog.close();
             }
-        }],
-        onshown: function (e) {
-            options.onshown();
-        }
+        }]
     }, options));
 };
 /**
@@ -247,7 +244,22 @@ Widgets.Dialogs.custom = function(title, message, callback, okLabel, options){
 
     okLabel = typeof(okLabel) == 'undefined' ? '确定' : okLabel;
 
-    return Widgets.Dialogs._base(title, message, {
+    (typeof options) == 'undefined' ? options = {
+        type: BootstrapDialog.TYPE_DEFAULT,
+        buttons: [{
+            cssClass: 'btn-info',
+            label: okLabel,
+            action: function (dialog) {
+                dialog.close();
+                callback();
+            }
+        }, {
+            label: '取消',
+            action: function (dialog) {
+                dialog.close();
+            }
+        }]
+    } : options = $.extend(true, {
         type: BootstrapDialog.TYPE_DEFAULT,
         buttons: [{
             cssClass: 'btn-info',
@@ -262,8 +274,9 @@ Widgets.Dialogs.custom = function(title, message, callback, okLabel, options){
                 dialog.close();
             }
         }],
-        onshown: options.onshown
-    });
+    }, options);
+
+    return Widgets.Dialogs._base(title, message, options);
 };
 /**
  * 图片上传模态框

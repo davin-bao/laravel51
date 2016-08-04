@@ -93,8 +93,6 @@
                                     </div>
                                     <input class="hidden" id="upload-url" value="{{ adminAction('StaticController@postUploadAvatar') }}">
                                     <input class="hidden" id="dz-style" value="{{ asset('dropzone/css/dropzone.min.css') }}">
-                                    <input class="hidden" id="dz-js" value="{{ asset('dropzone/js/dropzone.min.js') }}">
-                                    <input class="hidden" id="dz-config" value="{{ asset('dropzone/js/dropzone-config.js') }}">
                                     <input class="hidden" id="user-id" value="{{ $staff->id }}">
                                 </div>
                                 <div class="tab-pane fade" id="tab-activity">
