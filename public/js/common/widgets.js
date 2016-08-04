@@ -144,6 +144,7 @@ Widgets.Dialogs = Widgets.Dialogs || {};
 Widgets.Dialogs._base = function(title, message, options){
 
     var dialog = BootstrapDialog.show($.extend(true, {
+        id: 'bootstrap',
         title: title,
         message: message,
         type: BootstrapDialog.TYPE_DEFAULT,
@@ -239,11 +240,11 @@ Widgets.Dialogs.deleteConfirm = function(url, id, callback, message){
  * @param okLabel 确立按钮名
  * @returns {*}
  */
-Widgets.Dialogs.custom = function(title, message, callback, okLabel){
+Widgets.Dialogs.custom = function(title, message, callback, okLabel, options){
 
     okLabel = typeof(okLabel) == 'undefined' ? '确定' : okLabel;
 
-    return Widgets.Dialogs._base(title, message, {
+    (typeof options) == 'undefined' ? options = {
         type: BootstrapDialog.TYPE_DEFAULT,
         buttons: [{
             cssClass: 'btn-info',
@@ -258,7 +259,24 @@ Widgets.Dialogs.custom = function(title, message, callback, okLabel){
                 dialog.close();
             }
         }]
-    });
+    } : options = $.extend(true, {
+        type: BootstrapDialog.TYPE_DEFAULT,
+        buttons: [{
+            cssClass: 'btn-info',
+            label: okLabel,
+            action: function (dialog) {
+                dialog.close();
+                callback();
+            }
+        }, {
+            label: '取消',
+            action: function (dialog) {
+                dialog.close();
+            }
+        }],
+    }, options);
+
+    return Widgets.Dialogs._base(title, message, options);
 };
 /**
  * 图片上传模态框
@@ -270,11 +288,9 @@ Widgets.Dialogs.custom = function(title, message, callback, okLabel){
  * @param okLabel
  * @returns {*}
  */
-Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel){
+Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel, options){
     var token = $('meta[name="csrf-token"]').attr('content');
     var dropzoneStyle = $('#dz-style').val();
-    var dropzoneJs = $('#dz-js').val();
-    var dropzoneConfig = $('#dz-config').val();
     var uploadUrl = $('#upload-url').val();
     var userid = $('#user-id').val();
     var dropZoneInfo = '<ul style="margin-top: 50px">';
@@ -336,8 +352,7 @@ Widgets.Dialogs.uploadImage = function(header, title, info,callback, okLabel){
                 </div>\
             </div>\
         </div>\
-    </div>\
-    <script id="dropzone-js" src="' + dropzoneJs + '"></script>\
-        <script id="dropzone-config" src="' + dropzoneConfig + '"></script>';
-    Widgets.Dialogs.custom(header, html, callback, okLabel);
+    </div>';
+
+    Widgets.Dialogs.custom(header, html, callback, okLabel, options);
 }

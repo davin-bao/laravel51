@@ -525,4 +525,83 @@ typeof($.fn.dataTable) != 'undefined' && $.fn.dataTable.Api.register( 'search()'
     url = url + '?' + Public.buildQuery(obj);
     this.ajax.url( url ).load();
 } );
+
+// dropzone初始化
+Public.dropzone = function (_obj, options) {
+    var photo_counter = 0;
+    return new Dropzone(_obj, {
+        url: $(_obj).attr('action'),
+        uploadMultiple: (typeof options.uploadMultiple) == 'undefined' ? false : options.uploadMultiple,
+        maxFiles: (typeof options.maxFiles) == 'undefined' ? 1 : options.maxFiles,
+        parallelUploads: 1,
+        maxFilesize: (typeof options.maxFilesize) == 'undefined' ? 1 : options.maxFontSize,
+        previewsContainer: '#dropzonePreview',
+        previewTemplate: document.querySelector('#preview-template').innerHTML,
+        addRemoveLinks: true,
+        dictRemoveFile: '删除',
+        dictFileTooBig: (typeof options.dictFileTooBig) == 'undefined' ? '文件大小需小于' + ((typeof options.maxFilesize) == 'undefined' ? 1 : options.maxFontSize) + 'M！' : options.dictFileTooBig,
+        dictMaxFilesExceeded: (typeof options.dictMaxFilesExceeded) == 'undefined' ? '一次只能上传一个文件！' : options.dictMaxFilesExceeded,
+
+        // The setting up of the dropzone
+        init:function() {
+
+            if ((typeof options.isHardDelete) == 'undefined' ? false : options.isHardDelete) {
+                this.on("removedfile", function (file) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'admin/static/delete',
+                        data: {id: file.name, _token: $('#csrf-token').val()},
+                        dataType: 'json',
+                        success: function (data) {
+                            var rep = JSON.parse(data);
+                            if (rep.code == 200) {
+                                photo_counter--;
+                                $("#photoCounter").text("(" + photo_counter + ")");
+                            }
+
+                        }
+                    });
+
+                });
+            }
+        },
+        error: function(file, response) {
+            if($.type(response) === "string")
+                var message = response; //dropzone sends it's own error messages in string
+            else
+                var message = response.msg;
+            file.previewElement.classList.add("dz-error");
+            _ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                node = _ref[_i];
+                _results.push(node.textContent = message);
+            }
+            return _results;
+        },
+        success: function(file,done) {
+            var uploadFailMessage = (typeof options.uploadFailMessage) == 'undefined' ? '上传失败！' : options.uploadFailMessage
+            $.ajax({
+                type: 'GET',
+                url: options.url + '?id=' + $('#user-id').val(),
+                success: function(data) {
+                    if (data.code === 200) {
+                        $('#user-left-box img').attr('src', Public.ROOT_URL + data.msg);
+                        $('.profile-dropdown img').attr('src', Public.ROOT_URL + data.msg);
+                        $('.main-box-body img').attr('src', Public.ROOT_URL + data.msg);
+                    } else {
+                        Widgets.Dialogs.custom(options.title, uploadFailMessage, function() {});
+                    }
+                },
+                error: function() {
+                    Widgets.Dialogs.custom(options.title, uploadFailMessage, function() {});
+                }
+            });
+            photo_counter++;
+            $("#photoCounter").text( "(" + photo_counter + ")");
+        }
+    });
+};
+
 //</editor-fold>
