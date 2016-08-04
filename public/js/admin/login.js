@@ -25,7 +25,7 @@ var page = {
         //添加操作按钮
 
         var jumpUri = 'admin';
-        var reg = new RegExp("(^|&)" + 'jumpUri' + "=([^&]*)(&|$)");
+        var reg = new RegExp("(^|&)" + 'historyUri' + "=([^&]*)(&|$)");
         var uriResult = window.location.search.substr(1).match(reg);
         if (uriResult != null) {
             jumpUri = unescape(uriResult[2]);

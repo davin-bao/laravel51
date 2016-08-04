@@ -32,10 +32,10 @@ class StaffPermissions
         $action = $request->route()->getActionName();
         if (!Auth::staff()->check()) {
 
-            $jumpUri = $request->getUri();
+            $historyUri = $request->getUri();
 
             \Html::error('登录超时，请重新登录！', 401);
-            return redirect("login?jumpUri=$jumpUri");
+            return redirect("login?historyUri=$historyUri");
         } else {
             $roleIds = Auth::staff()->get()->getRoleIds();
             $permission = Permission::getPermission($action, $roleIds);
